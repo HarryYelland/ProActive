@@ -1,0 +1,95 @@
+--Setup DB
+SET SEARCH_PATH TO PUBLIC, PUBLIC;
+
+--Deletes Old Database Setup
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+
+
+--Creates Accounts Table
+CREATE TABLE Account
+(
+UUID INTEGER NOT NULL,
+FirstName VARCHAR(20) NOT NULL,
+Surname VARCHAR(40) NOT NULL,
+Email VARCHAR(30) NOT NULL,
+Password VARCHAR(30) NOT NULL,
+PRIMARY KEY (UUID),
+CHECK(Email LIKE '_%@%_')
+);
+
+--Creates Exercise Table
+CREATE TABLE Exercise
+(
+ExerciseID INTEGER NOT NULL,
+Calories INTEGER NOT NULL,
+Name VARCHAR(20) NOT NULL, 
+PRIMARY KEY (ExerciseID),
+CHECK(Calories > 0)
+);
+
+--Creates Exercise Completed Table
+CREATE TABLE ExerciseComp
+(
+ExCompID INTEGER NOT NULL,
+UUID INTEGER NOT NULL,
+ExerciseID INTEGER NOT NULL,
+TimeStamp DATE NOT NULL,
+PRIMARY KEY (ExCompID),
+FOREIGN KEY (UUID) REFERENCES Account(UUID),
+FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID)
+);
+
+--Creates Consumable Table
+CREATE TABLE Consumable
+(
+ConsumableID INTEGER NOT NULL,
+Calories INTEGER NOT NULL,
+Name VARCHAR(20) NOT NULL, 
+PRIMARY KEY (ConsumableID),
+CHECK(Calories > 0)
+);
+
+--Creates Consumables Consumed Table
+CREATE TABLE ConsumableComp
+(
+ConCompID INTEGER NOT NULL,
+UUID INTEGER NOT NULL,
+ConsumableID INTEGER NOT NULL,
+TimeStamp DATE NOT NULL,
+PRIMARY KEY (ConCompID),
+FOREIGN KEY (UUID) REFERENCES Account(UUID),
+FOREIGN KEY (ConsumableID) REFERENCES Consumable(ConsumableID)
+);
+
+--Creates Details Table
+CREATE TABLE Details
+(
+DetailsID INTEGER NOT NULL,
+UUID INTEGER NOT NULL,
+CalorieGoal INTEGER NOT NULL,
+Weight INTEGER NOT NULL,
+Height INTEGER NOT NULL,
+PRIMARY KEY (DetailsID),
+FOREIGN KEY (UUID) REFERENCES Account(UUID)
+);
+
+--Creates Groups Table
+CREATE TABLE Groups
+(
+GroupID INTEGER NOT NULL,
+GroupName VARCHAR(20) NOT NULL,
+PRIMARY KEY (GroupID)
+);
+
+--Creates Group Members Table
+CREATE TABLE GroupMembers
+(
+MemberID INTEGER NOT NULL,
+GroupID INTEGER NOT NULL,
+UUID INTEGER NOT NULL,
+PRIMARY KEY (MemberID),
+FOREIGN KEY (UUID) REFERENCES Account(UUID),
+FOREIGN KEY (GroupID) REFERENCES Groups(GroupID)
+);
+
