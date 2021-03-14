@@ -9,87 +9,96 @@ CREATE SCHEMA public;
 --Creates Accounts Table
 CREATE TABLE Account
 (
-UUID INTEGER NOT NULL,
-FirstName VARCHAR(20) NOT NULL,
-Surname VARCHAR(40) NOT NULL,
+UUID SMALLSERIAL NOT NULL,
+Username VARCHAR(40) NOT NULL,
 Email VARCHAR(30) NOT NULL,
 Password VARCHAR(30) NOT NULL,
 PRIMARY KEY (UUID),
-CHECK(Email LIKE '_%@%_')
+CHECK(Email LIKE '_%@%_'),
+UNIQUE(UUID),
+UNIQUE(Email),
+UNIQUE(Username)
 );
 
 --Creates Exercise Table
 CREATE TABLE Exercise
 (
-ExerciseID INTEGER NOT NULL,
+ExerciseID SMALLSERIAL NOT NULL,
 Calories INTEGER NOT NULL,
 Name VARCHAR(20) NOT NULL, 
 PRIMARY KEY (ExerciseID),
-CHECK(Calories > 0)
+CHECK(Calories > 0),
+UNIQUE(ExerciseID)
 );
 
 --Creates Exercise Completed Table
 CREATE TABLE ExerciseComp
 (
-ExCompID INTEGER NOT NULL,
+ExCompID SMALLSERIAL NOT NULL,
 UUID INTEGER NOT NULL,
 ExerciseID INTEGER NOT NULL,
 TimeStamp DATE NOT NULL,
 PRIMARY KEY (ExCompID),
 FOREIGN KEY (UUID) REFERENCES Account(UUID),
-FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID)
+FOREIGN KEY (ExerciseID) REFERENCES Exercise(ExerciseID),
+UNIQUE(ExCompID)
 );
 
 --Creates Consumable Table
 CREATE TABLE Consumable
 (
-ConsumableID INTEGER NOT NULL,
+ConsumableID SMALLSERIAL NOT NULL,
 Calories INTEGER NOT NULL,
 Name VARCHAR(20) NOT NULL, 
 PRIMARY KEY (ConsumableID),
-CHECK(Calories > 0)
+CHECK(Calories > 0),
+UNIQUE(ConsumableID)
 );
 
 --Creates Consumables Consumed Table
 CREATE TABLE ConsumableComp
 (
-ConCompID INTEGER NOT NULL,
+ConCompID SMALLSERIAL NOT NULL,
 UUID INTEGER NOT NULL,
 ConsumableID INTEGER NOT NULL,
 TimeStamp DATE NOT NULL,
 PRIMARY KEY (ConCompID),
 FOREIGN KEY (UUID) REFERENCES Account(UUID),
-FOREIGN KEY (ConsumableID) REFERENCES Consumable(ConsumableID)
+FOREIGN KEY (ConsumableID) REFERENCES Consumable(ConsumableID),
+UNIQUE(ConCompID)
 );
 
 --Creates Details Table
 CREATE TABLE Details
 (
-DetailsID INTEGER NOT NULL,
+DetailsID SMALLSERIAL NOT NULL,
 UUID INTEGER NOT NULL,
 CalorieGoal INTEGER NOT NULL,
 Weight INTEGER NOT NULL,
 Height INTEGER NOT NULL,
 PRIMARY KEY (DetailsID),
-FOREIGN KEY (UUID) REFERENCES Account(UUID)
+FOREIGN KEY (UUID) REFERENCES Account(UUID),
+UNIQUE(DetailsID)
 );
 
 --Creates Groups Table
 CREATE TABLE Groups
 (
-GroupID INTEGER NOT NULL,
+GroupID SMALLSERIAL NOT NULL,
 GroupName VARCHAR(20) NOT NULL,
-PRIMARY KEY (GroupID)
+PRIMARY KEY (GroupID),
+UNIQUE(GroupID),
+UNIQUE(GroupName)
 );
 
 --Creates Group Members Table
 CREATE TABLE GroupMembers
 (
-MemberID INTEGER NOT NULL,
+MemberID SMALLSERIAL NOT NULL,
 GroupID INTEGER NOT NULL,
 UUID INTEGER NOT NULL,
 PRIMARY KEY (MemberID),
 FOREIGN KEY (UUID) REFERENCES Account(UUID),
-FOREIGN KEY (GroupID) REFERENCES Groups(GroupID)
+FOREIGN KEY (GroupID) REFERENCES Groups(GroupID),
+UNIQUE(MemberID)
 );
-
