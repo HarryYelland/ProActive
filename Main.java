@@ -12,9 +12,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 
 public class Main extends Application {
     private Stage mainStage;
+    public int ID;
 
     @Override
     public void start(Stage primaryStage) {
@@ -36,7 +39,7 @@ public class Main extends Application {
         proActiveName.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,50));
         proActiveName.setTranslateX(200);
         proActiveName.setTranslateY(165);
-        
+
         //Login button + styling
         Button loginButton = new Button();
         loginButton.setText("Login");
@@ -123,7 +126,7 @@ public class Main extends Application {
         lButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                Login login = new Login();
                 //Error Handling
                 Alert errorWarning = new Alert(Alert.AlertType.ERROR);
                 errorWarning.setTitle("Error");
@@ -142,8 +145,16 @@ public class Main extends Application {
                     errorWarning.setContentText("Forgot to enter your Password");
                     errorWarning.show();
                 }
-                else mainStage.setScene(accountPage());
-
+                else {
+                    ID = login.main(userNameTextField.getText(), userPassword.getText());
+                    if(ID < 0) {
+                        errorWarning.setContentText("Incorrect Login Details, Please Try Again");
+                        errorWarning.show();
+                    }
+                    else{
+                        mainStage.setScene(accountPage());
+                    }
+                }
             }
         });
 
@@ -211,7 +222,7 @@ public class Main extends Application {
         rButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
+                Registration register = new Registration();
                 Alert errorWarning = new Alert(Alert.AlertType.ERROR);
                 errorWarning.setTitle("Error");
                 errorWarning.setHeaderText("Oops Something went wrong");
@@ -244,9 +255,31 @@ public class Main extends Application {
                     errorWarning.setContentText("Forgot to Confirm your Password");
                     errorWarning.show();
                 }
-
-                else mainStage.setScene(accountPage()); //Takes user to Account Page
-
+                else if((confirmPasswordTextField.getText().compareTo(passwordTextField.getText()))!= 0){
+                    errorWarning.setContentText("Passwords do not Match");
+                    errorWarning.show();
+                }
+                //Reference from: https://www.tutorialspoint.com/validate-email-address-in-java
+                else if(!(emailTextField.getText().matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$"))){
+                    errorWarning.setContentText("Email Formatting Incorrect");
+                    errorWarning.show();
+                }
+                else {
+                    try {
+                        if(register.main(usernameTextField.getText(), emailTextField.getText(), passwordTextField.getText()) == -1){
+                            errorWarning.setContentText("Username Already in Use");
+                            errorWarning.show();
+                        }
+                        else if(register.main(usernameTextField.getText(), emailTextField.getText(), passwordTextField.getText()) == -2){
+                            errorWarning.setContentText("Email Already in Use");
+                            errorWarning.show();
+                        } else {
+                            mainStage.setScene(loginPage());
+                        };
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
             }
         });
 
