@@ -152,7 +152,11 @@ public class Main extends Application {
                         errorWarning.show();
                     }
                     else{
-                        mainStage.setScene(accountPage());
+                        try {
+                            mainStage.setScene(accountPage());
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
                     }
                 }
             }
@@ -285,19 +289,17 @@ public class Main extends Application {
 
 
         registerRoot.getChildren().addAll(usernameTextField,registerPageName,rButton,emailTextField,passwordTextField,confirmPasswordTextField);
-
         return new Scene(registerRoot, 640, 426);
 
     }
 
-    protected Scene accountPage() {
+    protected Scene accountPage() throws SQLException {
         Pane accountRoot = new Pane();
         accountRoot.setStyle("-fx-background-color: #F7EDDE");
-
-
+        Account account = new Account();
 
         Label accountPageName = new Label();
-        accountPageName.setText("Welcome <USERNAME> to Your Pro-Active");
+        accountPageName.setText("Welcome " + account.getUsername(ID) + " to Your Pro-Active");
         accountPageName.setTextFill(Color.BLACK);
         accountPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,20));
         accountPageName.setTranslateX(220);
@@ -305,6 +307,9 @@ public class Main extends Application {
 
         accountRoot.getChildren().addAll(accountPageName);
 
+        if(account.setPassword(ID, "b", "c", "c")){
+            System.out.println("pass changed");
+        }
 
 
         return new Scene(accountRoot, 640, 426);
