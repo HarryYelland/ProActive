@@ -1,4 +1,4 @@
-package sample;
+
 
 import java.sql.*;
 import java.util.Scanner;
@@ -72,6 +72,7 @@ public class Account {
 
         String query1 = "SELECT Password From Account WHERE UUID = ?";
         String query2 = "UPDATE Account SET Password = ? WHERE UUID = ?";
+
 
 
         try {

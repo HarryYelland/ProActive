@@ -1,4 +1,4 @@
-package sample;
+
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,7 +27,7 @@ import java.sql.SQLException;
 
 public class Main extends Application {
     private Stage mainStage;
-   // public int ID;
+    public int ID;
 
     @Override
     public void start(Stage primaryStage) {
@@ -71,10 +71,6 @@ public class Main extends Application {
                         "-fx-font: normal 20px 'Arial Nova Cond Light'"
         );
 
-//        ImageView imageView = new ImageView("mealPrep.png");
-//        imageView.setFitWidth(Screen.getPrimary().getVisualBounds().getWidth());
-//        imageView.setFitHeight(Screen.getPrimary().getVisualBounds().getHeight());
-
 
       loginButton.setOnAction(new EventHandler<ActionEvent>() {
           @Override
@@ -99,15 +95,6 @@ public class Main extends Application {
         );
 
         registerButton.setOnAction(event -> mainStage.setScene(registrationPage()));
-
-
-        //Background Image
-  //       String image = Main.class.getResource("fitness.png").toExternalForm();
-      //   mainPageRoot.setStyle("-fx-background-image: url('" + image + "');");
-
-//        ImageView imageView = new ImageView(image);
-//        imageView.setFitWidth(Screen.getPrimary().getVisualBounds().getWidth());
-//        imageView.setFitHeight(Screen.getPrimary().getVisualBounds().getHeight());
 
 
 
@@ -181,7 +168,7 @@ public class Main extends Application {
         lButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //Login login = new Login();
+                Login login = new Login();
 
                 //Error Handling
                 Alert errorWarning = new Alert(Alert.AlertType.ERROR);
@@ -200,23 +187,17 @@ public class Main extends Application {
                 else if(userPassword.getText().isEmpty()){
                     errorWarning.setContentText("Forgot to enter your Password");
                     errorWarning.show();
-                }else {
-                    mainStage.setScene(accountPage());
                 }
-//                else {
-//                    ID = login.main(userNameTextField.getText(), userPassword.getText());
-//                    if(ID < 0) {
-//                        errorWarning.setContentText("Incorrect Login Details, Please Try Again");
-//                        errorWarning.show();
-//                    }
-//                    else{
-//                        try {
-//                            mainStage.setScene(accountPage());
-//                        } catch (SQLException throwables) {
-//                            throwables.printStackTrace();
-//                        }
-//                    }
-//                }
+                else {
+                    ID = login.main(userNameTextField.getText(), userPassword.getText());
+                    if(ID < 0) {
+                        errorWarning.setContentText("Incorrect Login Details, Please Try Again");
+                        errorWarning.show();
+                    }
+                    else{
+                        mainStage.setScene(accountPage());
+                    }
+                }
             }
         });
 
@@ -326,7 +307,7 @@ public class Main extends Application {
         rButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //Registration register = new Registration();
+                Registration register = new Registration();
                 Alert errorWarning = new Alert(Alert.AlertType.ERROR);
                 errorWarning.setTitle("Error");
                 errorWarning.setHeaderText("Oops Something went wrong");
@@ -364,26 +345,29 @@ public class Main extends Application {
                     errorWarning.show();
                 }
                 //Reference from: https://www.tutorialspoint.com/validate-email-address-in-java
-//                else if(!(emailTextField.getText().matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$"))){
-//                    errorWarning.setContentText("Email Formatting Incorrect");
-//                    errorWarning.show();
-//                }
-//                else {
-//                    try {
-//                        if(register.main(usernameTextField.getText(), emailTextField.getText(), passwordTextField.getText()) == -1){
-//                            errorWarning.setContentText("Username Already in Use");
-//                            errorWarning.show();
-//                        }
-//                        else if(register.main(usernameTextField.getText(), emailTextField.getText(), passwordTextField.getText()) == -2){
-//                            errorWarning.setContentText("Email Already in Use");
-//                            errorWarning.show();
-//                        } else {
-//                            mainStage.setScene(loginPage());
-//                        };
-//                    } catch (SQLException throwables) {
-//                        throwables.printStackTrace();
-//                    }
-//                }
+                else if(!(emailTextField.getText().matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$"))){
+                    errorWarning.setContentText("Email Formatting Incorrect");
+                    errorWarning.show();
+                }
+                else {
+                    try {
+                        if(register.main(usernameTextField.getText(), emailTextField.getText(), passwordTextField.getText()) == -1){
+                            errorWarning.setContentText("Username Already in Use");
+                            errorWarning.show();
+                        }
+                        else if(register.main(usernameTextField.getText(), emailTextField.getText(), passwordTextField.getText()) == -2){
+                            errorWarning.setContentText("Email Already in Use");
+                            errorWarning.show();
+                        } else {
+                            Login login = new Login();
+                            ID = login.getUser(usernameTextField.getText(), passwordTextField.getText());
+                            mainStage.setScene(accountPage());
+
+                        };
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
             }
         });
 
