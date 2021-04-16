@@ -1,4 +1,4 @@
-
+package com.company;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,11 +23,15 @@ import javafx.scene.shape.Rectangle;
 
 import java.awt.*;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 public class Main extends Application {
     private Stage mainStage;
     public int ID;
+    LocalDateTime DATE;
+    DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
     @Override
     public void start(Stage primaryStage) {
@@ -379,7 +383,7 @@ public class Main extends Application {
 
     protected Scene accountPage() {
         Pane accountRoot = new Pane();
-
+        Account account = new Account();
 
         //Adding image on side panel
         BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
@@ -390,7 +394,7 @@ public class Main extends Application {
        // accountRoot.setStyle("-fx-background-color: #000000");
 
         Label accountPageName = new Label();
-        accountPageName.setText("Welcome <Username> to your Pro-Active");
+        accountPageName.setText("Welcome " + account.getUsername(ID) + " to your Pro-Active");
         accountPageName.setTextFill(Color.rgb(55,77,95));
         accountPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
         accountPageName.setTranslateX(300);
@@ -408,9 +412,11 @@ public class Main extends Application {
         usernameLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField username = new TextField();
+        username.setText(account.getUsername(ID));
         username.setPrefSize(300,40);
         username.setTranslateX(600);
         username.setTranslateY(140);
+        username.setEditable(false);
 
 
 
@@ -535,12 +541,14 @@ public class Main extends Application {
         //Exercise Log button design
         Button exerciseLogButton = new Button();
         exerciseLogButton.setText("Exercise Log");
+        exerciseLogButton.setEllipsisString("Exercise Log");
         exerciseLogButton.setTextFill(Color.WHITE);
         exerciseLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
         exerciseLogButton.setPrefSize(190, 40);
         exerciseLogButton.setTranslateX(5); // negative = Left, positive = right
         exerciseLogButton.setTranslateY(-20); //Bottom
         exerciseLogButton.setOnAction(event -> mainStage.setScene(exerciseLog()));
+
 
         Image exerciseIcon = new Image(getClass().getResourceAsStream("clipboard.png"));
         ImageView eImg = new ImageView(exerciseIcon);
@@ -552,6 +560,7 @@ public class Main extends Application {
 
         Button dietaryLogButton = new Button();
         dietaryLogButton.setText("Dietary Log");
+        dietaryLogButton.setEllipsisString("Dietary Log");
         dietaryLogButton.setTextFill(Color.WHITE);
         dietaryLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" + "-fx-background-color: transparent");
         dietaryLogButton.setPrefSize(190, 40);
@@ -609,6 +618,35 @@ public class Main extends Application {
         BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
                 ,new BackgroundSize(1.0,1.0,true,true,false,false));
         exerciseRoot.setBackground(new Background(backgroundImage));
+        Label exercise = new Label();
+        Label date = new Label();
+        DATE = LocalDateTime.now();
+        exercise.setText("Viewing Exercise Log For:");
+        date.setText(DTF.format(DATE));
+        exercise.setTextFill(Color.rgb(55,77,95));
+        date.setTextFill(Color.rgb(55,77,95));
+        exercise.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
+        date.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
+        exercise.setTranslateX(420);
+        exercise.setTranslateY(40);
+        date.setTranslateX(550);
+        date.setTranslateY(75);
+
+        //Change Date Left
+        Button dateLeftButton = new Button();
+        dateLeftButton.setText("<<");
+        dateLeftButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
+        dateLeftButton.setPrefSize(190, 40);
+        dateLeftButton.setTranslateX(370); // negative = Left, positive = right
+        dateLeftButton.setTranslateY(75); //Bottom
+        dateLeftButton.setOnAction(event -> DATE.plusDays(1));
+        //Change Date Right
+        Button dateRightButton = new Button();
+        dateRightButton.setText(">>");
+        dateRightButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
+        dateRightButton.setPrefSize(190, 40);
+        dateRightButton.setTranslateX(675); // negative = Left, positive = right
+        dateRightButton.setTranslateY(75); //Bottom
 
 
         VBox sideButtons = new VBox(91);
@@ -648,12 +686,14 @@ public class Main extends Application {
         //Exercise Log button design
         Button exerciseLogButton = new Button();
         exerciseLogButton.setText("Exercise Log");
+        exerciseLogButton.setEllipsisString("Exercise Log");
         exerciseLogButton.setTextFill(Color.WHITE);
         exerciseLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
         exerciseLogButton.setPrefSize(190, 40);
         exerciseLogButton.setTranslateX(5); // negative = Left, positive = right
         exerciseLogButton.setTranslateY(-20); //Bottom
         exerciseLogButton.setOnAction(event -> mainStage.setScene(exerciseLog()));
+
 
         Image exerciseIcon = new Image(getClass().getResourceAsStream("clipboard.png"));
         ImageView eImg = new ImageView(exerciseIcon);
@@ -665,6 +705,7 @@ public class Main extends Application {
 
         Button dietaryLogButton = new Button();
         dietaryLogButton.setText("Dietary Log");
+        dietaryLogButton.setEllipsisString("Dietary Log");
         dietaryLogButton.setTextFill(Color.WHITE);
         dietaryLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" + "-fx-background-color: transparent");
         dietaryLogButton.setPrefSize(190, 40);
@@ -705,7 +746,7 @@ public class Main extends Application {
 
 
 
-        exerciseRoot.getChildren().addAll(sideButtons);
+        exerciseRoot.getChildren().addAll(exercise, date, dateLeftButton, dateRightButton, sideButtons);
         return new Scene(exerciseRoot, 1024, 600);
 
 
@@ -719,6 +760,35 @@ public class Main extends Application {
                 ,new BackgroundSize(1.0,1.0,true,true,false,false));
         dietaryLogRoot.setBackground(new Background(backgroundImage));
 
+        Label diet = new Label();
+        Label date = new Label();
+        DATE = LocalDateTime.now();
+        diet.setText("Viewing Diet Log For:");
+        date.setText(DTF.format(DATE));
+        diet.setTextFill(Color.rgb(55,77,95));
+        date.setTextFill(Color.rgb(55,77,95));
+        diet.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
+        date.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
+        diet.setTranslateX(435);
+        diet.setTranslateY(40);
+        date.setTranslateX(525);
+        date.setTranslateY(75);
+
+        //Change Date Left
+        Button dateLeftButton = new Button();
+        dateLeftButton.setText("<<");
+        dateLeftButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
+        dateLeftButton.setPrefSize(190, 40);
+        dateLeftButton.setTranslateX(370); // negative = Left, positive = right
+        dateLeftButton.setTranslateY(75); //Bottom
+        //Change Date Right
+        Button dateRightButton = new Button();
+        dateRightButton.setText(">>");
+        dateRightButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
+        dateRightButton.setPrefSize(190, 40);
+        dateRightButton.setTranslateX(675); // negative = Left, positive = right
+        dateRightButton.setTranslateY(75); //Bottom
+
 
         VBox sideButtons = new VBox(91);
 
@@ -757,12 +827,14 @@ public class Main extends Application {
         //Exercise Log button design
         Button exerciseLogButton = new Button();
         exerciseLogButton.setText("Exercise Log");
+        exerciseLogButton.setEllipsisString("Exercise Log");
         exerciseLogButton.setTextFill(Color.WHITE);
         exerciseLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
         exerciseLogButton.setPrefSize(190, 40);
         exerciseLogButton.setTranslateX(5); // negative = Left, positive = right
         exerciseLogButton.setTranslateY(-20); //Bottom
         exerciseLogButton.setOnAction(event -> mainStage.setScene(exerciseLog()));
+
 
         Image exerciseIcon = new Image(getClass().getResourceAsStream("clipboard.png"));
         ImageView eImg = new ImageView(exerciseIcon);
@@ -774,6 +846,7 @@ public class Main extends Application {
 
         Button dietaryLogButton = new Button();
         dietaryLogButton.setText("Dietary Log");
+        dietaryLogButton.setEllipsisString("Dietary Log");
         dietaryLogButton.setTextFill(Color.WHITE);
         dietaryLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" + "-fx-background-color: transparent");
         dietaryLogButton.setPrefSize(190, 40);
@@ -813,7 +886,7 @@ public class Main extends Application {
 
 
 
-        dietaryLogRoot.getChildren().addAll(sideButtons);
+        dietaryLogRoot.getChildren().addAll(diet, date, dateLeftButton, dateRightButton, sideButtons);
         return new Scene(dietaryLogRoot, 1024, 600);
 
 
@@ -911,12 +984,14 @@ public class Main extends Application {
         //Exercise Log button design
         Button exerciseLogButton = new Button();
         exerciseLogButton.setText("Exercise Log");
+        exerciseLogButton.setEllipsisString("Exercise Log");
         exerciseLogButton.setTextFill(Color.WHITE);
         exerciseLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
         exerciseLogButton.setPrefSize(190, 40);
         exerciseLogButton.setTranslateX(5); // negative = Left, positive = right
         exerciseLogButton.setTranslateY(-20); //Bottom
         exerciseLogButton.setOnAction(event -> mainStage.setScene(exerciseLog()));
+
 
         Image exerciseIcon = new Image(getClass().getResourceAsStream("clipboard.png"));
         ImageView eImg = new ImageView(exerciseIcon);
@@ -928,6 +1003,7 @@ public class Main extends Application {
 
         Button dietaryLogButton = new Button();
         dietaryLogButton.setText("Dietary Log");
+        dietaryLogButton.setEllipsisString("Dietary Log");
         dietaryLogButton.setTextFill(Color.WHITE);
         dietaryLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" + "-fx-background-color: transparent");
         dietaryLogButton.setPrefSize(190, 40);
@@ -1086,12 +1162,14 @@ public class Main extends Application {
         //Exercise Log button design
         Button exerciseLogButton = new Button();
         exerciseLogButton.setText("Exercise Log");
+        exerciseLogButton.setEllipsisString("Exercise Log");
         exerciseLogButton.setTextFill(Color.WHITE);
         exerciseLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
         exerciseLogButton.setPrefSize(190, 40);
         exerciseLogButton.setTranslateX(5); // negative = Left, positive = right
         exerciseLogButton.setTranslateY(-20); //Bottom
         exerciseLogButton.setOnAction(event -> mainStage.setScene(exerciseLog()));
+
 
         Image exerciseIcon = new Image(getClass().getResourceAsStream("clipboard.png"));
         ImageView eImg = new ImageView(exerciseIcon);
@@ -1103,6 +1181,7 @@ public class Main extends Application {
 
         Button dietaryLogButton = new Button();
         dietaryLogButton.setText("Dietary Log");
+        dietaryLogButton.setEllipsisString("Dietary Log");
         dietaryLogButton.setTextFill(Color.WHITE);
         dietaryLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" + "-fx-background-color: transparent");
         dietaryLogButton.setPrefSize(190, 40);
@@ -1343,12 +1422,14 @@ public class Main extends Application {
         //Exercise Log button design
         Button exerciseLogButton = new Button();
         exerciseLogButton.setText("Exercise Log");
+        exerciseLogButton.setEllipsisString("Exercise Log");
         exerciseLogButton.setTextFill(Color.WHITE);
         exerciseLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
         exerciseLogButton.setPrefSize(190, 40);
         exerciseLogButton.setTranslateX(5); // negative = Left, positive = right
         exerciseLogButton.setTranslateY(-20); //Bottom
         exerciseLogButton.setOnAction(event -> mainStage.setScene(exerciseLog()));
+
 
         Image exerciseIcon = new Image(getClass().getResourceAsStream("clipboard.png"));
         ImageView eImg = new ImageView(exerciseIcon);
@@ -1360,6 +1441,7 @@ public class Main extends Application {
 
         Button dietaryLogButton = new Button();
         dietaryLogButton.setText("Dietary Log");
+        dietaryLogButton.setEllipsisString("Dietary Log");
         dietaryLogButton.setTextFill(Color.WHITE);
         dietaryLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" + "-fx-background-color: transparent");
         dietaryLogButton.setPrefSize(190, 40);
