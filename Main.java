@@ -23,8 +23,11 @@ import javafx.scene.shape.Rectangle;
 
 import java.awt.*;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 
 public class Main extends Application {
@@ -635,24 +638,24 @@ public class Main extends Application {
         date.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
         exercise.setTranslateX(420);
         exercise.setTranslateY(40);
-        date.setTranslateX(550);
+        date.setTranslateX(530);
         date.setTranslateY(75);
 
         //Change Date Left
         Button dateLeftButton = new Button();
         dateLeftButton.setText("<<");
-        dateLeftButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
-        dateLeftButton.setPrefSize(190, 40);
-        dateLeftButton.setTranslateX(370); // negative = Left, positive = right
-        dateLeftButton.setTranslateY(75); //Bottom
+        dateLeftButton.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        dateLeftButton.setPrefSize(70, 18);
+        dateLeftButton.setTranslateX(440); // negative = Left, positive = right
+        dateLeftButton.setTranslateY(82); //Bottom
         dateLeftButton.setOnAction(event -> {DATE = DATE.plusDays(-1); mainStage.setScene(exerciseLog());});
         //Change Date Right
         Button dateRightButton = new Button();
         dateRightButton.setText(">>");
-        dateRightButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
-        dateRightButton.setPrefSize(190, 40);
-        dateRightButton.setTranslateX(675); // negative = Left, positive = right
-        dateRightButton.setTranslateY(75); //Bottom
+        dateRightButton.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        dateRightButton.setPrefSize(70, 18);
+        dateRightButton.setTranslateX(720); // negative = Left, positive = right
+        dateRightButton.setTranslateY(82); //Bottom
         dateRightButton.setOnAction(event -> {DATE = DATE.plusDays(1); mainStage.setScene(exerciseLog());});
 
         VBox sideButtons = new VBox(91);
@@ -782,20 +785,27 @@ public class Main extends Application {
         //Change Date Left
         Button dateLeftButton = new Button();
         dateLeftButton.setText("<<");
-        dateLeftButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
-        dateLeftButton.setPrefSize(190, 40);
-        dateLeftButton.setTranslateX(370); // negative = Left, positive = right
-        dateLeftButton.setTranslateY(75); //Bottom
+        dateLeftButton.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        dateLeftButton.setPrefSize(70, 18);
+        dateLeftButton.setTranslateX(440); // negative = Left, positive = right
+        dateLeftButton.setTranslateY(82); //Bottom
         dateLeftButton.setOnAction(event -> {DATE = DATE.plusDays(-1); mainStage.setScene(dietaryLog());});
         //Change Date Right
         Button dateRightButton = new Button();
         dateRightButton.setText(">>");
-        dateRightButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
-        dateRightButton.setPrefSize(190, 40);
-        dateRightButton.setTranslateX(675); // negative = Left, positive = right
-        dateRightButton.setTranslateY(75); //Bottom
-        dateRightButton.setOnAction(event -> {DATE = DATE.plusDays(1); System.out.println("Added Day"); mainStage.setScene(dietaryLog());});
+        dateRightButton.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        dateRightButton.setPrefSize(70, 18);
+        dateRightButton.setTranslateX(720); // negative = Left, positive = right
+        dateRightButton.setTranslateY(82); //Bottom
+        dateRightButton.setOnAction(event -> {DATE = DATE.plusDays(1); mainStage.setScene(dietaryLog());});
 
+        Button addToLog = new Button();
+        addToLog.setText("Add To Date's Log");
+        addToLog.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        addToLog.setPrefSize(190, 40);
+        addToLog.setTranslateX(510);
+        addToLog.setTranslateY(525);
+        addToLog.setOnAction(event -> mainStage.setScene(foodLoggingPage()));
 
         VBox sideButtons = new VBox(91);
 
@@ -893,7 +903,7 @@ public class Main extends Application {
 
 
 
-        dietaryLogRoot.getChildren().addAll(diet, date, dateLeftButton, dateRightButton, sideButtons);
+        dietaryLogRoot.getChildren().addAll(diet, date, dateLeftButton, dateRightButton, sideButtons, addToLog);
         return new Scene(dietaryLogRoot, 1024, 600);
 
 
@@ -1608,23 +1618,104 @@ public class Main extends Application {
         heightTb.setTranslateX(600);
         heightTb.setTranslateY(380);
 
+        Label bmiLabel = new Label("BMI: ");
+        bmiLabel.setTranslateX(300);
+        bmiLabel.setTranslateY(440);
+        bmiLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        TextField bmiTb = new TextField();
+        int BMI = 0;
+        if (account.getHeight(ID) > 0) {
+            BMI = account.getWeight(ID) / (account.getHeight(ID))^2;
+        }
+        bmiTb.setText(String.valueOf(BMI));
+        bmiTb.setPrefSize(300,40);
+        bmiTb.setTranslateX(600);
+        bmiTb.setTranslateY(440);
+        bmiTb.setEditable(false);
+
         Button saveBtn = new Button("Save Details");
         saveBtn.setTranslateX(770);
-        saveBtn.setTranslateY(440);
+        saveBtn.setTranslateY(500);
         saveBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         Button closeBtn = new Button("Return To My Account");
         closeBtn.setTranslateX(450); // negative = Left, positive = right
-        closeBtn.setTranslateY(515); //Bottom
+        closeBtn.setTranslateY(540); //Bottom
         closeBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
         closeBtn.setOnAction(event -> mainStage.setScene(accountPage()));
 
-        accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, editDetailsLabel, calorieLabel, calorieTb, weightLabel, weightTb, heightLabel, heightTb, saveBtn, closeBtn);
+        accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, editDetailsLabel, calorieLabel, calorieTb, weightLabel, weightTb, heightLabel, heightTb, saveBtn, closeBtn, bmiLabel, bmiTb);
 
 
         return new Scene(accountRoot, 1024, 600);
     }
 
+    protected Scene foodLoggingPage() {
+        Pane accountRoot = new Pane();
+        Account account = new Account();
+
+        HBox loginPageNameRoot = new HBox();
+        BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("headerIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
+                ,new BackgroundSize(1.0,1.0,true,true,false,false));
+        loginPageNameRoot.setBackground(new Background(bgImage));
+
+
+        loginPageNameRoot.setPrefSize(1025,250);
+
+        // accountRoot.setStyle("-fx-background-color: #000000");
+
+        Label accountPageName = new Label();
+        accountPageName.setText("Add Food To Log");
+        accountPageName.setTextFill(Color.rgb(55,77,95));
+        accountPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
+        accountPageName.setTranslateX(440);
+        accountPageName.setTranslateY(300);
+
+        Label foodLabel = new Label("Name of Food: ");
+        foodLabel.setTranslateX(300);
+        foodLabel.setTranslateY(360);
+        foodLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        TextField foodTb = new TextField();
+        foodTb.setPrefSize(300,40);
+        foodTb.setTranslateX(600);
+        foodTb.setTranslateY(360);
+
+        Label calorieLabel = new Label("Calories: ");
+        calorieLabel.setTranslateX(300);
+        calorieLabel.setTranslateY(420);
+        calorieLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        TextField calorieTb = new TextField();
+        calorieTb.setPrefSize(300,40);
+        calorieTb.setTranslateX(600);
+        calorieTb.setTranslateY(420);
+
+
+        Button saveBtn = new Button("Save Details");
+        saveBtn.setTranslateX(800);
+        saveBtn.setTranslateY(480);
+        saveBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        saveBtn.setOnAction(event -> {
+            Food food = new Food();
+            int id = food.addFood(foodTb.getText(), Integer.parseInt(calorieTb.getText()));
+            Instant instant = DATE.toInstant(ZoneOffset.ofHours(0));
+            Date output = Date.from(instant);
+            food.addLog(ID, id, (java.sql.Date) output);
+        });
+
+        Button closeBtn = new Button("Return To My Account");
+        closeBtn.setTranslateX(450); // negative = Left, positive = right
+        closeBtn.setTranslateY(540); //Bottom
+        closeBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        closeBtn.setOnAction(event -> mainStage.setScene(dietaryLog()));
+
+        accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, calorieLabel, calorieTb, foodLabel, foodTb, saveBtn, closeBtn);
+
+
+        return new Scene(accountRoot, 1024, 600);
+    }
 
     public static void main(String[] args) {
         launch(args);

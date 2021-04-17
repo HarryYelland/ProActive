@@ -5,14 +5,16 @@ import java.util.Scanner;
 
 public class Food {
 
-        public boolean addFood(String food, int caloriePerHunded)
+        public int addFood(String food, int caloriePerHunded)
         {
             DatabaseConnector connector = new DatabaseConnector();
             ResultSet rs;
             boolean exists = false;
+            int id = 0;
 
-            String query1 = "SELECT * FROM diet WHERE food =?";
-            String query2 = "INSERT INTO diet(food, calories) VALUES(?, ?)";
+            String query1 = "SELECT * FROM Consumable WHERE Name LIKE ?";
+            String query2 = "INSERT INTO Consumable(Calories, Name) VALUES(?, ?)";
+            String query3 = "SELECT ConsumableID FROM Consumable WHERE Name LIKE ?";
 
             try
             {
@@ -35,8 +37,8 @@ public class Food {
             {
                 try(PreparedStatement insert = connector.getConnection().prepareStatement(query2))
                 {
-                    insert.setString(1, food);
-                    insert.setInt(2, caloriePerHunded);
+                    insert.setInt(1, caloriePerHunded);
+                    insert.setString(2, food);
                     insert.execute();
                     System.out.println("New food added into database");
                     exists = true;
@@ -47,8 +49,48 @@ public class Food {
                     System.out.println(e.getMessage());
                 }
             }
-            return exists;
+
+            try
+            {
+                PreparedStatement getID = connector.getConnection().prepareStatement(query3);
+                getID.setString(1, food);
+
+                rs = getID.executeQuery();
+
+                if (rs.next()) {
+                    id = rs.findColumn(String.valueOf(1));
+                }
+            }
+            catch(SQLException e)
+            {
+                System.out.println("Error in checking food type");
+            }
+
+
+
+            return id;
         }
+
+    public boolean addLog(int UUID, int ConsumableID, Date Date)
+    {
+        DatabaseConnector connector = new DatabaseConnector();
+        ResultSet rs;
+
+        String query1 = "INSERT INTO ConsumableComp(UUID, ConsumableID, DATE) VALUES(?, ?, ?)";
+        try(PreparedStatement insert = connector.getConnection().prepareStatement(query1))
+        {
+            insert.setInt(1, UUID);
+            insert.setInt(2, ConsumableID);
+            insert.setDate(3, Date);
+            insert.execute();
+            System.out.println("New food added into database");
+        }
+        catch(SQLException e)
+        {
+                System.out.println(e.getMessage());
+        }
+        return true;
+    }
 
         public static void main(String[] args) throws SQLException {
             Food addFood = new Food();
