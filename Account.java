@@ -28,8 +28,133 @@ public class Account {
     //                 https://stackoverflow.com/questions/42454582/check-if-value-accountnumber-exist-in-a-java-database
     //                 https://stackoverflow.com/questions/16099382/java-mysql-check-if-value-exists-in-database
 
+    public int getWeight(int id){
+        PreparedStatement ps;
+        ResultSet rs;
+        int weight = 0;
 
+        String query1 = "SELECT Weight FROM Details WHERE UUID = ?";
 
+        try
+        {
+            ps = Account.getConnection().prepareStatement(query1);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                System.out.println("Successful login!");
+                weight = rs.getInt(1);
+                return weight;        //caloriegoal
+            }
+
+            else
+            {
+                System.out.println("No Current Weight Set - Setting To 0");
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+        return weight;
+    }
+
+    public String getEmail(int id){
+        PreparedStatement ps;
+        ResultSet rs;
+        String email = "";
+
+        String query1 = "SELECT Email FROM Accounts WHERE UUID = ?";
+
+        try
+        {
+            ps = Account.getConnection().prepareStatement(query1);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                System.out.println("Successful login!");
+                email = rs.getString(1);
+                return email;        //caloriegoal
+            }
+
+            else
+            {
+                System.out.println("No Current Email Set");
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+        return email;
+    }
+
+    public int getHeight(int id){
+        PreparedStatement ps;
+        ResultSet rs;
+        int height = 0;
+
+        String query1 = "SELECT Height FROM Details WHERE UUID = ?";
+
+        try
+        {
+            ps = Account.getConnection().prepareStatement(query1);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                System.out.println("Successful login!");
+                height = rs.getInt(1);
+                return height;        //caloriegoal
+            }
+
+            else
+            {
+                System.out.println("No Current Height Set - Setting To 0");
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+        return height;
+    }
+
+    public int getCalorieGoal(int id){
+        PreparedStatement ps;
+        ResultSet rs;
+        int calories = 0;
+
+        String query1 = "SELECT CalorieGoal FROM Details WHERE UUID = ?";
+
+        try
+        {
+            ps = Account.getConnection().prepareStatement(query1);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                System.out.println("Successful login!");
+                calories = rs.getInt(1);
+                return calories;        //caloriegoal
+            }
+
+            else
+            {
+                System.out.println("No Current Calorie Goal - Setting To 0");
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+        return calories;
+    }
 
     public String getUsername(int id)
     {

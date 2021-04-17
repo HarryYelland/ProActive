@@ -44,7 +44,7 @@ public class Main extends Application {
 
     //Main Pro Active Page
     public Scene mainPage(){
-
+        DATE = LocalDateTime.now();
         Pane mainPageRoot = new Pane();
 
         //Background Image
@@ -483,6 +483,7 @@ public class Main extends Application {
         currentEmailLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField currentEmail = new TextField();
+        currentEmail.setText(account.getEmail(ID));
         currentEmail.setPrefSize(300,40);
         currentEmail.setTranslateX(600);
         currentEmail.setTranslateY(410);
@@ -504,7 +505,12 @@ public class Main extends Application {
         emailSendButton.setTranslateY(510); //Bottom
         emailSendButton.setStyle("-fx-font: normal 16px 'Didact Gothic'");
 
-
+        Button detailsBtn = new Button("Edit Personal Details");
+        detailsBtn.setPrefSize(190, 10);
+        detailsBtn.setTranslateX(450); // negative = Left, positive = right
+        detailsBtn.setTranslateY(545); //Bottom
+        detailsBtn.setStyle("-fx-font: normal 16px 'Didact Gothic'");
+        detailsBtn.setOnAction(event -> mainStage.setScene(detailsPage()));
 
         VBox sideButtons = new VBox(91);
 
@@ -603,7 +609,7 @@ public class Main extends Application {
 
         accountRoot.getChildren().addAll(sideButtons,accountPageName,username,oldPass,newPass,confirmPass,currentEmail,
                 newEmail,emailSendButton,passSendButton,oldPassLabel,newPassLabel,confirmPassLabel,currentEmailLabel,
-                newEmailLabel,usernameLabel,editDetailsLabel,passResetLabel,changeEmailLabel );
+                newEmailLabel,usernameLabel,editDetailsLabel,passResetLabel,changeEmailLabel, detailsBtn);
 
 //        if(account.setPassword(ID, "b", "c", "c")){
 //            System.out.println("pass changed");
@@ -620,7 +626,7 @@ public class Main extends Application {
         exerciseRoot.setBackground(new Background(backgroundImage));
         Label exercise = new Label();
         Label date = new Label();
-        DATE = LocalDateTime.now();
+        //DATE = LocalDateTime.now();
         exercise.setText("Viewing Exercise Log For:");
         date.setText(DTF.format(DATE));
         exercise.setTextFill(Color.rgb(55,77,95));
@@ -639,7 +645,7 @@ public class Main extends Application {
         dateLeftButton.setPrefSize(190, 40);
         dateLeftButton.setTranslateX(370); // negative = Left, positive = right
         dateLeftButton.setTranslateY(75); //Bottom
-        dateLeftButton.setOnAction(event -> DATE.plusDays(1));
+        dateLeftButton.setOnAction(event -> {DATE = DATE.plusDays(-1); mainStage.setScene(exerciseLog());});
         //Change Date Right
         Button dateRightButton = new Button();
         dateRightButton.setText(">>");
@@ -647,7 +653,7 @@ public class Main extends Application {
         dateRightButton.setPrefSize(190, 40);
         dateRightButton.setTranslateX(675); // negative = Left, positive = right
         dateRightButton.setTranslateY(75); //Bottom
-
+        dateRightButton.setOnAction(event -> {DATE = DATE.plusDays(1); mainStage.setScene(exerciseLog());});
 
         VBox sideButtons = new VBox(91);
 
@@ -762,7 +768,6 @@ public class Main extends Application {
 
         Label diet = new Label();
         Label date = new Label();
-        DATE = LocalDateTime.now();
         diet.setText("Viewing Diet Log For:");
         date.setText(DTF.format(DATE));
         diet.setTextFill(Color.rgb(55,77,95));
@@ -781,6 +786,7 @@ public class Main extends Application {
         dateLeftButton.setPrefSize(190, 40);
         dateLeftButton.setTranslateX(370); // negative = Left, positive = right
         dateLeftButton.setTranslateY(75); //Bottom
+        dateLeftButton.setOnAction(event -> {DATE = DATE.plusDays(-1); mainStage.setScene(dietaryLog());});
         //Change Date Right
         Button dateRightButton = new Button();
         dateRightButton.setText(">>");
@@ -788,6 +794,7 @@ public class Main extends Application {
         dateRightButton.setPrefSize(190, 40);
         dateRightButton.setTranslateX(675); // negative = Left, positive = right
         dateRightButton.setTranslateY(75); //Bottom
+        dateRightButton.setOnAction(event -> {DATE = DATE.plusDays(1); System.out.println("Added Day"); mainStage.setScene(dietaryLog());});
 
 
         VBox sideButtons = new VBox(91);
@@ -1538,6 +1545,85 @@ public class Main extends Application {
 
     }
 
+    protected Scene detailsPage() {
+        Pane accountRoot = new Pane();
+        Account account = new Account();
+
+        HBox loginPageNameRoot = new HBox();
+        BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("headerIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
+                ,new BackgroundSize(1.0,1.0,true,true,false,false));
+        loginPageNameRoot.setBackground(new Background(bgImage));
+
+
+        loginPageNameRoot.setPrefSize(1025,150);
+
+        // accountRoot.setStyle("-fx-background-color: #000000");
+
+        Label accountPageName = new Label();
+        accountPageName.setText(account.getUsername(ID) + "'s Details");
+        accountPageName.setTextFill(Color.rgb(55,77,95));
+        accountPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
+        accountPageName.setTranslateX(440);
+        accountPageName.setTranslateY(160);
+
+        Label editDetailsLabel = new Label("Edit Details");
+        editDetailsLabel.setTranslateX(525);
+        editDetailsLabel.setTranslateY(200);
+        editDetailsLabel.setUnderline(true);
+        editDetailsLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+
+        Label calorieLabel = new Label("Calorie Goal: ");
+        calorieLabel.setTranslateX(300);
+        calorieLabel.setTranslateY(260);
+        calorieLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        TextField calorieTb = new TextField();
+        calorieTb.setText(String.valueOf(account.getCalorieGoal(ID)));
+        calorieTb.setPrefSize(300,40);
+        calorieTb.setTranslateX(600);
+        calorieTb.setTranslateY(260);
+
+
+        Label weightLabel = new Label("Weight: ");
+        weightLabel.setTranslateX(300);
+        weightLabel.setTranslateY(320);
+        weightLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+
+        Label heightLabel = new Label("Height: ");
+        heightLabel.setTranslateX(300);
+        heightLabel.setTranslateY(380);
+        heightLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        TextField weightTb = new TextField();
+        weightTb.setText(String.valueOf(account.getWeight(ID)));
+        weightTb.setPrefSize(300,40);
+        weightTb.setTranslateX(600);
+        weightTb.setTranslateY(320);
+
+        TextField heightTb = new TextField();
+        heightTb.setText(String.valueOf(account.getHeight(ID)));
+        heightTb.setPrefSize(300,40);
+        heightTb.setTranslateX(600);
+        heightTb.setTranslateY(380);
+
+        Button saveBtn = new Button("Save Details");
+        saveBtn.setTranslateX(770);
+        saveBtn.setTranslateY(440);
+        saveBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        Button closeBtn = new Button("Return To My Account");
+        closeBtn.setTranslateX(450); // negative = Left, positive = right
+        closeBtn.setTranslateY(515); //Bottom
+        closeBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        closeBtn.setOnAction(event -> mainStage.setScene(accountPage()));
+
+        accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, editDetailsLabel, calorieLabel, calorieTb, weightLabel, weightTb, heightLabel, heightTb, saveBtn, closeBtn);
+
+
+        return new Scene(accountRoot, 1024, 600);
+    }
 
 
     public static void main(String[] args) {
