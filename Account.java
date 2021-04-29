@@ -63,9 +63,9 @@ public class Account {
     public String getEmail(int id){
         PreparedStatement ps;
         ResultSet rs;
-        String email = "";
+        String email = "No Email Found";
 
-        String query1 = "SELECT Email FROM Accounts WHERE UUID = ?";
+        String query1 = "SELECT Email FROM Account WHERE UUID = ?";
 
         try
         {
@@ -156,6 +156,39 @@ public class Account {
         return calories;
     }
 
+    public String getCustomGoal(int id){
+        PreparedStatement ps;
+        ResultSet rs;
+        String goal = "";
+
+        String query1 = "SELECT CustomGoal FROM Details WHERE UUID = ?";
+
+        try
+        {
+            ps = Account.getConnection().prepareStatement(query1);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                System.out.println("Successful login!");
+                goal = rs.getString(1);
+                return goal;        //goal
+            }
+
+            else
+            {
+                System.out.println("No Current Calorie Goal - Setting To 0");
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+        return goal;
+    }
+
+
     public String getUsername(int id)
     {
         PreparedStatement ps;
@@ -234,6 +267,76 @@ public class Account {
         catch(SQLException e)
         {
             System.out.println("Error in Setting Password");
+        }
+        return false;
+    }
+
+
+    public boolean setEmail(int id, String newEmail) throws SQLException {
+        ResultSet rs;
+        PreparedStatement ps;
+
+        String query1 = "UPDATE Account SET Email = ? WHERE UUID = ?";
+
+        try
+        {
+                PreparedStatement setEmail = Registration.getConnection().prepareStatement(query1);
+                ps = Account.getConnection().prepareStatement(query1);
+                ps.setString(1, newEmail);
+                ps.setInt(2, id);
+                rs = ps.executeQuery();
+                rs = setEmail.executeQuery();
+                return true;
+        }
+        catch(SQLException e)
+        {
+        }
+        return false;
+    }
+
+
+    public boolean setFirstDetails(int id) throws SQLException {
+        ResultSet rs;
+        PreparedStatement ps;
+
+        String query1 = "INSERT INTO Details (UUID, CalorieGoal, Weight, Height, CustomGoal) VALUES (?, 0, 0, 0, ?)";
+        try
+        {
+            PreparedStatement setDetails = Registration.getConnection().prepareStatement(query1);
+            ps = Account.getConnection().prepareStatement(query1);
+            ps.setInt(1, id);
+            ps.setString(2, "");
+            rs = ps.executeQuery();
+            rs = setDetails.executeQuery();
+            return true;
+        }
+        catch(SQLException e)
+        {
+        }
+        return false;
+    }
+
+    public boolean setDetails(int id, int calorieGoal, int weight, int height, String customGoal) throws SQLException {
+        ResultSet rs;
+        PreparedStatement ps;
+
+        String query1 = "UPDATE Details SET CalorieGoal = ?, Weight = ?, Height = ?, CustomGoal = ? WHERE UUID = ?";
+
+        try
+        {
+            PreparedStatement setCalorieGoal = Registration.getConnection().prepareStatement(query1);
+            ps = Account.getConnection().prepareStatement(query1);
+            ps.setInt(1, calorieGoal);
+            ps.setInt(2, weight);
+            ps.setInt(3, height);
+            ps.setString(4, customGoal);
+            ps.setInt(5, id);
+            rs = ps.executeQuery();
+            rs = setCalorieGoal.executeQuery();
+            return true;
+        }
+        catch(SQLException e)
+        {
         }
         return false;
     }

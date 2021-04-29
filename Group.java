@@ -28,7 +28,7 @@ public class Group {
         return false;
     }
 
-    Boolean makeGroup(String groupName) throws SQLException {
+    Boolean makeGroup(String groupName, String confirmName) throws SQLException {
         PreparedStatement ps;
         ResultSet rs;
         String query1 = "INSERT INTO Groups (GroupName) VALUES (?)";
@@ -85,19 +85,6 @@ public class Group {
         ps.setInt(2, uuid);
         ps.executeQuery();
         System.out.println("INSERTED GROUP MEMBER");
-        return true;
-    }
-
-    Boolean createGroup(int UUID, String groupName, ArrayList userlist) throws SQLException {
-        int groupID;
-        int memberID;
-        makeGroup(groupName);
-        groupID = getGroupID(groupName);
-        System.out.println(userlist.size());
-        for(int i= 0; i < userlist.size(); i++){
-            memberID = getMemberUUID(userlist.get(i).toString());
-            insertGroupMember(groupID, memberID);
-        }
         return true;
     }
 

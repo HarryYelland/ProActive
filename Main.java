@@ -27,6 +27,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -490,6 +491,7 @@ public class Main extends Application {
         currentEmail.setPrefSize(300,40);
         currentEmail.setTranslateX(600);
         currentEmail.setTranslateY(410);
+        currentEmail.setEditable(false);
 
         //New Email
         Label newEmailLabel = new Label("New Email: ");
@@ -507,13 +509,26 @@ public class Main extends Application {
         emailSendButton.setTranslateX(810); // negative = Left, positive = right
         emailSendButton.setTranslateY(510); //Bottom
         emailSendButton.setStyle("-fx-font: normal 16px 'Didact Gothic'");
+        emailSendButton.setOnAction(event -> {
+            try {
+                account.setEmail(ID, newEmail.getText());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         Button detailsBtn = new Button("Edit Personal Details");
         detailsBtn.setPrefSize(190, 10);
         detailsBtn.setTranslateX(450); // negative = Left, positive = right
         detailsBtn.setTranslateY(545); //Bottom
         detailsBtn.setStyle("-fx-font: normal 16px 'Didact Gothic'");
-        detailsBtn.setOnAction(event -> mainStage.setScene(detailsPage()));
+        detailsBtn.setOnAction(event -> {
+            try {
+                mainStage.setScene(detailsPage());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         VBox sideButtons = new VBox(91);
 
@@ -1070,7 +1085,13 @@ public class Main extends Application {
         createGroupButton.setStyle("-fx-background-radius: 1em; " +
                 "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #879AF2");
 
-        createGroupButton.setOnAction(event -> mainStage.setScene(createGroup()));
+        createGroupButton.setOnAction(event -> {
+            try {
+                mainStage.setScene(createGroup());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         //Join Group Button
         Button joinGroupButton = new Button();
@@ -1091,7 +1112,9 @@ public class Main extends Application {
     }
 
 
-    protected Scene createGroup(){
+    protected Scene createGroup() throws SQLException {
+        ArrayList<Integer> members = new ArrayList();
+        Group group = new Group();
         Pane createGroupRoot = new Pane();
         BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
                 ,new BackgroundSize(1.0,1.0,true,true,false,false));
@@ -1130,6 +1153,19 @@ public class Main extends Application {
         createGroupButton.setTranslateY(400); //Bottom
         createGroupButton.setStyle("-fx-background-radius: 5em; " +
                 "-fx-font: normal 16px 'Didact Gothic'");
+        createGroupButton.setOnAction(event->{
+            try {
+                group.makeGroup(groupNameTextField.getText(), confirmGroupTextField.getText());
+                int groupID = group.getGroupID(groupNameTextField.getText());
+                for (int i=0; i<members.size(); i++) {
+                    group.insertGroupMember(groupID, members.get(i));
+                }
+                mainStage.setScene(joinGroup1());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+                System.out.println("big issue");
+            }
+        });
 
 
         Button addFriendButton = new Button("Add Friend");
@@ -1138,6 +1174,13 @@ public class Main extends Application {
         addFriendButton.setTranslateY(340); //Bottom
         addFriendButton.setStyle("-fx-background-radius: 5em; " +
                 "-fx-font:  normal 16px 'Didact Gothic'");
+        addFriendButton.setOnAction(event -> {
+            try {
+                members.add(group.getMemberUUID(inviteTextField.getText()));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
 
 
@@ -1555,9 +1598,13 @@ public class Main extends Application {
 
     }
 
-    protected Scene detailsPage() {
+    protected Scene detailsPage() throws SQLException {
         Pane accountRoot = new Pane();
         Account account = new Account();
+
+        if(account.getCalorieGoal(ID) <= 0){
+            account.setFirstDetails(ID);
+        }
 
         HBox loginPageNameRoot = new HBox();
         BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("headerIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
@@ -1576,11 +1623,16 @@ public class Main extends Application {
         accountPageName.setTranslateX(440);
         accountPageName.setTranslateY(160);
 
-        Label editDetailsLabel = new Label("Edit Details");
-        editDetailsLabel.setTranslateX(525);
-        editDetailsLabel.setTranslateY(200);
-        editDetailsLabel.setUnderline(true);
-        editDetailsLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        Label customGoalLabel = new Label("Custom Goal: ");
+        customGoalLabel.setTranslateX(300);
+        customGoalLabel.setTranslateY(200);
+        customGoalLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        TextField customGoalTb = new TextField();
+        customGoalTb.setText(String.valueOf(account.getCustomGoal(ID)));
+        customGoalTb.setPrefSize(300,40);
+        customGoalTb.setTranslateX(600);
+        customGoalTb.setTranslateY(200);
 
 
         Label calorieLabel = new Label("Calorie Goal: ");
@@ -1624,9 +1676,9 @@ public class Main extends Application {
         bmiLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField bmiTb = new TextField();
-        int BMI = 0;
+        float BMI = 0;
         if (account.getHeight(ID) > 0) {
-            BMI = account.getWeight(ID) / (account.getHeight(ID))^2;
+            BMI = account.getWeight(ID) / ((account.getHeight(ID) / 100)^2);
         }
         bmiTb.setText(String.valueOf(BMI));
         bmiTb.setPrefSize(300,40);
@@ -1638,6 +1690,14 @@ public class Main extends Application {
         saveBtn.setTranslateX(770);
         saveBtn.setTranslateY(500);
         saveBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        saveBtn.setOnAction(event -> {
+            try {
+                account.setDetails(ID, Integer.parseInt(calorieTb.getText()), Integer.parseInt(weightTb.getText()), Integer.parseInt(heightTb.getText()), customGoalTb.getText());
+                mainStage.setScene(detailsPage());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         Button closeBtn = new Button("Return To My Account");
         closeBtn.setTranslateX(450); // negative = Left, positive = right
@@ -1645,7 +1705,7 @@ public class Main extends Application {
         closeBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
         closeBtn.setOnAction(event -> mainStage.setScene(accountPage()));
 
-        accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, editDetailsLabel, calorieLabel, calorieTb, weightLabel, weightTb, heightLabel, heightTb, saveBtn, closeBtn, bmiLabel, bmiTb);
+        accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, customGoalLabel, customGoalTb, calorieLabel, calorieTb, weightLabel, weightTb, heightLabel, heightTb, saveBtn, closeBtn, bmiLabel, bmiTb);
 
 
         return new Scene(accountRoot, 1024, 600);
