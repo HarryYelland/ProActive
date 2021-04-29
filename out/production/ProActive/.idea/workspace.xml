@@ -2,8 +2,72 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f6ce92d9-fb26-45d8-98cf-1f3d6b94436e" name="Default Changelist" comment="Cleaned code with functional DB">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ProActive.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/.idea/dbnavigator.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/.idea/libraries/lib.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/Account.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/Login.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/Main$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/Main$2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/Main$3.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/Main$4.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/MealPrep2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/MealPrep3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/PROACTIVEIMAGE.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/ProActive.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/Proactive UI.pptx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/Registration.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/backgroundIMG.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/clipboard.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/db.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/debug.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/fitChallenge.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/fitChallenge2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/fitChallenge3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/fitnessFirst.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/fitnessFirst2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/fitnessFirst3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/fitnessImg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/funandFit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/funandFit2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/funandFit3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/groupBackgroundImg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/groupIcon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/headerIMG.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/mealPrep.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/motivateFit.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/motivateFit2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/motivateFit3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/proactiveIMG2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/proactiveIMG3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/proactiveSideImage2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/proactiveSideImg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/proactiveside3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/salad.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/sample.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/sample/Controller.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/user.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/weightL.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/weightL2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/ProActive/weightL3.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exercise.java" beforeDir="false" afterPath="$PROJECT_DIR$/Exercise.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Food.java" beforeDir="false" afterPath="$PROJECT_DIR$/Food.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Group.java" beforeDir="false" afterPath="$PROJECT_DIR$/Group.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/Login.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ProActive/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Registration.java" beforeDir="false" afterPath="$PROJECT_DIR$/Registration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ProActive/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ProActive/Main.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +132,8 @@
       <workItem from="1619013387639" duration="214000" />
       <workItem from="1619221120772" duration="1633000" />
       <workItem from="1619630614309" duration="8639000" />
+      <workItem from="1619709330892" duration="1034000" />
+      <workItem from="1619711363843" duration="392000" />
     </task>
     <task id="LOCAL-00001" summary="Cleaned code with functional DB">
       <created>1617983191265</created>

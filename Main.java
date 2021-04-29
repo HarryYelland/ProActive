@@ -1,5 +1,7 @@
-package com.company;
+//package com.company;
 
+
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
@@ -20,7 +22,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.control.CheckBox;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -1140,17 +1145,42 @@ public class Main extends Application {
         confirmGroupTextField.setTranslateX(360);
         confirmGroupTextField.setTranslateY(270);
 
+
+
+        HBox checkBoxLayout = new HBox();
+        checkBoxLayout.setPrefSize(500,60);
+        checkBoxLayout.setTranslateX(415);
+        checkBoxLayout.setTranslateY(345);
+        checkBoxLayout.setSpacing(100.0);
+
+
+        final ToggleGroup radioGroup = new ToggleGroup();
+
+        RadioButton radioButton1 = new RadioButton("Calorie");
+        RadioButton radioButton2 = new RadioButton("Exercise");
+        RadioButton radioButton3 = new RadioButton("Custom");
+
+        radioButton1.setToggleGroup(radioGroup);
+        radioButton2.setToggleGroup(radioGroup);
+        radioButton3.setToggleGroup(radioGroup);
+
+
+
+        checkBoxLayout.getChildren().addAll(radioButton1,radioButton2,radioButton3);
+
+
+
         TextField inviteTextField = new TextField();
         inviteTextField.setPromptText("Friend username");
         inviteTextField.setPrefSize(350,40);
         inviteTextField.setTranslateX(360);
-        inviteTextField.setTranslateY(340);
+        inviteTextField.setTranslateY(400);
 
 
         Button createGroupButton = new Button("Create Group");
         createGroupButton.setPrefSize(200, 40);
         createGroupButton.setTranslateX(360); // negative = Left, positive = right
-        createGroupButton.setTranslateY(400); //Bottom
+        createGroupButton.setTranslateY(450); //Bottom
         createGroupButton.setStyle("-fx-background-radius: 5em; " +
                 "-fx-font: normal 16px 'Didact Gothic'");
         createGroupButton.setOnAction(event->{
@@ -1171,7 +1201,7 @@ public class Main extends Application {
         Button addFriendButton = new Button("Add Friend");
         addFriendButton.setPrefSize(120, 40);
         addFriendButton.setTranslateX(730); // negative = Left, positive = right
-        addFriendButton.setTranslateY(340); //Bottom
+        addFriendButton.setTranslateY(400); //Bottom
         addFriendButton.setStyle("-fx-background-radius: 5em; " +
                 "-fx-font:  normal 16px 'Didact Gothic'");
         addFriendButton.setOnAction(event -> {
@@ -1179,6 +1209,23 @@ public class Main extends Application {
                 members.add(group.getMemberUUID(inviteTextField.getText()));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
+            }
+        });
+
+        addFriendButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+                Alert friendAdded = new Alert(Alert.AlertType.CONFIRMATION);
+
+                friendAdded.setTitle("Friend Added");
+
+                friendAdded.setHeaderText(inviteTextField.getText() + "has been added to the group");
+
+
+                //inviteTextField.getText();
+
+
             }
         });
 
@@ -1282,7 +1329,7 @@ public class Main extends Application {
 
 
         createGroupRoot.getChildren().addAll(sideButtons,confirmGroupTextField,groupNameTextField
-        ,inviteTextField,createGroupName,createGroupButton, addFriendButton);
+        ,inviteTextField,createGroupName,createGroupButton, addFriendButton, checkBoxLayout);
         return new Scene(createGroupRoot,1024,600);
 
     }
