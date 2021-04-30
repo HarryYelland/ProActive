@@ -15,10 +15,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.*;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
@@ -471,11 +469,14 @@ public class Main extends Application {
         confirmPass.setTranslateX(600);
         confirmPass.setTranslateY(300);
 
-        Button passSendButton = new Button("Send");
-        passSendButton.setPrefSize(90, 10);
-        passSendButton.setTranslateX(810); // negative = Left, positive = right
+        Button passSendButton = new Button("Save Details");
+        passSendButton.setTextFill(Color.WHITE);
+        passSendButton.setTranslateX(790); // negative = Left, positive = right
         passSendButton.setTranslateY(350); //Bottom
-        passSendButton.setStyle("-fx-font: normal 16px 'Didact Gothic'");
+        passSendButton.setStyle("-fx-background-radius: 5em; " +
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+
 
 
 
@@ -509,11 +510,13 @@ public class Main extends Application {
         newEmail.setTranslateX(600);
         newEmail.setTranslateY(460);
 
-        Button emailSendButton = new Button("Send");
-        emailSendButton.setPrefSize(90, 10);
-        emailSendButton.setTranslateX(810); // negative = Left, positive = right
+        Button emailSendButton = new Button("Save Details");
+        emailSendButton.setTextFill(Color.WHITE);
+        emailSendButton.setTranslateX(790); // negative = Left, positive = right
         emailSendButton.setTranslateY(510); //Bottom
-        emailSendButton.setStyle("-fx-font: normal 16px 'Didact Gothic'");
+        emailSendButton.setStyle("-fx-background-radius: 5em; " +
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         emailSendButton.setOnAction(event -> {
             try {
                 account.setEmail(ID, newEmail.getText());
@@ -524,9 +527,13 @@ public class Main extends Application {
 
         Button detailsBtn = new Button("Edit Personal Details");
         detailsBtn.setPrefSize(190, 10);
+        detailsBtn.setTextFill(Color.WHITE);
         detailsBtn.setTranslateX(450); // negative = Left, positive = right
         detailsBtn.setTranslateY(545); //Bottom
-        detailsBtn.setStyle("-fx-font: normal 16px 'Didact Gothic'");
+        detailsBtn.setStyle("-fx-background-radius: 5em; " +
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+
         detailsBtn.setOnAction(event -> {
             try {
                 mainStage.setScene(detailsPage());
@@ -791,37 +798,39 @@ public class Main extends Application {
 
         Label diet = new Label();
         Label date = new Label();
-        diet.setText("Viewing Diet Log For:");
+        diet.setText("Dietary Log For:");
         date.setText(DTF.format(DATE));
         diet.setTextFill(Color.rgb(55,77,95));
         date.setTextFill(Color.rgb(55,77,95));
         diet.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
         date.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        diet.setTranslateX(435);
+        diet.setTranslateX(255);
         diet.setTranslateY(40);
-        date.setTranslateX(525);
-        date.setTranslateY(75);
+        date.setTranslateX(620);
+        date.setTranslateY(45);
 
         //Change Date Left
         Button dateLeftButton = new Button();
-        dateLeftButton.setText("<<");
-        dateLeftButton.setStyle("-fx-font: normal 17px 'Didact Gothic'");
-        dateLeftButton.setPrefSize(70, 18);
-        dateLeftButton.setTranslateX(440); // negative = Left, positive = right
-        dateLeftButton.setTranslateY(82); //Bottom
+        dateLeftButton.setText("⏪");
+        dateLeftButton.setStyle("-fx-font: normal 17px 'Didact Gothic';"+ "-fx-background-radius: 1em; " + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        dateLeftButton.setTranslateX(560); // negative = Left, positive = right
+        dateLeftButton.setTranslateY(45); //Bottom
         dateLeftButton.setOnAction(event -> {DATE = DATE.plusDays(-1); mainStage.setScene(dietaryLog());});
+
         //Change Date Right
         Button dateRightButton = new Button();
-        dateRightButton.setText(">>");
-        dateRightButton.setStyle("-fx-font: normal 17px 'Didact Gothic'");
-        dateRightButton.setPrefSize(70, 18);
-        dateRightButton.setTranslateX(720); // negative = Left, positive = right
-        dateRightButton.setTranslateY(82); //Bottom
+        dateRightButton.setText("⏩");
+        dateRightButton.setStyle("-fx-font: normal 17px 'Didact Gothic';"+ "-fx-background-radius: 1em; " + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        dateRightButton.setTranslateX(820); // negative = Left, positive = right
+        dateRightButton.setTranslateY(45); //Bottom
         dateRightButton.setOnAction(event -> {DATE = DATE.plusDays(1); mainStage.setScene(dietaryLog());});
 
         Button addToLog = new Button();
-        addToLog.setText("Add To Date's Log");
-        addToLog.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        addToLog.setText("Add Food/Drink");
+        addToLog.setTextFill(Color.WHITE);
+        addToLog.setStyle("-fx-background-radius: 5em; " +
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         addToLog.setPrefSize(190, 40);
         addToLog.setTranslateX(510);
         addToLog.setTranslateY(525);
@@ -1649,6 +1658,11 @@ public class Main extends Application {
         Pane accountRoot = new Pane();
         Account account = new Account();
 
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
+                ,new BackgroundSize(1.0,1.0,true,true,false,false));
+        accountRoot.setBackground(new Background(backgroundImage));
+
+
         if(account.getCalorieGoal(ID) <= 0){
             account.setFirstDetails(ID);
         }
@@ -1659,67 +1673,67 @@ public class Main extends Application {
         loginPageNameRoot.setBackground(new Background(bgImage));
 
 
-        loginPageNameRoot.setPrefSize(1025,150);
+        loginPageNameRoot.setPrefSize(1025,200);
 
         // accountRoot.setStyle("-fx-background-color: #000000");
 
         Label accountPageName = new Label();
         accountPageName.setText(account.getUsername(ID) + "'s Details");
-        accountPageName.setTextFill(Color.rgb(55,77,95));
-        accountPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        accountPageName.setTranslateX(440);
-        accountPageName.setTranslateY(160);
+        accountPageName.setTextFill(Color.rgb(255,255,255));
+        accountPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.EXTRA_BOLD,60));
+        accountPageName.setTranslateX(50);
+        accountPageName.setTranslateY(55);
 
         Label customGoalLabel = new Label("Custom Goal: ");
         customGoalLabel.setTranslateX(300);
-        customGoalLabel.setTranslateY(200);
+        customGoalLabel.setTranslateY(220);
         customGoalLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField customGoalTb = new TextField();
         customGoalTb.setText(String.valueOf(account.getCustomGoal(ID)));
         customGoalTb.setPrefSize(300,40);
-        customGoalTb.setTranslateX(600);
-        customGoalTb.setTranslateY(200);
+        customGoalTb.setTranslateX(500);
+        customGoalTb.setTranslateY(220);
 
 
         Label calorieLabel = new Label("Calorie Goal: ");
         calorieLabel.setTranslateX(300);
-        calorieLabel.setTranslateY(260);
+        calorieLabel.setTranslateY(280);
         calorieLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField calorieTb = new TextField();
         calorieTb.setText(String.valueOf(account.getCalorieGoal(ID)));
         calorieTb.setPrefSize(300,40);
-        calorieTb.setTranslateX(600);
-        calorieTb.setTranslateY(260);
+        calorieTb.setTranslateX(500);
+        calorieTb.setTranslateY(280);
 
 
         Label weightLabel = new Label("Weight: ");
-        weightLabel.setTranslateX(300);
-        weightLabel.setTranslateY(320);
+        weightLabel.setTranslateX(317);
+        weightLabel.setTranslateY(340);
         weightLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
 
         Label heightLabel = new Label("Height: ");
-        heightLabel.setTranslateX(300);
-        heightLabel.setTranslateY(380);
+        heightLabel.setTranslateX(317);
+        heightLabel.setTranslateY(400);
         heightLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField weightTb = new TextField();
         weightTb.setText(String.valueOf(account.getWeight(ID)));
         weightTb.setPrefSize(300,40);
-        weightTb.setTranslateX(600);
-        weightTb.setTranslateY(320);
+        weightTb.setTranslateX(500);
+        weightTb.setTranslateY(340);
 
         TextField heightTb = new TextField();
         heightTb.setText(String.valueOf(account.getHeight(ID)));
         heightTb.setPrefSize(300,40);
-        heightTb.setTranslateX(600);
-        heightTb.setTranslateY(380);
+        heightTb.setTranslateX(500);
+        heightTb.setTranslateY(400);
 
         Label bmiLabel = new Label("BMI: ");
-        bmiLabel.setTranslateX(300);
-        bmiLabel.setTranslateY(440);
+        bmiLabel.setTranslateX(325);
+        bmiLabel.setTranslateY(460);
         bmiLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField bmiTb = new TextField();
@@ -1729,14 +1743,18 @@ public class Main extends Application {
         }
         bmiTb.setText(String.valueOf(BMI));
         bmiTb.setPrefSize(300,40);
-        bmiTb.setTranslateX(600);
-        bmiTb.setTranslateY(440);
+        bmiTb.setTranslateX(500);
+        bmiTb.setTranslateY(460);
         bmiTb.setEditable(false);
 
         Button saveBtn = new Button("Save Details");
-        saveBtn.setTranslateX(770);
-        saveBtn.setTranslateY(500);
-        saveBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        saveBtn.setTranslateX(689);
+        saveBtn.setTranslateY(510);
+        saveBtn.setTextFill(Color.WHITE);
+        saveBtn.setStyle("-fx-background-radius: 5em; " +
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+
+
         saveBtn.setOnAction(event -> {
             try {
                 account.setDetails(ID, Integer.parseInt(calorieTb.getText()), Integer.parseInt(weightTb.getText()), Integer.parseInt(heightTb.getText()), customGoalTb.getText());
@@ -1747,9 +1765,11 @@ public class Main extends Application {
         });
 
         Button closeBtn = new Button("Return To My Account");
-        closeBtn.setTranslateX(450); // negative = Left, positive = right
-        closeBtn.setTranslateY(540); //Bottom
-        closeBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        closeBtn.setTranslateX(400); // negative = Left, positive = right
+        closeBtn.setTranslateY(550); //Bottom
+        closeBtn.setTextFill(Color.WHITE);
+        closeBtn.setStyle("-fx-background-radius: 5em; " +
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         closeBtn.setOnAction(event -> mainStage.setScene(accountPage()));
 
         accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, customGoalLabel, customGoalTb, calorieLabel, calorieTb, weightLabel, weightTb, heightLabel, heightTb, saveBtn, closeBtn, bmiLabel, bmiTb);
