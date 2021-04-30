@@ -55,7 +55,6 @@ public class Main extends Application {
         Pane mainPageRoot = new Pane();
 
         //Background Image
-
         BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("proactiveIMG2.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
                 ,new BackgroundSize(1.0,1.0,true,true,false,false));
         mainPageRoot.setBackground(new Background(bgImage));
@@ -687,6 +686,24 @@ public class Main extends Application {
         dateRightButton.setTranslateY(45); //Bottom
         dateRightButton.setOnAction(event -> {DATE = DATE.plusDays(1); mainStage.setScene(exerciseLog());});
 
+        //Exercise Log Table
+        TableView tableView1 = new TableView();
+        tableView1.setEditable(true);
+
+        TableColumn ExerciseName = new TableColumn("Exercise Name");
+        TableColumn RepsDistance = new TableColumn("Reps/Distance");
+        TableColumn CaloriesBurnt = new TableColumn("Calories Remaining");
+
+        ExerciseName.setPrefWidth(200);
+        RepsDistance.setPrefWidth(200);
+        CaloriesBurnt.setPrefWidth(200);
+
+        tableView1.setPrefSize(600,400);
+        tableView1.setTranslateX(310);
+        tableView1.setTranslateY(100);
+
+        tableView1.getColumns().addAll(ExerciseName,RepsDistance,CaloriesBurnt);
+
         VBox sideButtons = new VBox(91);
 
         //Adding image on side panel
@@ -784,7 +801,7 @@ public class Main extends Application {
 
 
 
-        exerciseRoot.getChildren().addAll(exercise, date, dateLeftButton, dateRightButton, sideButtons);
+        exerciseRoot.getChildren().addAll(exercise, date, dateLeftButton, dateRightButton, sideButtons,tableView1);
         return new Scene(exerciseRoot, 1024, 600);
 
 
@@ -838,6 +855,27 @@ public class Main extends Application {
         addToLog.setTranslateY(525);
         addToLog.setOnAction(event -> mainStage.setScene(foodLoggingPage()));
 
+        //Dietary Log Table
+        TableView tableView = new TableView();
+        tableView.setEditable(true);
+
+        TableColumn FoodName = new TableColumn("Food Name");
+        TableColumn CaloriesConsumed = new TableColumn("Calories Consumed");
+        TableColumn CaloriesRemaining = new TableColumn("Calories Remaining");
+
+        FoodName.setPrefWidth(200);
+        CaloriesConsumed.setPrefWidth(200);
+        CaloriesRemaining.setPrefWidth(200);
+
+        tableView.setPrefSize(600,400);
+        tableView.setTranslateX(310);
+        tableView.setTranslateY(100);
+
+        tableView.getColumns().addAll(FoodName,CaloriesConsumed,CaloriesRemaining);
+
+
+
+
         VBox sideButtons = new VBox(91);
 
         //Adding image on side panel
@@ -934,7 +972,7 @@ public class Main extends Application {
 
 
 
-        dietaryLogRoot.getChildren().addAll(diet, date, dateLeftButton, dateRightButton, sideButtons, addToLog);
+        dietaryLogRoot.getChildren().addAll(diet, date, dateLeftButton, dateRightButton, sideButtons, addToLog,tableView);
         return new Scene(dietaryLogRoot, 1024, 600);
 
 
@@ -1690,58 +1728,58 @@ public class Main extends Application {
         accountPageName.setText(account.getUsername(ID) + "'s Details");
         accountPageName.setTextFill(Color.rgb(255,255,255));
         accountPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.EXTRA_BOLD,60));
-        accountPageName.setTranslateX(50);
+        accountPageName.setTranslateX(300);
         accountPageName.setTranslateY(55);
 
         Label customGoalLabel = new Label("Custom Goal: ");
-        customGoalLabel.setTranslateX(300);
+        customGoalLabel.setTranslateX(260);
         customGoalLabel.setTranslateY(220);
         customGoalLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField customGoalTb = new TextField();
         customGoalTb.setText(String.valueOf(account.getCustomGoal(ID)));
         customGoalTb.setPrefSize(300,40);
-        customGoalTb.setTranslateX(500);
+        customGoalTb.setTranslateX(470);
         customGoalTb.setTranslateY(220);
 
 
         Label calorieLabel = new Label("Calorie Goal: ");
-        calorieLabel.setTranslateX(300);
+        calorieLabel.setTranslateX(260);
         calorieLabel.setTranslateY(280);
         calorieLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField calorieTb = new TextField();
         calorieTb.setText(String.valueOf(account.getCalorieGoal(ID)));
         calorieTb.setPrefSize(300,40);
-        calorieTb.setTranslateX(500);
+        calorieTb.setTranslateX(470);
         calorieTb.setTranslateY(280);
 
 
         Label weightLabel = new Label("Weight: ");
-        weightLabel.setTranslateX(317);
+        weightLabel.setTranslateX(270);
         weightLabel.setTranslateY(340);
         weightLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
 
         Label heightLabel = new Label("Height: ");
-        heightLabel.setTranslateX(317);
+        heightLabel.setTranslateX(270);
         heightLabel.setTranslateY(400);
         heightLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField weightTb = new TextField();
         weightTb.setText(String.valueOf(account.getWeight(ID)));
         weightTb.setPrefSize(300,40);
-        weightTb.setTranslateX(500);
+        weightTb.setTranslateX(470);
         weightTb.setTranslateY(340);
 
         TextField heightTb = new TextField();
         heightTb.setText(String.valueOf(account.getHeight(ID)));
         heightTb.setPrefSize(300,40);
-        heightTb.setTranslateX(500);
+        heightTb.setTranslateX(470);
         heightTb.setTranslateY(400);
 
         Label bmiLabel = new Label("BMI: ");
-        bmiLabel.setTranslateX(325);
+        bmiLabel.setTranslateX(276);
         bmiLabel.setTranslateY(460);
         bmiLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
@@ -1752,12 +1790,12 @@ public class Main extends Application {
         }
         bmiTb.setText(String.valueOf(BMI));
         bmiTb.setPrefSize(300,40);
-        bmiTb.setTranslateX(500);
+        bmiTb.setTranslateX(470);
         bmiTb.setTranslateY(460);
         bmiTb.setEditable(false);
 
         Button saveBtn = new Button("Save Details");
-        saveBtn.setTranslateX(689);
+        saveBtn.setTranslateX(664);
         saveBtn.setTranslateY(510);
         saveBtn.setTextFill(Color.WHITE);
         saveBtn.setStyle("-fx-background-radius: 5em; " +
@@ -1774,7 +1812,7 @@ public class Main extends Application {
         });
 
         Button closeBtn = new Button("Return To My Account");
-        closeBtn.setTranslateX(400); // negative = Left, positive = right
+        closeBtn.setTranslateX(370); // negative = Left, positive = right
         closeBtn.setTranslateY(550); //Bottom
         closeBtn.setTextFill(Color.WHITE);
         closeBtn.setStyle("-fx-background-radius: 5em; " +
@@ -1791,48 +1829,70 @@ public class Main extends Application {
         Pane accountRoot = new Pane();
         Account account = new Account();
 
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
+                ,new BackgroundSize(1.0,1.0,true,true,false,false));
+        accountRoot.setBackground(new Background(backgroundImage));
+
+
         HBox loginPageNameRoot = new HBox();
         BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("headerIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
                 ,new BackgroundSize(1.0,1.0,true,true,false,false));
         loginPageNameRoot.setBackground(new Background(bgImage));
 
 
-        loginPageNameRoot.setPrefSize(1025,250);
 
         // accountRoot.setStyle("-fx-background-color: #000000");
 
         Label accountPageName = new Label();
         accountPageName.setText("Add Food To Log");
-        accountPageName.setTextFill(Color.rgb(55,77,95));
-        accountPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        accountPageName.setTranslateX(440);
-        accountPageName.setTranslateY(300);
+        accountPageName.setTextFill(Color.WHITE);
+        //accountPageName.setTextFill(Color.rgb(55,77,95));
+        accountPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.EXTRA_BOLD,60));
+        accountPageName.setTranslateX(300);
+        accountPageName.setTranslateY(55);
+
+        loginPageNameRoot.setPrefSize(1025,200);
+
+        loginPageNameRoot.getChildren().addAll(accountPageName);
+
+        ComboBox prevFoodComboBox = new ComboBox();
+        prevFoodComboBox.getItems().add("Food 1");
+        prevFoodComboBox.getItems().add("Food 2");
+        prevFoodComboBox.getItems().add("Food 3");
+
+        prevFoodComboBox.setTranslateX(260);
+        prevFoodComboBox.setTranslateY(230);
+        prevFoodComboBox.setPrefSize(500,40);
+
 
         Label foodLabel = new Label("Name of Food: ");
-        foodLabel.setTranslateX(300);
+        foodLabel.setTranslateX(265);
         foodLabel.setTranslateY(360);
+
         foodLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField foodTb = new TextField();
         foodTb.setPrefSize(300,40);
-        foodTb.setTranslateX(600);
-        foodTb.setTranslateY(360);
+        foodTb.setTranslateX(460);
+        foodTb.setTranslateY(357);
 
         Label calorieLabel = new Label("Calories: ");
-        calorieLabel.setTranslateX(300);
+        calorieLabel.setTranslateX(280);
         calorieLabel.setTranslateY(420);
         calorieLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField calorieTb = new TextField();
         calorieTb.setPrefSize(300,40);
-        calorieTb.setTranslateX(600);
-        calorieTb.setTranslateY(420);
+        calorieTb.setTranslateX(460);
+        calorieTb.setTranslateY(415);
 
 
         Button saveBtn = new Button("Save Details");
-        saveBtn.setTranslateX(800);
+        saveBtn.setTranslateX(648);
         saveBtn.setTranslateY(480);
-        saveBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        saveBtn.setTextFill(Color.WHITE);
+        saveBtn.setStyle("-fx-background-radius: 5em; " +
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         saveBtn.setOnAction(event -> {
             Food food = new Food();
             int id = food.addFood(foodTb.getText(), Integer.parseInt(calorieTb.getText()));
@@ -1842,12 +1902,14 @@ public class Main extends Application {
         });
 
         Button closeBtn = new Button("Return To My Account");
-        closeBtn.setTranslateX(450); // negative = Left, positive = right
+        closeBtn.setTranslateX(400); // negative = Left, positive = right
         closeBtn.setTranslateY(540); //Bottom
-        closeBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        closeBtn.setTextFill(Color.WHITE);
+        closeBtn.setStyle("-fx-background-radius: 5em; " +
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         closeBtn.setOnAction(event -> mainStage.setScene(dietaryLog()));
 
-        accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, calorieLabel, calorieTb, foodLabel, foodTb, saveBtn, closeBtn);
+        accountRoot.getChildren().addAll(loginPageNameRoot,prevFoodComboBox, calorieLabel, calorieTb, foodLabel, foodTb, saveBtn, closeBtn);
 
 
         return new Scene(accountRoot, 1024, 600);
