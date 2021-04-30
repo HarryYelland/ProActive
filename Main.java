@@ -174,7 +174,8 @@ public class Main extends Application {
         lButton.setTranslateX(390); // negative = Left, positive = right
         lButton.setTranslateY(450); //Bottom
         lButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000");
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
         lButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -219,7 +220,8 @@ public class Main extends Application {
         backButton.setTranslateX(390);
         backButton.setTranslateY(500);
         backButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000");
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
         backButton.setOnAction(event -> mainStage.setScene(mainPage()));
 
@@ -297,7 +299,8 @@ public class Main extends Application {
         rButton.setTranslateX(420);
         rButton.setTranslateY(490);
         rButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000");
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
 
         Button backButton = new Button();
@@ -307,7 +310,8 @@ public class Main extends Application {
         backButton.setTranslateX(420);
         backButton.setTranslateY(540);
         backButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000");
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
         backButton.setOnAction(event -> mainStage.setScene(mainPage()));
 
@@ -657,32 +661,30 @@ public class Main extends Application {
         Label exercise = new Label();
         Label date = new Label();
         //DATE = LocalDateTime.now();
-        exercise.setText("Viewing Exercise Log For:");
+        exercise.setText("Exercise Log For:");
         date.setText(DTF.format(DATE));
         exercise.setTextFill(Color.rgb(55,77,95));
         date.setTextFill(Color.rgb(55,77,95));
         exercise.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
         date.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        exercise.setTranslateX(420);
+        exercise.setTranslateX(255);
         exercise.setTranslateY(40);
-        date.setTranslateX(530);
-        date.setTranslateY(75);
+        date.setTranslateX(620);
+        date.setTranslateY(45);
 
         //Change Date Left
         Button dateLeftButton = new Button();
-        dateLeftButton.setText("<<");
-        dateLeftButton.setStyle("-fx-font: normal 17px 'Didact Gothic'");
-        dateLeftButton.setPrefSize(70, 18);
-        dateLeftButton.setTranslateX(440); // negative = Left, positive = right
-        dateLeftButton.setTranslateY(82); //Bottom
+        dateLeftButton.setText("⏪");
+        dateLeftButton.setStyle("-fx-font: normal 17px 'Didact Gothic';"+ "-fx-background-radius: 1em; " + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        dateLeftButton.setTranslateX(560); // negative = Left, positive = right
+        dateLeftButton.setTranslateY(45); //Bottom
         dateLeftButton.setOnAction(event -> {DATE = DATE.plusDays(-1); mainStage.setScene(exerciseLog());});
         //Change Date Right
         Button dateRightButton = new Button();
-        dateRightButton.setText(">>");
-        dateRightButton.setStyle("-fx-font: normal 17px 'Didact Gothic'");
-        dateRightButton.setPrefSize(70, 18);
-        dateRightButton.setTranslateX(720); // negative = Left, positive = right
-        dateRightButton.setTranslateY(82); //Bottom
+        dateRightButton.setText("⏩");
+        dateRightButton.setStyle("-fx-font: normal 17px 'Didact Gothic';"+ "-fx-background-radius: 1em; " + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        dateRightButton.setTranslateX(820); // negative = Left, positive = right
+        dateRightButton.setTranslateY(45); //Bottom
         dateRightButton.setOnAction(event -> {DATE = DATE.plusDays(1); mainStage.setScene(exerciseLog());});
 
         VBox sideButtons = new VBox(91);
@@ -961,7 +963,10 @@ public class Main extends Application {
         joinedGroup1Button.setTranslateX(340); // negative = Left, positive = right
         joinedGroup1Button.setTranslateY(120); //Bottom
         joinedGroup1Button.setStyle("-fx-background-radius: 100px; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000");
+                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+
+
 
 
         //Circle Group2 Button
@@ -972,7 +977,8 @@ public class Main extends Application {
         joinedGroup2Button.setTranslateX(560); // negative = Left, positive = right
         joinedGroup2Button.setTranslateY(120); //Bottom
         joinedGroup2Button.setStyle("-fx-background-radius: 100px; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #D3208B");
+                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #D3208B;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
 
         //Circle Group3 Button
@@ -983,11 +989,8 @@ public class Main extends Application {
         joinedGroup3Button.setTranslateX(790); // negative = Left, positive = right
         joinedGroup3Button.setTranslateY(120); //Bottom
         joinedGroup3Button.setStyle("-fx-background-radius: 100px; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #879AF2");
-
-
-
-
+                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #879AF2;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
 
 
@@ -1096,8 +1099,9 @@ public class Main extends Application {
         createGroupButton.setPrefSize(540, 40);
         createGroupButton.setTranslateX(345); // negative = Left, positive = right
         createGroupButton.setTranslateY(300); //Bottom
-        createGroupButton.setStyle("-fx-background-radius: 1em; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #879AF2");
+        createGroupButton.setStyle("-fx-background-radius: 5em; " +
+                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #879AF2;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
         createGroupButton.setOnAction(event -> {
             try {
@@ -1114,8 +1118,9 @@ public class Main extends Application {
         joinGroupButton.setPrefSize(540, 40);
         joinGroupButton.setTranslateX(345); // negative = Left, positive = right
         joinGroupButton.setTranslateY(420); //Bottom
-        joinGroupButton.setStyle("-fx-background-radius: 1em; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #879AF2");
+        joinGroupButton.setStyle("-fx-background-radius: 5em; " +
+                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #879AF2;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
         joinGroupButton.setOnAction(event -> mainStage.setScene(joinGroupPage()));
 
@@ -1187,11 +1192,13 @@ public class Main extends Application {
 
 
         Button createGroupButton = new Button("Create Group");
-        createGroupButton.setPrefSize(200, 40);
+       // createGroupButton.setPrefSize(200, 40);
+        createGroupButton.setTextFill(Color.WHITE);
         createGroupButton.setTranslateX(360); // negative = Left, positive = right
         createGroupButton.setTranslateY(450); //Bottom
         createGroupButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 16px 'Didact Gothic'");
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         createGroupButton.setOnAction(event->{
             try {
                 group.makeGroup(groupNameTextField.getText(), confirmGroupTextField.getText());
@@ -1208,11 +1215,13 @@ public class Main extends Application {
 
 
         Button addFriendButton = new Button("Add Friend");
-        addFriendButton.setPrefSize(120, 40);
+       // addFriendButton.setPrefSize(120, 40);
+        addFriendButton.setTextFill(Color.WHITE);
         addFriendButton.setTranslateX(730); // negative = Left, positive = right
         addFriendButton.setTranslateY(400); //Bottom
         addFriendButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font:  normal 16px 'Didact Gothic'");
+                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         addFriendButton.setOnAction(event -> {
             try {
                 members.add(group.getMemberUUID(inviteTextField.getText()));
