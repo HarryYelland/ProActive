@@ -688,6 +688,15 @@ public class Main extends Application {
         TableColumn ExerciseName = new TableColumn("Exercise Name");
         TableColumn RepsDistance = new TableColumn("Reps/Distance");
         TableColumn CaloriesBurnt = new TableColumn("Calories Burnt");
+        Instant instant = DATE.toInstant(ZoneOffset.UTC);
+        Date newdate = Date.from(instant);
+        java.sql.Date sqlDate = new java.sql.Date(newdate.getTime());
+        try {
+            Exercise exercise1 = new Exercise();
+            tableView1.setItems(exercise1.getExerciseLog(sqlDate));
+        } catch(Exception e){
+            System.out.println(e);
+        }
 
         ExerciseName.setPrefWidth(200);
         RepsDistance.setPrefWidth(200);
@@ -814,6 +823,7 @@ public class Main extends Application {
 
     protected Scene dietaryLog (){
 
+        Food food = new Food();
         Pane dietaryLogRoot = new Pane();
         BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
                 ,new BackgroundSize(1.0,1.0,true,true,false,false));
@@ -863,7 +873,14 @@ public class Main extends Application {
         TableColumn FoodName = new TableColumn("Food Name");
         TableColumn CaloriesConsumed = new TableColumn("Calories Consumed");
         TableColumn CaloriesRemaining = new TableColumn("Calories Remaining");
-
+        Instant instant = DATE.toInstant(ZoneOffset.UTC);
+        Date newdate = Date.from(instant);
+        java.sql.Date sqlDate = new java.sql.Date(newdate.getTime());
+        try {
+            tableView.setItems(food.getFoodLog(sqlDate));
+        } catch(Exception e){
+            System.out.println(e);
+        }
 
 
         FoodName.setPrefWidth(200);

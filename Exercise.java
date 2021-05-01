@@ -1,5 +1,8 @@
 package com.company;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -139,6 +142,37 @@ import java.util.Scanner;
             }
             return exerciseName;
         }
+
+        public ObservableList getExerciseLog(Date date){
+            PreparedStatement ps;
+            ResultSet rs;
+            String query1 = "SELECT * FROM ExerciseComp WHERE CAST(date AS DATE) = ?";
+            ObservableList data = FXCollections.observableArrayList();
+
+            try
+            {
+                ps = DatabaseConnector.getConnection().prepareStatement(query1);
+                ps.setDate(1, date);
+                rs = ps.executeQuery();
+
+                while (rs.next())
+                {
+                    ObservableList<String> row = FXCollections.observableArrayList();
+                    for(int i=1 ; i<=rs.getMetaData().getColumnCount(); i++){
+                        //Iterate Column
+                        row.add(rs.getString(i));
+                    }
+                    data.add(row);
+                }
+
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            return data;
+        }
+
+
+
 
         public ArrayList<Integer> getAllExercises(){
             PreparedStatement ps;
