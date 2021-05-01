@@ -1,5 +1,6 @@
 package com.company;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -693,7 +694,21 @@ public class Main extends Application {
         java.sql.Date sqlDate = new java.sql.Date(newdate.getTime());
         try {
             Exercise exercise1 = new Exercise();
-            tableView1.setItems(exercise1.getExerciseLog(sqlDate));
+            ArrayList<Integer> exerciseIds = new ArrayList<>();
+            ArrayList<String> exerciseNames = new ArrayList<>();
+            ArrayList<Integer> exerciseReps = new ArrayList<>();
+            ArrayList<Integer> exerciseCalories = new ArrayList<>();
+
+            //ExerciseName.setCellValueFactory(c -> new SimpleStringProperty(new String("123")));
+            //RepsDistance.setCellValueFactory(c -> new SimpleStringProperty(new String("456")));
+            //CaloriesBurnt.setCellValueFactory(c -> new SimpleStringProperty(new String("789")));
+            exerciseIds = exercise1.getIDsFromDate(sqlDate, ID);
+            for(int i=0; i<exerciseIds.size(); i++){
+                exerciseNames.set(i, exercise1.getExerciseName(exerciseIds.get(1)));
+                exerciseReps.set(i, exercise1.getExerciseReps(exerciseIds.get(1)));
+                exerciseCalories.set(i, exercise1.getExerciseCalories(exerciseIds.get(1)));
+            }
+            tableView1.getItems().addAll(exerciseNames, exerciseReps, exerciseCalories);
         } catch(Exception e){
             System.out.println(e);
         }
@@ -1913,16 +1928,25 @@ public class Main extends Application {
         calorieTb.setTranslateX(600);
         calorieTb.setTranslateY(420);
 
+        Label repsLabel = new Label("Reps/Steps: ");
+        repsLabel.setTranslateX(300);
+        repsLabel.setTranslateY(480);
+        repsLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        TextField repsTb = new TextField();
+        repsTb.setPrefSize(300, 40);
+        repsTb.setTranslateX(600);
+        repsTb.setTranslateY(480);
 
         Button saveBtn = new Button("Save Details");
         saveBtn.setTranslateX(800);
-        saveBtn.setTranslateY(480);
+        saveBtn.setTranslateY(510);
         saveBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
         saveBtn.setOnAction(event -> {
             Instant instant = DATE.toInstant(ZoneOffset.UTC);
             Date date = Date.from(instant);
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-            exercise.addExercise(exerciseTb.getText(), Integer.parseInt(calorieTb.getText()));
+            exercise.addExercise(exerciseTb.getText(), Integer.parseInt(calorieTb.getText()), Integer.parseInt(repsTb.getText()));
             int id = exercise.getExerciseID(exerciseTb.getText());
             if (id >= 0) {
                 exercise.addLog(ID, id, sqlDate);
@@ -1938,7 +1962,7 @@ public class Main extends Application {
         closeBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
         closeBtn.setOnAction(event -> mainStage.setScene(exerciseLog()));
 
-        accountRoot.getChildren().addAll(loginPageNameRoot, exercisePageName, calorieLabel, calorieTb, exerciseLabel, exerciseTb, saveBtn, closeBtn, exerciseComboBox);
+        accountRoot.getChildren().addAll(loginPageNameRoot, exercisePageName, calorieLabel, calorieTb, exerciseLabel, exerciseTb, repsLabel, repsTb, saveBtn, closeBtn, exerciseComboBox);
 
         return new Scene(accountRoot, 1024, 600);
     }
