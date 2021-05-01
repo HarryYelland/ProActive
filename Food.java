@@ -1,6 +1,7 @@
-//package com.company;
+package com.company;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Food {
@@ -65,9 +66,6 @@ public class Food {
             {
                 System.out.println("Error in checking food type");
             }
-
-
-
             return id;
         }
 
@@ -105,4 +103,31 @@ public class Food {
 
         }
 
+    public int getConsumableID(String Name){
+        PreparedStatement ps;
+        ResultSet rs;
+        int consumableID = -1;
+
+        String query1 = "SELECT ConsumableID FROM Consumable WHERE Name LIKE ?";
+
+        try
+        {
+            ps = DatabaseConnector.getConnection().prepareStatement(query1);
+            ps.setString(1, Name);
+            rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                System.out.println("Consumable Found");
+                consumableID = rs.getInt(1);
+                return consumableID;
+            } else {
+                consumableID = -1;
+                System.out.println("No Consumable By That ID");
+            }
+        }
+        catch(SQLException e) {
+        }
+        return consumableID;
+    }
 }

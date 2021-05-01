@@ -1,5 +1,6 @@
-//package com.company;
+package com.company;
 
+import javax.xml.crypto.Data;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,19 +30,29 @@ public class Group {
     }
 
     Boolean makeGroup(String groupName, String confirmName) throws SQLException {
+        Group group = new Group();
+        if(groupName != confirmName){
+            return false;
+        }
+        if(group.getGroupID(groupName) >= 0) {
+            System.out.println("Group Name Already Taken");
+            return false;
+        }
         PreparedStatement ps;
         ResultSet rs;
         String query1 = "INSERT INTO Groups (GroupName) VALUES (?)";
         try
         {
+            PreparedStatement insertGroup = DatabaseConnector.getConnection().prepareStatement(query1);
             ps = DatabaseConnector.getConnection().prepareStatement(query1);
             ps.setString (1, groupName);
-            ps.executeQuery();
+            rs = ps.executeQuery();
+            rs = insertGroup.executeQuery();
             System.out.println("MADE GROUP");
+            return true;
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     int getGroupID(String groupName) throws SQLException {
@@ -79,13 +90,50 @@ public class Group {
     Boolean insertGroupMember(int groupID, int uuid) throws SQLException {
         PreparedStatement ps;
         ResultSet rs;
-        String query4 = "INSERT INTO GroupMembers (GroupID, UUID) VALUES (?, ?)";
-        ps = DatabaseConnector.getConnection().prepareStatement(query4);
-        ps.setInt (1, groupID);
-        ps.setInt(2, uuid);
-        ps.executeQuery();
-        System.out.println("INSERTED GROUP MEMBER");
-        return true;
+        String query1 = "INSERT INTO GroupMembers (GroupID, UUID) VALUES (?, ?)";
+        try {
+            PreparedStatement insertMember = DatabaseConnector.getConnection().prepareStatement(query1);
+            ps = DatabaseConnector.getConnection().prepareStatement(query1);
+            ps.setInt(1, groupID);
+            ps.setInt(2, uuid);
+            rs = ps.executeQuery();
+            rs = insertMember.executeQuery();
+            System.out.println("INSERTED GROUP MEMBER");
+            return true;
+        } catch (SQLException e){
+        }
+            return false;
     }
 
+    public String getGroupName(int id){
+        PreparedStatement ps;
+        ResultSet rs;
+        String groupName = "";
+
+        String query1 = "SELECT GroupName FROM Groups WHERE GroupID = ?";
+
+        try
+        {
+            ps = DatabaseConnector.getConnection().prepareStatement(query1);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                System.out.println("Successful login!");
+                groupName = rs.getString(1);
+                return groupName;
+            }
+
+            else
+            {
+                System.out.println("No Group By That ID");
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+        return groupName;
+    }
 }
