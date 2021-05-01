@@ -188,6 +188,37 @@ public class Account {
         return goal;
     }
 
+    public Boolean getCustomMet(int id){
+        PreparedStatement ps;
+        ResultSet rs;
+        Boolean goal = false;
+
+        String query1 = "SELECT CustomMet FROM Details WHERE UUID = ?";
+
+        try
+        {
+            ps = Account.getConnection().prepareStatement(query1);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                System.out.println("Successful login!");
+                goal = rs.getBoolean(1);
+                return goal;        //goal
+            }
+
+            else
+            {
+                System.out.println("No Current Goal Check - Setting To False");
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+        return goal;
+    }
 
     public String getUsername(int id)
     {
@@ -299,13 +330,14 @@ public class Account {
         ResultSet rs;
         PreparedStatement ps;
 
-        String query1 = "INSERT INTO Details (UUID, CalorieGoal, Weight, Height, CustomGoal) VALUES (?, 0, 0, 0, ?)";
+        String query1 = "INSERT INTO Details (UUID, CalorieGoal, Weight, Height, CustomGoal, CustomMet) VALUES (?, 0, 0, 0, ?, ?)";
         try
         {
             PreparedStatement setDetails = Registration.getConnection().prepareStatement(query1);
             ps = Account.getConnection().prepareStatement(query1);
             ps.setInt(1, id);
             ps.setString(2, "");
+            ps.setBoolean(3, false);
             rs = ps.executeQuery();
             rs = setDetails.executeQuery();
             return true;
@@ -316,11 +348,11 @@ public class Account {
         return false;
     }
 
-    public boolean setDetails(int id, int calorieGoal, int weight, int height, String customGoal) throws SQLException {
+    public boolean setDetails(int id, int calorieGoal, int weight, int height, String customGoal, Boolean customMet) throws SQLException {
         ResultSet rs;
         PreparedStatement ps;
 
-        String query1 = "UPDATE Details SET CalorieGoal = ?, Weight = ?, Height = ?, CustomGoal = ? WHERE UUID = ?";
+        String query1 = "UPDATE Details SET CalorieGoal = ?, Weight = ?, Height = ?, CustomGoal = ?, CustomMet = ? WHERE UUID = ?";
 
         try
         {
@@ -330,7 +362,8 @@ public class Account {
             ps.setInt(2, weight);
             ps.setInt(3, height);
             ps.setString(4, customGoal);
-            ps.setInt(5, id);
+            ps.setBoolean(5, customMet);
+            ps.setInt(6, id);
             rs = ps.executeQuery();
             rs = setCalorieGoal.executeQuery();
             return true;

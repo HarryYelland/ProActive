@@ -1681,9 +1681,14 @@ public class Main extends Application {
         TextField customGoalTb = new TextField();
         customGoalTb.setText(String.valueOf(account.getCustomGoal(ID)));
         customGoalTb.setPrefSize(300,40);
-        customGoalTb.setTranslateX(600);
-        customGoalTb.setTranslateY(200);
+        customGoalTb.setTranslateX(470);
+        customGoalTb.setTranslateY(220);
 
+        CheckBox customGoalCb = new CheckBox();
+        customGoalCb.setTranslateX(775);
+        customGoalCb.setTranslateY(225);
+        customGoalCb.setPrefSize(25, 25);
+        customGoalCb.setSelected(account.getCustomMet(ID));
 
         Label calorieLabel = new Label("Calorie Goal: ");
         calorieLabel.setTranslateX(260);
@@ -1743,7 +1748,7 @@ public class Main extends Application {
         saveBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         saveBtn.setOnAction(event -> {
             try {
-                account.setDetails(ID, Integer.parseInt(calorieTb.getText()), Integer.parseInt(weightTb.getText()), Integer.parseInt(heightTb.getText()), customGoalTb.getText());
+                account.setDetails(ID, Integer.parseInt(calorieTb.getText()), Integer.parseInt(weightTb.getText()), Integer.parseInt(heightTb.getText()), customGoalTb.getText(), customGoalCb.isSelected());
                 mainStage.setScene(detailsPage());
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -1757,7 +1762,7 @@ public class Main extends Application {
         closeBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         closeBtn.setOnAction(event -> mainStage.setScene(accountPage()));
 
-        accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, customGoalLabel, customGoalTb, calorieLabel, calorieTb, weightLabel, weightTb, heightLabel, heightTb, saveBtn, closeBtn, bmiLabel, bmiTb);
+        accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, customGoalLabel, customGoalTb, calorieLabel, calorieTb, weightLabel, weightTb, heightLabel, heightTb, saveBtn, closeBtn, bmiLabel, bmiTb, customGoalCb);
 
 
         return new Scene(accountRoot, 1024, 600);
