@@ -32,7 +32,7 @@ public class Login {
         PreparedStatement ps;
         ResultSet rs;
 
-        String query1 = "SELECT * FROM Account WHERE Username =? AND Password =?";
+        String query1 = "SELECT * FROM Account WHERE Username LIKE ? AND Password LIKE ?";
 
         try
         {
@@ -62,6 +62,6 @@ public class Login {
 
     public static int main(String username, String password){
         Login login = new Login();
-        return(login.getUser(username.toLowerCase(), password));
+        return(login.getUser(username, password));
     }
 }
