@@ -1,4 +1,4 @@
-package com.company;
+//package com.company;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -138,7 +139,6 @@ public class Main extends Application {
 
         Label loginText = new Label();
         loginText.setText("Login");
-        // login.setTextFill(Color.WHITE); Uncomment when image has been added
         loginText.setTextFill(Color.WHITE);
         loginText.setFont(Font.font("PMingLiU-ExtB", FontWeight.EXTRA_BOLD,60));
         loginText.setTranslateX(50);
@@ -404,6 +404,26 @@ public class Main extends Application {
         accountRoot.setBackground(new Background(backgroundImage));
 
 
+        //Circle Group Button
+        Button rewardsButton = new Button();
+        rewardsButton.setText("🏆");
+        rewardsButton.setTextFill(Color.WHITE);
+        rewardsButton.setPrefSize(65, 65);
+        rewardsButton.setTranslateX(920); // negative = Left, positive = right
+        rewardsButton.setTranslateY(35); //Bottom
+        rewardsButton.setStyle("-fx-background-radius: 100px; " +
+                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #d3208b;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+
+        rewardsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                mainStage.setScene(achievementPage());
+            }
+        });
+
+
+
         // accountRoot.setStyle("-fx-background-color: #000000");
 
         Label accountPageName = new Label();
@@ -478,8 +498,6 @@ public class Main extends Application {
         Button passSendButton = new Button("Save Details");
         passSendButton.setTextFill(Color.WHITE);
         passSendButton.setTranslateX(790); // negative = Left, positive = right
-        passSendButton.setTranslateX(810); // negative = Left, positive = right
-        passSendButton.setTranslateY(350); //Bottom
         passSendButton.setTranslateY(350); //Bottom
         passSendButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
@@ -636,7 +654,7 @@ public class Main extends Application {
 
 
 
-        accountRoot.getChildren().addAll(sideButtons,accountPageName,username,oldPass,newPass,confirmPass,currentEmail,
+        accountRoot.getChildren().addAll(rewardsButton,sideButtons,accountPageName,username,oldPass,newPass,confirmPass,currentEmail,
                 newEmail,emailSendButton,passSendButton,oldPassLabel,newPassLabel,confirmPassLabel,currentEmailLabel,
                 newEmailLabel,usernameLabel,editDetailsLabel,passResetLabel,changeEmailLabel, detailsBtn);
 
@@ -676,7 +694,7 @@ public class Main extends Application {
         dateLeftButton.setOnAction(event -> {DATE = DATE.plusDays(-1); mainStage.setScene(exerciseLog());});
         //Change Date Right
         Button dateRightButton = new Button();
-        dateRightButton.setText(">>");
+        dateRightButton.setText("⏩");
         dateRightButton.setStyle("-fx-font: normal 17px 'Didact Gothic';"+ "-fx-background-radius: 1em; " + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         dateRightButton.setTranslateX(860); // negative = Left, positive = right
         dateRightButton.setTranslateY(45); //Bottom
@@ -724,8 +742,9 @@ public class Main extends Application {
 
 
         Button addToLog = new Button();
-        addToLog.setText("Add To Date's Log");
-        addToLog.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        addToLog.setText("Add Exercise");
+        addToLog.setTextFill(Color.WHITE);
+        addToLog.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         addToLog.setPrefSize(190, 40);
         addToLog.setTranslateX(510);
         addToLog.setTranslateY(525);
@@ -1238,14 +1257,14 @@ public class Main extends Application {
         inviteTextField.setPromptText("Friend username");
         inviteTextField.setPrefSize(350,40);
         inviteTextField.setTranslateX(360);
-        inviteTextField.setTranslateY(340);
+        inviteTextField.setTranslateY(400);
 
 
         Button createGroupButton = new Button("Create Group");
         //createGroupButton.setPrefSize(200, 40);
         createGroupButton.setTextFill(Color.WHITE);
         createGroupButton.setTranslateX(360); // negative = Left, positive = right
-        createGroupButton.setTranslateY(400); //Bottom
+        createGroupButton.setTranslateY(450); //Bottom
         createGroupButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         createGroupButton.setOnAction(event->{
             try {
@@ -1267,6 +1286,7 @@ public class Main extends Application {
         Button addFriendButton = new Button("Add Friend");
         addFriendButton.setTranslateX(730); // negative = Left, positive = right
         addFriendButton.setTranslateY(400); //Bottom
+        addFriendButton.setTextFill(Color.WHITE);
         addFriendButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         addFriendButton.setOnAction(event -> {
             try {
@@ -1809,12 +1829,13 @@ public class Main extends Application {
         loginPageNameRoot.setPrefSize(1025, 200);
         loginPageNameRoot.getChildren().addAll(accountPageName);
 
-        ComboBox prevFoodComboBox = new ComboBox();
+        final ComboBox prevFoodComboBox = new ComboBox();
         prevFoodComboBox.getItems().add("Food 1");
         prevFoodComboBox.getItems().add("Food 2");
         prevFoodComboBox.getItems().add("Food 3");
         prevFoodComboBox.setTranslateX(260);
         prevFoodComboBox.setTranslateY(230);
+        prevFoodComboBox.setPromptText("Select Already Added Food");
         prevFoodComboBox.setPrefSize(500, 40);
 
         Label foodLabel = new Label("Name of Food: ");
@@ -1859,7 +1880,7 @@ public class Main extends Application {
         });
 
         Button closeBtn = new Button("Return To My Account");
-        closeBtn.setTranslateX(450); // negative = Left, positive = right
+        closeBtn.setTranslateX(400); // negative = Left, positive = right
         closeBtn.setTranslateY(540); //Bottom
         closeBtn.setTextFill(Color.WHITE);
         closeBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
@@ -1872,6 +1893,9 @@ public class Main extends Application {
 
     protected Scene exerciseLoggingPage() {
         Pane accountRoot = new Pane();
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER, new BackgroundSize(1.0,1.0,true,true,false,false));
+        accountRoot.setBackground(new Background(backgroundImage));
+
         Account account = new Account();
 
         HBox loginPageNameRoot = new HBox();
@@ -1880,16 +1904,16 @@ public class Main extends Application {
         loginPageNameRoot.setBackground(new Background(bgImage));
 
 
-        loginPageNameRoot.setPrefSize(1025, 250);
+        loginPageNameRoot.setPrefSize(1025, 200);
 
         // accountRoot.setStyle("-fx-background-color: #000000");
 
         Label exercisePageName = new Label();
         exercisePageName.setText("Add Exercise To Log");
-        exercisePageName.setTextFill(Color.rgb(55, 77, 95));
-        exercisePageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT, 35));
-        exercisePageName.setTranslateX(440);
-        exercisePageName.setTranslateY(250);
+        exercisePageName.setTextFill(Color.WHITE);
+        exercisePageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.EXTRA_BOLD,60));
+        exercisePageName.setTranslateX(300);
+        exercisePageName.setTranslateY(55);
 
         ArrayList<Integer> exerciseIDs = new ArrayList<>();
         ArrayList<String> exerciseNames = new ArrayList<>();
@@ -1903,45 +1927,46 @@ public class Main extends Application {
         final ComboBox exerciseComboBox = new ComboBox();
         ObservableList<String> exercises = FXCollections.observableList(exerciseNames);
         exerciseComboBox.setItems(exercises);
-        exerciseComboBox.setTranslateX(440);
-        exerciseComboBox.setTranslateY(300);
+        exerciseComboBox.setTranslateX(260);
+        exerciseComboBox.setTranslateY(230);
         exerciseComboBox.setPromptText("Select Already Added Exercise");
-        exerciseComboBox.setPrefWidth(250);
+        exerciseComboBox.setPrefSize(500, 40);
 
         Label exerciseLabel = new Label("Name of Exercise: ");
-        exerciseLabel.setTranslateX(300);
+        exerciseLabel.setTranslateX(265);
         exerciseLabel.setTranslateY(360);
         exerciseLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField exerciseTb = new TextField();
         exerciseTb.setPrefSize(300, 40);
-        exerciseTb.setTranslateX(600);
+        exerciseTb.setTranslateX(460);
         exerciseTb.setTranslateY(360);
 
         Label calorieLabel = new Label("Calories: ");
         calorieLabel.setTranslateX(300);
-        calorieLabel.setTranslateY(420);
+        calorieLabel.setTranslateY(430);
         calorieLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField calorieTb = new TextField();
         calorieTb.setPrefSize(300, 40);
-        calorieTb.setTranslateX(600);
+        calorieTb.setTranslateX(460);
         calorieTb.setTranslateY(420);
 
         Label repsLabel = new Label("Reps/Steps: ");
-        repsLabel.setTranslateX(300);
-        repsLabel.setTranslateY(480);
+        repsLabel.setTranslateX(290);
+        repsLabel.setTranslateY(490);
         repsLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField repsTb = new TextField();
         repsTb.setPrefSize(300, 40);
-        repsTb.setTranslateX(600);
-        repsTb.setTranslateY(480);
+        repsTb.setTranslateX(460);
+        repsTb.setTranslateY(485);
 
         Button saveBtn = new Button("Save Details");
-        saveBtn.setTranslateX(800);
-        saveBtn.setTranslateY(510);
-        saveBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        saveBtn.setTranslateX(648);
+        saveBtn.setTranslateY(535);
+        saveBtn.setTextFill(Color.WHITE);
+        saveBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         saveBtn.setOnAction(event -> {
             Instant instant = DATE.toInstant(ZoneOffset.UTC);
             Date date = Date.from(instant);
@@ -1957,9 +1982,10 @@ public class Main extends Application {
         });
 
         Button closeBtn = new Button("Return To My Account");
-        closeBtn.setTranslateX(450); // negative = Left, positive = right
-        closeBtn.setTranslateY(540); //Bottom
-        closeBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        closeBtn.setTranslateX(390); // negative = Left, positive = right
+        closeBtn.setTranslateY(550); //Bottom
+        closeBtn.setTextFill(Color.WHITE);
+        closeBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         closeBtn.setOnAction(event -> mainStage.setScene(exerciseLog()));
 
         accountRoot.getChildren().addAll(loginPageNameRoot, exercisePageName, calorieLabel, calorieTb, exerciseLabel, exerciseTb, repsLabel, repsTb, saveBtn, closeBtn, exerciseComboBox);
@@ -1967,6 +1993,62 @@ public class Main extends Application {
         return new Scene(accountRoot, 1024, 600);
     }
 
+
+    protected Scene achievementPage (){
+
+        Pane achievementRoot = new Pane();
+        Label achievementLabel = new Label("🏆 Your Achievements 🏆");
+        achievementLabel.setTextFill(Color.rgb(55,77,95));
+        achievementLabel.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
+        achievementLabel.setTranslateX(320);
+        achievementLabel.setTranslateY(35);
+
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
+                ,new BackgroundSize(1.0,1.0,true,true,false,false));
+        achievementRoot.setBackground(new Background(backgroundImage));
+
+
+        Button rewardButton = new Button();
+        rewardButton.setText("Back");
+        rewardButton.setTextFill(Color.WHITE);
+        rewardButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        rewardButton.setPrefSize(190, 40);
+        rewardButton.setTranslateX(430); // negative = Left, positive = right
+        rewardButton.setTranslateY(525); //Bottom
+
+        rewardButton.setOnAction(actionEvent -> mainStage.setScene(accountPage()));
+
+
+        TableView rewardsTable = new TableView();
+        rewardsTable.setEditable(true);
+
+        TableColumn rewardDate = new TableColumn("Date");
+        TableColumn achievement = new TableColumn("Achievements");
+        TableColumn rewardPoints = new TableColumn("Points");
+
+       // rewardsTable.set
+
+        rewardDate.setPrefWidth(200);
+        achievement.setPrefWidth(200);
+        rewardPoints.setPrefWidth(200);
+
+        rewardsTable.setPrefSize(600,400);
+        rewardsTable.setTranslateX(220);
+        rewardsTable.setTranslateY(100);
+
+        rewardsTable.getColumns().addAll(rewardDate,achievement,rewardPoints);
+
+        achievementRoot.getChildren().addAll(rewardButton,rewardsTable,achievementLabel);
+
+
+
+
+
+
+        return new Scene(achievementRoot, 1024, 600);
+
+
+    }
 
 
     public static void main(String[] args) {
