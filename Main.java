@@ -1,7 +1,9 @@
-//package com.company;
+package com.company;
 
-
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
@@ -21,10 +23,11 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.CheckBox;
-
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import java.awt.*;
+import java.sql.Array;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -55,6 +58,7 @@ public class Main extends Application {
         Pane mainPageRoot = new Pane();
 
         //Background Image
+
         BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("proactiveIMG2.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
                 ,new BackgroundSize(1.0,1.0,true,true,false,false));
         mainPageRoot.setBackground(new Background(bgImage));
@@ -77,17 +81,17 @@ public class Main extends Application {
         loginButton.setTranslateX(400); // negative = Left, positive = right
         loginButton.setTranslateY(290);
         loginButton.setStyle("" +
-                        "-fx-background-radius: 5em; " +
-                        "-fx-font: normal 20px 'Arial Nova Cond Light'"
+                "-fx-background-radius: 5em; " +
+                "-fx-font: normal 20px 'Arial Nova Cond Light'"
         );
 
 
-      loginButton.setOnAction(new EventHandler<ActionEvent>() {
-          @Override
-          public void handle(ActionEvent event) {
-              mainStage.setScene(loginPage());
-          }
-      });
+        loginButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                mainStage.setScene(loginPage());
+            }
+        });
 
         //connects to next scene
 
@@ -173,8 +177,7 @@ public class Main extends Application {
         lButton.setTranslateX(390); // negative = Left, positive = right
         lButton.setTranslateY(450); //Bottom
         lButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+                "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0.5, 0, 2)");
 
         lButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -219,8 +222,7 @@ public class Main extends Application {
         backButton.setTranslateX(390);
         backButton.setTranslateY(500);
         backButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+                "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0.5, 0, 2)");
 
         backButton.setOnAction(event -> mainStage.setScene(mainPage()));
 
@@ -298,8 +300,7 @@ public class Main extends Application {
         rButton.setTranslateX(420);
         rButton.setTranslateY(490);
         rButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+                "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0.5, 0, 2)");
 
 
         Button backButton = new Button();
@@ -309,8 +310,7 @@ public class Main extends Application {
         backButton.setTranslateX(420);
         backButton.setTranslateY(540);
         backButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0.5, 0, 2)");
 
         backButton.setOnAction(event -> mainStage.setScene(mainPage()));
 
@@ -375,6 +375,9 @@ public class Main extends Application {
                         } else {
                             Login login = new Login();
                             ID = login.getUser(usernameTextField.getText(), passwordTextField.getText());
+                            System.out.println(ID);
+                            Account account = new Account();
+                            account.setFirstDetails(ID);
                             mainStage.setScene(accountPage());
 
                         };
@@ -401,7 +404,7 @@ public class Main extends Application {
         accountRoot.setBackground(new Background(backgroundImage));
 
 
-       // accountRoot.setStyle("-fx-background-color: #000000");
+        // accountRoot.setStyle("-fx-background-color: #000000");
 
         Label accountPageName = new Label();
         accountPageName.setText("Welcome " + account.getUsername(ID) + " to your Pro-Active");
@@ -475,12 +478,10 @@ public class Main extends Application {
         Button passSendButton = new Button("Save Details");
         passSendButton.setTextFill(Color.WHITE);
         passSendButton.setTranslateX(790); // negative = Left, positive = right
+        passSendButton.setTranslateX(810); // negative = Left, positive = right
         passSendButton.setTranslateY(350); //Bottom
-        passSendButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-
-
+        passSendButton.setTranslateY(350); //Bottom
+        passSendButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
 
         Label changeEmailLabel = new Label("Change Email:");
@@ -516,10 +517,9 @@ public class Main extends Application {
         Button emailSendButton = new Button("Save Details");
         emailSendButton.setTextFill(Color.WHITE);
         emailSendButton.setTranslateX(790); // negative = Left, positive = right
-        emailSendButton.setTranslateY(510); //Bottom
-        emailSendButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        emailSendButton.setTranslateY(510); // negative = Left, positive = right
+        emailSendButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+
         emailSendButton.setOnAction(event -> {
             try {
                 account.setEmail(ID, newEmail.getText());
@@ -533,10 +533,7 @@ public class Main extends Application {
         detailsBtn.setTextFill(Color.WHITE);
         detailsBtn.setTranslateX(450); // negative = Left, positive = right
         detailsBtn.setTranslateY(545); //Bottom
-        detailsBtn.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-
+        detailsBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         detailsBtn.setOnAction(event -> {
             try {
                 mainStage.setScene(detailsPage());
@@ -548,9 +545,8 @@ public class Main extends Application {
         VBox sideButtons = new VBox(91);
 
         //Adding image on side panel
-         BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("proactiveside3.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
-        ,new BackgroundSize(1.0,1.0,true,true,false,false));
-           sideButtons.setBackground(new Background(bgImage));
+        BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("proactiveside3.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER,new BackgroundSize(1.0,1.0,true,true,false,false));
+        sideButtons.setBackground(new Background(bgImage));
 
 
         Label proActiveName2 = new Label("Pro-Active");
@@ -666,23 +662,23 @@ public class Main extends Application {
         date.setTextFill(Color.rgb(55,77,95));
         exercise.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
         date.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        exercise.setTranslateX(255);
+        exercise.setTranslateX(295);
         exercise.setTranslateY(40);
-        date.setTranslateX(620);
+        date.setTranslateX(660);
         date.setTranslateY(45);
 
         //Change Date Left
         Button dateLeftButton = new Button();
         dateLeftButton.setText("⏪");
         dateLeftButton.setStyle("-fx-font: normal 17px 'Didact Gothic';"+ "-fx-background-radius: 1em; " + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-        dateLeftButton.setTranslateX(560); // negative = Left, positive = right
+        dateLeftButton.setTranslateX(600); // negative = Left, positive = right
         dateLeftButton.setTranslateY(45); //Bottom
         dateLeftButton.setOnAction(event -> {DATE = DATE.plusDays(-1); mainStage.setScene(exerciseLog());});
         //Change Date Right
         Button dateRightButton = new Button();
-        dateRightButton.setText("⏩");
+        dateRightButton.setText(">>");
         dateRightButton.setStyle("-fx-font: normal 17px 'Didact Gothic';"+ "-fx-background-radius: 1em; " + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-        dateRightButton.setTranslateX(820); // negative = Left, positive = right
+        dateRightButton.setTranslateX(860); // negative = Left, positive = right
         dateRightButton.setTranslateY(45); //Bottom
         dateRightButton.setOnAction(event -> {DATE = DATE.plusDays(1); mainStage.setScene(exerciseLog());});
 
@@ -692,17 +688,49 @@ public class Main extends Application {
 
         TableColumn ExerciseName = new TableColumn("Exercise Name");
         TableColumn RepsDistance = new TableColumn("Reps/Distance");
-        TableColumn CaloriesBurnt = new TableColumn("Calories Remaining");
+        TableColumn CaloriesBurnt = new TableColumn("Calories Burnt");
+        Instant instant = DATE.toInstant(ZoneOffset.UTC);
+        Date newdate = Date.from(instant);
+        java.sql.Date sqlDate = new java.sql.Date(newdate.getTime());
+        try {
+            Exercise exercise1 = new Exercise();
+            ArrayList<Integer> exerciseIds = new ArrayList<>();
+            ArrayList<String> exerciseNames = new ArrayList<>();
+            ArrayList<Integer> exerciseReps = new ArrayList<>();
+            ArrayList<Integer> exerciseCalories = new ArrayList<>();
+
+            //ExerciseName.setCellValueFactory(c -> new SimpleStringProperty(new String("123")));
+            //RepsDistance.setCellValueFactory(c -> new SimpleStringProperty(new String("456")));
+            //CaloriesBurnt.setCellValueFactory(c -> new SimpleStringProperty(new String("789")));
+            exerciseIds = exercise1.getIDsFromDate(sqlDate, ID);
+            for(int i=0; i<exerciseIds.size(); i++){
+                exerciseNames.set(i, exercise1.getExerciseName(exerciseIds.get(1)));
+                exerciseReps.set(i, exercise1.getExerciseReps(exerciseIds.get(1)));
+                exerciseCalories.set(i, exercise1.getExerciseCalories(exerciseIds.get(1)));
+            }
+            tableView1.getItems().addAll(exerciseNames, exerciseReps, exerciseCalories);
+        } catch(Exception e){
+            System.out.println(e);
+        }
 
         ExerciseName.setPrefWidth(200);
         RepsDistance.setPrefWidth(200);
         CaloriesBurnt.setPrefWidth(200);
-
-        tableView1.setPrefSize(600,400);
+        tableView1.setPrefSize(600, 400);
         tableView1.setTranslateX(310);
         tableView1.setTranslateY(100);
 
-        tableView1.getColumns().addAll(ExerciseName,RepsDistance,CaloriesBurnt);
+        tableView1.getColumns().addAll(ExerciseName, RepsDistance, CaloriesBurnt);
+
+
+        Button addToLog = new Button();
+        addToLog.setText("Add To Date's Log");
+        addToLog.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        addToLog.setPrefSize(190, 40);
+        addToLog.setTranslateX(510);
+        addToLog.setTranslateY(525);
+        addToLog.setOnAction(event -> mainStage.setScene(exerciseLoggingPage()));
+
 
         VBox sideButtons = new VBox(91);
 
@@ -801,7 +829,7 @@ public class Main extends Application {
 
 
 
-        exerciseRoot.getChildren().addAll(exercise, date, dateLeftButton, dateRightButton, sideButtons,tableView1);
+        exerciseRoot.getChildren().addAll(exercise, date, dateLeftButton, dateRightButton, sideButtons, addToLog, tableView1);
         return new Scene(exerciseRoot, 1024, 600);
 
 
@@ -810,6 +838,7 @@ public class Main extends Application {
 
     protected Scene dietaryLog (){
 
+        Food food = new Food();
         Pane dietaryLogRoot = new Pane();
         BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
                 ,new BackgroundSize(1.0,1.0,true,true,false,false));
@@ -823,33 +852,30 @@ public class Main extends Application {
         date.setTextFill(Color.rgb(55,77,95));
         diet.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
         date.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        diet.setTranslateX(255);
+        diet.setTranslateX(310);
         diet.setTranslateY(40);
-        date.setTranslateX(620);
+        date.setTranslateX(675);
         date.setTranslateY(45);
 
         //Change Date Left
         Button dateLeftButton = new Button();
         dateLeftButton.setText("⏪");
         dateLeftButton.setStyle("-fx-font: normal 17px 'Didact Gothic';"+ "-fx-background-radius: 1em; " + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-        dateLeftButton.setTranslateX(560); // negative = Left, positive = right
+        dateLeftButton.setTranslateX(605); // negative = Left, positive = right
         dateLeftButton.setTranslateY(45); //Bottom
         dateLeftButton.setOnAction(event -> {DATE = DATE.plusDays(-1); mainStage.setScene(dietaryLog());});
-
         //Change Date Right
         Button dateRightButton = new Button();
         dateRightButton.setText("⏩");
         dateRightButton.setStyle("-fx-font: normal 17px 'Didact Gothic';"+ "-fx-background-radius: 1em; " + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-        dateRightButton.setTranslateX(820); // negative = Left, positive = right
+        dateRightButton.setTranslateX(865); // negative = Left, positive = right
         dateRightButton.setTranslateY(45); //Bottom
         dateRightButton.setOnAction(event -> {DATE = DATE.plusDays(1); mainStage.setScene(dietaryLog());});
 
         Button addToLog = new Button();
         addToLog.setText("Add Food/Drink");
         addToLog.setTextFill(Color.WHITE);
-        addToLog.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        addToLog.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         addToLog.setPrefSize(190, 40);
         addToLog.setTranslateX(510);
         addToLog.setTranslateY(525);
@@ -862,18 +888,25 @@ public class Main extends Application {
         TableColumn FoodName = new TableColumn("Food Name");
         TableColumn CaloriesConsumed = new TableColumn("Calories Consumed");
         TableColumn CaloriesRemaining = new TableColumn("Calories Remaining");
+        Instant instant = DATE.toInstant(ZoneOffset.UTC);
+        Date newdate = Date.from(instant);
+        java.sql.Date sqlDate = new java.sql.Date(newdate.getTime());
+        try {
+            tableView.setItems(food.getFoodLog(sqlDate));
+        } catch(Exception e){
+            System.out.println(e);
+        }
+
 
         FoodName.setPrefWidth(200);
         CaloriesConsumed.setPrefWidth(200);
         CaloriesRemaining.setPrefWidth(200);
 
-        tableView.setPrefSize(600,400);
+        tableView.setPrefSize(600, 400);
         tableView.setTranslateX(310);
         tableView.setTranslateY(100);
 
-        tableView.getColumns().addAll(FoodName,CaloriesConsumed,CaloriesRemaining);
-
-
+        tableView.getColumns().addAll(FoodName, CaloriesConsumed, CaloriesRemaining);
 
 
         VBox sideButtons = new VBox(91);
@@ -972,7 +1005,7 @@ public class Main extends Application {
 
 
 
-        dietaryLogRoot.getChildren().addAll(diet, date, dateLeftButton, dateRightButton, sideButtons, addToLog,tableView);
+        dietaryLogRoot.getChildren().addAll(diet, date, dateLeftButton, dateRightButton, sideButtons, addToLog, tableView);
         return new Scene(dietaryLogRoot, 1024, 600);
 
 
@@ -1000,11 +1033,7 @@ public class Main extends Application {
         joinedGroup1Button.setPrefSize(100, 100);
         joinedGroup1Button.setTranslateX(340); // negative = Left, positive = right
         joinedGroup1Button.setTranslateY(120); //Bottom
-        joinedGroup1Button.setStyle("-fx-background-radius: 100px; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-
-
+        joinedGroup1Button.setStyle("-fx-background-radius: 100px; " + "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
 
         //Circle Group2 Button
@@ -1014,9 +1043,7 @@ public class Main extends Application {
         joinedGroup2Button.setPrefSize(100, 100);
         joinedGroup2Button.setTranslateX(560); // negative = Left, positive = right
         joinedGroup2Button.setTranslateY(120); //Bottom
-        joinedGroup2Button.setStyle("-fx-background-radius: 100px; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #D3208B;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        joinedGroup2Button.setStyle("-fx-background-radius: 100px; " + "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;"  + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
 
         //Circle Group3 Button
@@ -1026,10 +1053,7 @@ public class Main extends Application {
         joinedGroup3Button.setPrefSize(100, 100);
         joinedGroup3Button.setTranslateX(790); // negative = Left, positive = right
         joinedGroup3Button.setTranslateY(120); //Bottom
-        joinedGroup3Button.setStyle("-fx-background-radius: 100px; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #879AF2;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-
+        joinedGroup3Button.setStyle("-fx-background-radius: 100px; " + "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
 
         //groupRoot.setStyle("-fx-background-color: #000000");
@@ -1137,10 +1161,7 @@ public class Main extends Application {
         createGroupButton.setPrefSize(540, 40);
         createGroupButton.setTranslateX(345); // negative = Left, positive = right
         createGroupButton.setTranslateY(300); //Bottom
-        createGroupButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #879AF2;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-
+        createGroupButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #879AF2;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         createGroupButton.setOnAction(event -> {
             try {
                 mainStage.setScene(createGroup());
@@ -1156,9 +1177,7 @@ public class Main extends Application {
         joinGroupButton.setPrefSize(540, 40);
         joinGroupButton.setTranslateX(345); // negative = Left, positive = right
         joinGroupButton.setTranslateY(420); //Bottom
-        joinGroupButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #879AF2;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        joinGroupButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #879AF2;" +  "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
         joinGroupButton.setOnAction(event -> mainStage.setScene(joinGroupPage()));
 
@@ -1197,14 +1216,11 @@ public class Main extends Application {
         confirmGroupTextField.setTranslateX(360);
         confirmGroupTextField.setTranslateY(270);
 
-
-
         HBox checkBoxLayout = new HBox();
         checkBoxLayout.setPrefSize(500,60);
         checkBoxLayout.setTranslateX(415);
         checkBoxLayout.setTranslateY(345);
         checkBoxLayout.setSpacing(100.0);
-
 
         final ToggleGroup radioGroup = new ToggleGroup();
 
@@ -1216,75 +1232,52 @@ public class Main extends Application {
         radioButton2.setToggleGroup(radioGroup);
         radioButton3.setToggleGroup(radioGroup);
 
-
-
-        checkBoxLayout.getChildren().addAll(radioButton1,radioButton2,radioButton3);
-
-
+        checkBoxLayout.getChildren().addAll(radioButton1, radioButton2, radioButton3);
 
         TextField inviteTextField = new TextField();
         inviteTextField.setPromptText("Friend username");
         inviteTextField.setPrefSize(350,40);
         inviteTextField.setTranslateX(360);
-        inviteTextField.setTranslateY(400);
+        inviteTextField.setTranslateY(340);
 
 
         Button createGroupButton = new Button("Create Group");
-       // createGroupButton.setPrefSize(200, 40);
+        //createGroupButton.setPrefSize(200, 40);
         createGroupButton.setTextFill(Color.WHITE);
         createGroupButton.setTranslateX(360); // negative = Left, positive = right
-        createGroupButton.setTranslateY(450); //Bottom
-        createGroupButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        createGroupButton.setTranslateY(400); //Bottom
+        createGroupButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         createGroupButton.setOnAction(event->{
             try {
                 group.makeGroup(groupNameTextField.getText(), confirmGroupTextField.getText());
                 int groupID = group.getGroupID(groupNameTextField.getText());
                 for (int i=0; i<members.size(); i++) {
-                    group.insertGroupMember(groupID, members.get(i));
+                    if(members.get(i) != null){
+                        group.insertGroupMember(groupID, members.get(i));
+                    }
                 }
-                mainStage.setScene(joinGroup1());
+                group.insertGroupMember(groupID, ID);
+                mainStage.setScene(Group(groupID));
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
-                System.out.println("big issue");
             }
         });
 
 
         Button addFriendButton = new Button("Add Friend");
-       // addFriendButton.setPrefSize(120, 40);
-        addFriendButton.setTextFill(Color.WHITE);
         addFriendButton.setTranslateX(730); // negative = Left, positive = right
         addFriendButton.setTranslateY(400); //Bottom
-        addFriendButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        addFriendButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         addFriendButton.setOnAction(event -> {
             try {
                 members.add(group.getMemberUUID(inviteTextField.getText()));
+                Alert friendAdded = new Alert(Alert.AlertType.CONFIRMATION);
+                friendAdded.setTitle("Friend Added");
+                friendAdded.setHeaderText(inviteTextField.getText() + " has been added to the group");
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
         });
-
-        addFriendButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-                Alert friendAdded = new Alert(Alert.AlertType.CONFIRMATION);
-
-                friendAdded.setTitle("Friend Added");
-
-                friendAdded.setHeaderText(inviteTextField.getText() + "has been added to the group");
-
-
-                //inviteTextField.getText();
-
-
-            }
-        });
-
 
 
 
@@ -1385,7 +1378,7 @@ public class Main extends Application {
 
 
         createGroupRoot.getChildren().addAll(sideButtons,confirmGroupTextField,groupNameTextField
-        ,inviteTextField,createGroupName,createGroupButton, addFriendButton, checkBoxLayout);
+                ,inviteTextField,createGroupName,createGroupButton, addFriendButton, checkBoxLayout);
         return new Scene(createGroupRoot,1024,600);
 
     }
@@ -1409,8 +1402,8 @@ public class Main extends Application {
         para.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore \n" +
                 " et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip");
 
-       para.setTranslateX(350);
-       para.setTranslateY(145);
+        para.setTranslateX(350);
+        para.setTranslateY(145);
 
 
 
@@ -1438,7 +1431,7 @@ public class Main extends Application {
 
         group1.setStyle("-fx-background-color: transparent;");
 
-        group1.setOnAction(event -> mainStage.setScene(joinGroup1()));
+        group1.setOnAction(event -> mainStage.setScene(Group(1)));
 
 
         // Styling join group2 button
@@ -1457,12 +1450,12 @@ public class Main extends Application {
         rec2.setFill(pattern2);
         rec2.setEffect(new DropShadow(20,Color.BLACK));
 
-       // rec2.setEffect(new DropShadow(20,Color.rgb(253,160,0)));
+        // rec2.setEffect(new DropShadow(20,Color.rgb(253,160,0)));
         group2.setGraphic(rec2);
 
         //group2.setPrefSize(210,150);
         group2.setStyle("-fx-background-color: transparent;");
-        group2.setOnAction(event -> mainStage.setScene(joinGroup2()));
+        group2.setOnAction(event -> mainStage.setScene(Group(2)));
 
 
         //JOIN GROUP BUTTON 3
@@ -1483,7 +1476,7 @@ public class Main extends Application {
         group3.setGraphic(rec3);
 
         group3.setStyle("-fx-background-color: transparent;");
-        group3.setOnAction(event -> mainStage.setScene(joinGroup3()));
+        group3.setOnAction(event -> mainStage.setScene(Group(3)));
 
 
         //Join group Button 4
@@ -1502,7 +1495,7 @@ public class Main extends Application {
         //rec4.setEffect(new DropShadow(20,Color.rgb(211,32,139)));
         group4.setGraphic(rec4);
         group4.setStyle("-fx-background-color: transparent;");
-        group4.setOnAction(event -> mainStage.setScene(joinGroup4()));
+        group4.setOnAction(event -> mainStage.setScene(Group(4)));
 
 
         //Join Group 5 BUTTON STYLING
@@ -1519,11 +1512,11 @@ public class Main extends Application {
 
         rec5.setFill(pattern5);
         rec5.setEffect(new DropShadow(20,Color.BLACK));
-       // rec5.setEffect(new DropShadow(20,Color.rgb(121,143,242)));
+        // rec5.setEffect(new DropShadow(20,Color.rgb(121,143,242)));
 
         group5.setGraphic(rec5);
         group5.setStyle("-fx-background-color: transparent;");
-        group5.setOnAction(event -> mainStage.setScene(joinGroup5()));
+        group5.setOnAction(event -> mainStage.setScene(Group(5)));
 
 
         //JOIN GROUP BUTTON 6 STYLING
@@ -1544,7 +1537,7 @@ public class Main extends Application {
         group6.setGraphic(rec6);
 
         group6.setStyle("-fx-background-color: transparent;");
-        group6.setOnAction(event -> mainStage.setScene(joinGroup6()));
+        group6.setOnAction(event -> mainStage.setScene(Group(6)));
 
 
 
@@ -1651,53 +1644,19 @@ public class Main extends Application {
         return new Scene(joinGroupRoot,1024,600);
     }
 
-    protected Scene joinGroup1(){
+    protected Scene Group(int GroupID){
 
-        Pane joinGroup1Root = new Pane();
+        Pane Group = new Pane();
+        Group group = new Group();
+        Label groupNameLbl = new Label();
+        groupNameLbl.setText(group.getGroupName(GroupID));
+        groupNameLbl.setTextFill(Color.rgb(55,77,95));
+        groupNameLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
+        groupNameLbl.setTranslateX(440);
+        groupNameLbl.setTranslateY(160);
 
-
-        return new Scene(joinGroup1Root,1024,600);
-
-    }
-
-    protected Scene joinGroup2(){
-
-        Pane joinGroup2Root = new Pane();
-
-
-        return new Scene(joinGroup2Root,1024,600);
-
-    }
-    protected Scene joinGroup3(){
-
-        Pane joinGroup3Root = new Pane();
-
-
-        return new Scene(joinGroup3Root,1024,600);
-
-    }
-    protected Scene joinGroup4(){
-
-        Pane joinGroup4Root = new Pane();
-
-
-        return new Scene(joinGroup4Root,1024,600);
-
-    }
-    protected Scene joinGroup5(){
-
-        Pane joinGroup5Root = new Pane();
-
-
-        return new Scene(joinGroup5Root,1024,600);
-
-    }
-    protected Scene joinGroup6(){
-
-        Pane joinGroup6Root = new Pane();
-
-
-        return new Scene(joinGroup6Root,1024,600);
+        Group.getChildren().addAll(groupNameLbl);
+        return new Scene(Group,1024,600);
 
     }
 
@@ -1705,10 +1664,8 @@ public class Main extends Application {
         Pane accountRoot = new Pane();
         Account account = new Account();
 
-        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
-                ,new BackgroundSize(1.0,1.0,true,true,false,false));
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(1.0, 1.0, true, true, false, false));
         accountRoot.setBackground(new Background(backgroundImage));
-
 
         if(account.getCalorieGoal(ID) <= 0){
             account.setFirstDetails(ID);
@@ -1727,7 +1684,7 @@ public class Main extends Application {
         Label accountPageName = new Label();
         accountPageName.setText(account.getUsername(ID) + "'s Details");
         accountPageName.setTextFill(Color.rgb(255,255,255));
-        accountPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.EXTRA_BOLD,60));
+        accountPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.EXTRA_BOLD, 60));
         accountPageName.setTranslateX(300);
         accountPageName.setTranslateY(55);
 
@@ -1742,6 +1699,11 @@ public class Main extends Application {
         customGoalTb.setTranslateX(470);
         customGoalTb.setTranslateY(220);
 
+        CheckBox customGoalCb = new CheckBox();
+        customGoalCb.setTranslateX(775);
+        customGoalCb.setTranslateY(225);
+        customGoalCb.setPrefSize(25, 25);
+        customGoalCb.setSelected(account.getCustomMet(ID));
 
         Label calorieLabel = new Label("Calorie Goal: ");
         calorieLabel.setTranslateX(260);
@@ -1798,13 +1760,10 @@ public class Main extends Application {
         saveBtn.setTranslateX(664);
         saveBtn.setTranslateY(510);
         saveBtn.setTextFill(Color.WHITE);
-        saveBtn.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-
-
+        saveBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         saveBtn.setOnAction(event -> {
             try {
-                account.setDetails(ID, Integer.parseInt(calorieTb.getText()), Integer.parseInt(weightTb.getText()), Integer.parseInt(heightTb.getText()), customGoalTb.getText());
+                account.setDetails(ID, Integer.parseInt(calorieTb.getText()), Integer.parseInt(weightTb.getText()), Integer.parseInt(heightTb.getText()), customGoalTb.getText(), customGoalCb.isSelected());
                 mainStage.setScene(detailsPage());
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -1812,14 +1771,13 @@ public class Main extends Application {
         });
 
         Button closeBtn = new Button("Return To My Account");
-        closeBtn.setTranslateX(370); // negative = Left, positive = right
-        closeBtn.setTranslateY(550); //Bottom
+        closeBtn.setTranslateX(450); // negative = Left, positive = right
+        closeBtn.setTranslateY(540); //Bottom
         closeBtn.setTextFill(Color.WHITE);
-        closeBtn.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        closeBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         closeBtn.setOnAction(event -> mainStage.setScene(accountPage()));
 
-        accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, customGoalLabel, customGoalTb, calorieLabel, calorieTb, weightLabel, weightTb, heightLabel, heightTb, saveBtn, closeBtn, bmiLabel, bmiTb);
+        accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, customGoalLabel, customGoalTb, calorieLabel, calorieTb, weightLabel, weightTb, heightLabel, heightTb, saveBtn, closeBtn, bmiLabel, bmiTb, customGoalCb);
 
 
         return new Scene(accountRoot, 1024, 600);
@@ -1829,10 +1787,8 @@ public class Main extends Application {
         Pane accountRoot = new Pane();
         Account account = new Account();
 
-        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
-                ,new BackgroundSize(1.0,1.0,true,true,false,false));
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER, new BackgroundSize(1.0,1.0,true,true,false,false));
         accountRoot.setBackground(new Background(backgroundImage));
-
 
         HBox loginPageNameRoot = new HBox();
         BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("headerIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
@@ -1840,35 +1796,30 @@ public class Main extends Application {
         loginPageNameRoot.setBackground(new Background(bgImage));
 
 
+        loginPageNameRoot.setPrefSize(1025,250);
 
         // accountRoot.setStyle("-fx-background-color: #000000");
 
         Label accountPageName = new Label();
         accountPageName.setText("Add Food To Log");
         accountPageName.setTextFill(Color.WHITE);
-        //accountPageName.setTextFill(Color.rgb(55,77,95));
         accountPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.EXTRA_BOLD,60));
         accountPageName.setTranslateX(300);
         accountPageName.setTranslateY(55);
-
-        loginPageNameRoot.setPrefSize(1025,200);
-
+        loginPageNameRoot.setPrefSize(1025, 200);
         loginPageNameRoot.getChildren().addAll(accountPageName);
 
         ComboBox prevFoodComboBox = new ComboBox();
         prevFoodComboBox.getItems().add("Food 1");
         prevFoodComboBox.getItems().add("Food 2");
         prevFoodComboBox.getItems().add("Food 3");
-
         prevFoodComboBox.setTranslateX(260);
         prevFoodComboBox.setTranslateY(230);
-        prevFoodComboBox.setPrefSize(500,40);
-
+        prevFoodComboBox.setPrefSize(500, 40);
 
         Label foodLabel = new Label("Name of Food: ");
         foodLabel.setTranslateX(265);
         foodLabel.setTranslateY(360);
-
         foodLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
 
         TextField foodTb = new TextField();
@@ -1891,29 +1842,132 @@ public class Main extends Application {
         saveBtn.setTranslateX(648);
         saveBtn.setTranslateY(480);
         saveBtn.setTextFill(Color.WHITE);
-        saveBtn.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        saveBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         saveBtn.setOnAction(event -> {
+            Instant instant = DATE.toInstant(ZoneOffset.UTC);
+            Date date = Date.from(instant);
+            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
             Food food = new Food();
-            int id = food.addFood(foodTb.getText(), Integer.parseInt(calorieTb.getText()));
-            Instant instant = DATE.toInstant(ZoneOffset.ofHours(0));
-            Date output = Date.from(instant);
-            food.addLog(ID, id, (java.sql.Date) output);
+            food.addFood(foodTb.getText(), Integer.parseInt(calorieTb.getText()));
+            int id = food.getConsumableID(foodTb.getText());
+            if(id != 1){
+                food.addLog(ID, id, sqlDate);
+            } else {
+                System.out.println("ID: " + id + " Not Found");
+            }
+
         });
 
         Button closeBtn = new Button("Return To My Account");
-        closeBtn.setTranslateX(400); // negative = Left, positive = right
+        closeBtn.setTranslateX(450); // negative = Left, positive = right
         closeBtn.setTranslateY(540); //Bottom
         closeBtn.setTextFill(Color.WHITE);
-        closeBtn.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        closeBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         closeBtn.setOnAction(event -> mainStage.setScene(dietaryLog()));
 
-        accountRoot.getChildren().addAll(loginPageNameRoot,prevFoodComboBox, calorieLabel, calorieTb, foodLabel, foodTb, saveBtn, closeBtn);
-
+        accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, calorieLabel, calorieTb, foodLabel, foodTb, saveBtn, closeBtn, prevFoodComboBox);
 
         return new Scene(accountRoot, 1024, 600);
     }
+
+    protected Scene exerciseLoggingPage() {
+        Pane accountRoot = new Pane();
+        Account account = new Account();
+
+        HBox loginPageNameRoot = new HBox();
+        BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("headerIMG.png")), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER
+                , new BackgroundSize(1.0, 1.0, true, true, false, false));
+        loginPageNameRoot.setBackground(new Background(bgImage));
+
+
+        loginPageNameRoot.setPrefSize(1025, 250);
+
+        // accountRoot.setStyle("-fx-background-color: #000000");
+
+        Label exercisePageName = new Label();
+        exercisePageName.setText("Add Exercise To Log");
+        exercisePageName.setTextFill(Color.rgb(55, 77, 95));
+        exercisePageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT, 35));
+        exercisePageName.setTranslateX(440);
+        exercisePageName.setTranslateY(250);
+
+        ArrayList<Integer> exerciseIDs = new ArrayList<>();
+        ArrayList<String> exerciseNames = new ArrayList<>();
+        Exercise exercise = new Exercise();
+
+        exerciseIDs = exercise.getAllExercises();
+        for(int i = 0; i<exerciseIDs.size(); i++){
+            exerciseNames.add(exercise.getExerciseName(exerciseIDs.get(i)));
+        }
+
+        final ComboBox exerciseComboBox = new ComboBox();
+        ObservableList<String> exercises = FXCollections.observableList(exerciseNames);
+        exerciseComboBox.setItems(exercises);
+        exerciseComboBox.setTranslateX(440);
+        exerciseComboBox.setTranslateY(300);
+        exerciseComboBox.setPromptText("Select Already Added Exercise");
+        exerciseComboBox.setPrefWidth(250);
+
+        Label exerciseLabel = new Label("Name of Exercise: ");
+        exerciseLabel.setTranslateX(300);
+        exerciseLabel.setTranslateY(360);
+        exerciseLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        TextField exerciseTb = new TextField();
+        exerciseTb.setPrefSize(300, 40);
+        exerciseTb.setTranslateX(600);
+        exerciseTb.setTranslateY(360);
+
+        Label calorieLabel = new Label("Calories: ");
+        calorieLabel.setTranslateX(300);
+        calorieLabel.setTranslateY(420);
+        calorieLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        TextField calorieTb = new TextField();
+        calorieTb.setPrefSize(300, 40);
+        calorieTb.setTranslateX(600);
+        calorieTb.setTranslateY(420);
+
+        Label repsLabel = new Label("Reps/Steps: ");
+        repsLabel.setTranslateX(300);
+        repsLabel.setTranslateY(480);
+        repsLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        TextField repsTb = new TextField();
+        repsTb.setPrefSize(300, 40);
+        repsTb.setTranslateX(600);
+        repsTb.setTranslateY(480);
+
+        Button saveBtn = new Button("Save Details");
+        saveBtn.setTranslateX(800);
+        saveBtn.setTranslateY(510);
+        saveBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        saveBtn.setOnAction(event -> {
+            Instant instant = DATE.toInstant(ZoneOffset.UTC);
+            Date date = Date.from(instant);
+            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+            exercise.addExercise(exerciseTb.getText(), Integer.parseInt(calorieTb.getText()), Integer.parseInt(repsTb.getText()));
+            int id = exercise.getExerciseID(exerciseTb.getText());
+            if (id >= 0) {
+                exercise.addLog(ID, id, sqlDate);
+            } else {
+                System.out.println("ID: " + id + " Not Found");
+            }
+
+        });
+
+        Button closeBtn = new Button("Return To My Account");
+        closeBtn.setTranslateX(450); // negative = Left, positive = right
+        closeBtn.setTranslateY(540); //Bottom
+        closeBtn.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+        closeBtn.setOnAction(event -> mainStage.setScene(exerciseLog()));
+
+        accountRoot.getChildren().addAll(loginPageNameRoot, exercisePageName, calorieLabel, calorieTb, exerciseLabel, exerciseTb, repsLabel, repsTb, saveBtn, closeBtn, exerciseComboBox);
+
+        return new Scene(accountRoot, 1024, 600);
+    }
+
+
 
     public static void main(String[] args) {
         launch(args);

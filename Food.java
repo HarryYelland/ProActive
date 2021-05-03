@@ -1,6 +1,12 @@
-//package com.company;
+package com.company;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArrayBase;
+import javafx.collections.ObservableList;
+
+import javax.swing.text.TableView;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Food {
@@ -65,9 +71,6 @@ public class Food {
             {
                 System.out.println("Error in checking food type");
             }
-
-
-
             return id;
         }
 
@@ -105,4 +108,59 @@ public class Food {
 
         }
 
+    public int getConsumableID(String Name){
+        PreparedStatement ps;
+        ResultSet rs;
+        int consumableID = -1;
+
+        String query1 = "SELECT ConsumableID FROM Consumable WHERE Name LIKE ?";
+
+        try
+        {
+            ps = DatabaseConnector.getConnection().prepareStatement(query1);
+            ps.setString(1, Name);
+            rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                System.out.println("Consumable Found");
+                consumableID = rs.getInt(1);
+                return consumableID;
+            } else {
+                consumableID = -1;
+                System.out.println("No Consumable By That ID");
+            }
+        }
+        catch(SQLException e) {
+        }
+        return consumableID;
+    }
+
+    public ObservableList getFoodLog(Date date){
+        PreparedStatement ps;
+        ResultSet rs;
+        String query1 = "SELECT * FROM ConsumableComp WHERE CAST(date AS DATE) = ?";
+        ObservableList data = FXCollections.observableArrayList();
+
+        try
+        {
+            ps = DatabaseConnector.getConnection().prepareStatement(query1);
+            ps.setDate(1, date);
+            rs = ps.executeQuery();
+
+            while (rs.next())
+            {
+                ObservableList<String> row = FXCollections.observableArrayList();
+                for(int i=1 ; i<=rs.getMetaData().getColumnCount(); i++){
+                    //Iterate Column
+                    row.add(rs.getString(i));
+                }
+                data.add(row);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return data;
+    }
 }
