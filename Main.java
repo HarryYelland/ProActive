@@ -1,5 +1,6 @@
 //package com.company;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -560,8 +561,7 @@ public class Main extends Application {
             }
         });
 
-        VBox sideButtons = new VBox(91);
-
+        VBox sideButtons = new VBox(59);
         //Adding image on side panel
         BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("proactiveside3.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER,new BackgroundSize(1.0,1.0,true,true,false,false));
         sideButtons.setBackground(new Background(bgImage));
@@ -570,16 +570,15 @@ public class Main extends Application {
         Label proActiveName2 = new Label("Pro-Active");
         proActiveName2.setTextFill(Color.WHITE);
         proActiveName2.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        proActiveName2.setTranslateX(8);
+        proActiveName2.setTranslateX(20);
         proActiveName2.setTranslateY(40);
 
         Button accountButton = new Button();
         accountButton.setText("Account");
         accountButton.setTextFill(Color.WHITE);
         accountButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" + "-fx-background-color: transparent");
-        accountButton.setPrefSize(190, 40);
-        accountButton.setTranslateX(5); // negative = Left, positive = right
-        accountButton.setTranslateY(5); //Bottom
+        accountButton.setTranslateX(20); // negative = Left, positive = right
+        accountButton.setTranslateY(1); //Bottom
 
         //Adding Icon
         Image accountIcon = new Image(getClass().getResourceAsStream("user.png"));
@@ -597,9 +596,8 @@ public class Main extends Application {
         exerciseLogButton.setEllipsisString("Exercise Log");
         exerciseLogButton.setTextFill(Color.WHITE);
         exerciseLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" +"-fx-background-color: transparent");
-        exerciseLogButton.setPrefSize(190, 40);
         exerciseLogButton.setTranslateX(5); // negative = Left, positive = right
-        exerciseLogButton.setTranslateY(-20); //Bottom
+        exerciseLogButton.setTranslateY(-10); //Bottom
         exerciseLogButton.setOnAction(event -> mainStage.setScene(exerciseLog()));
 
 
@@ -616,9 +614,8 @@ public class Main extends Application {
         dietaryLogButton.setEllipsisString("Dietary Log");
         dietaryLogButton.setTextFill(Color.WHITE);
         dietaryLogButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" + "-fx-background-color: transparent");
-        dietaryLogButton.setPrefSize(190, 40);
         dietaryLogButton.setTranslateX(5); // negative = Left, positive = right
-        dietaryLogButton.setTranslateY(-30); //Bottom
+        dietaryLogButton.setTranslateY(-20); //Bottom
         dietaryLogButton.setOnAction(event -> mainStage.setScene(dietaryLog()));
 
 
@@ -634,9 +631,8 @@ public class Main extends Application {
         groupsButton.setText("Groups");
         groupsButton.setTextFill(Color.WHITE);
         groupsButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" + "-fx-background-color: transparent");
-        groupsButton.setPrefSize(190, 40);
-        groupsButton.setTranslateX(5); // negative = Left, positive = right
-        groupsButton.setTranslateY(-60); //Bottom
+        groupsButton.setTranslateX(25); // negative = Left, positive = right
+        groupsButton.setTranslateY(-30); //Bottom
 
 
         //Adding Icon to the group button
@@ -649,8 +645,17 @@ public class Main extends Application {
 
         groupsButton.setOnAction(event -> mainStage.setScene(groupPage()));
 
+        Button logOutButton = new Button();
+        logOutButton.setText("🚪 Logout");
+        logOutButton.setTextFill(Color.WHITE);
+        logOutButton.setStyle("-fx-font: normal 25px 'Arial Nova Cond Light';" + "-fx-background-color: transparent");
+        logOutButton.setTranslateX(35);
+        logOutButton.setTranslateY(-42); //Bottom
 
-        sideButtons.getChildren().addAll(proActiveName2,accountButton,exerciseLogButton,dietaryLogButton,groupsButton);
+        logOutButton.setOnAction(event -> {ID = -1; mainStage.setScene(mainPage());});
+
+
+        sideButtons.getChildren().addAll(proActiveName2,accountButton,exerciseLogButton,dietaryLogButton,groupsButton,logOutButton);
 
 
 
@@ -710,6 +715,8 @@ public class Main extends Application {
         Instant instant = DATE.toInstant(ZoneOffset.UTC);
         Date newdate = Date.from(instant);
         java.sql.Date sqlDate = new java.sql.Date(newdate.getTime());
+
+
         try {
             Exercise exercise1 = new Exercise();
             ArrayList<Integer> exerciseIds = new ArrayList<>();
@@ -2039,9 +2046,6 @@ public class Main extends Application {
         rewardsTable.getColumns().addAll(rewardDate,achievement,rewardPoints);
 
         achievementRoot.getChildren().addAll(rewardButton,rewardsTable,achievementLabel);
-
-
-
 
 
 
