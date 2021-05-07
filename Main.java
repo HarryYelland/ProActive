@@ -25,6 +25,8 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.CheckBox;
+
+import javax.mail.MessagingException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -379,10 +381,11 @@ public class Main extends Application {
                             System.out.println(ID);
                             Account account = new Account();
                             account.setFirstDetails(ID);
+                            Email.sendMail(emailTextField.getText(), "Dear " + usernameTextField.getText() + ", \nYou have successfully signed up with ProActive Health Tracker using this Email Address!");
                             mainStage.setScene(accountPage());
 
                         };
-                    } catch (SQLException throwables) {
+                    } catch (SQLException | MessagingException throwables) {
                         throwables.printStackTrace();
                     }
                 }
