@@ -323,6 +323,7 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 Registration register = new Registration();
+
                 Alert errorWarning = new Alert(Alert.AlertType.ERROR);
                 errorWarning.setTitle("Error");
                 errorWarning.setHeaderText("Oops Something went wrong");
@@ -361,7 +362,7 @@ public class Main extends Application {
                 }
                 //Reference from: https://www.tutorialspoint.com/validate-email-address-in-java
                 else if(!(emailTextField.getText().matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$"))){
-                    errorWarning.setContentText("Email Formatting Incorrect");
+                    errorWarning.setContentText("Email Format Is Incorrect");
                     errorWarning.show();
                 }
                 else {
@@ -1257,6 +1258,7 @@ public class Main extends Application {
         confirmGroupTextField.setTranslateX(360);
         confirmGroupTextField.setTranslateY(270);
 
+
         HBox checkBoxLayout = new HBox();
         checkBoxLayout.setPrefSize(500,60);
         checkBoxLayout.setTranslateX(415);
@@ -1275,51 +1277,108 @@ public class Main extends Application {
 
         checkBoxLayout.getChildren().addAll(radioButton1, radioButton2, radioButton3);
 
-        TextField inviteTextField = new TextField();
-        inviteTextField.setPromptText("Friend username");
-        inviteTextField.setPrefSize(350,40);
-        inviteTextField.setTranslateX(360);
-        inviteTextField.setTranslateY(400);
+//        TextField inviteTextField = new TextField();
+//        inviteTextField.setPromptText("Friend username");
+//        inviteTextField.setPrefSize(350,40);
+//        inviteTextField.setTranslateX(360);
+//        inviteTextField.setTranslateY(400);
+
+
+        TextField emailTextField = new TextField();
+        emailTextField.setPromptText("Friend Email");
+        emailTextField.setPrefSize(500,40);
+        emailTextField.setTranslateX(360);
+        emailTextField.setTranslateY(400);
+
+//
+//        Button sendEmail = new Button("Send");
+//        sendEmail.setTextFill(Color.WHITE);
+//        sendEmail.setTranslateX(900); // negative = Left, positive = right
+//        sendEmail.setTranslateY(400); //Bottom
+//        sendEmail.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+//        sendEmail.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent actionEvent) {
+//                try {
+//                    Email.sendMail(emailTextField.getText(), "You have been added to " + groupNameTextField.getText() + ", \nLogin to your Pro-Active account to check other group members fitness progress! 😊");
+//                } catch (MessagingException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
 
         Button createGroupButton = new Button("Create Group");
-        //createGroupButton.setPrefSize(200, 40);
         createGroupButton.setTextFill(Color.WHITE);
-        createGroupButton.setTranslateX(360); // negative = Left, positive = right
-        createGroupButton.setTranslateY(450); //Bottom
+        createGroupButton.setTranslateX(540); // negative = Left, positive = right
+        createGroupButton.setTranslateY(500); //Bottom
         createGroupButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         createGroupButton.setOnAction(event->{
-            try {
-                group.makeGroup(groupNameTextField.getText(), confirmGroupTextField.getText());
-                int groupID = group.getGroupID(groupNameTextField.getText());
-                for (int i=0; i<members.size(); i++) {
-                    if(members.get(i) != null){
-                        group.insertGroupMember(groupID, members.get(i));
-                    }
+            Alert errorWarning = new Alert(Alert.AlertType.ERROR);
+            errorWarning.setTitle("Error");
+            errorWarning.setHeaderText("Oops something went wrong");
+            if (groupNameTextField.getText().isEmpty() && confirmGroupTextField.getText().isEmpty() && emailTextField.getText().isEmpty()){
+                errorWarning.setContentText("""
+                            Forgot to enter:
+                            Group Name
+                            Confirm group name
+                            Friend Email
+                            """);
+                errorWarning.show();
+
+            }
+            else if(groupNameTextField.getText().isEmpty()){
+                errorWarning.setContentText("Forgot to enter your username");
+                errorWarning.show();
+            }else if(confirmGroupTextField.getText().isEmpty()){
+                errorWarning.setContentText("Forgot to confirm your group name");
+                errorWarning.show();
+            }else if(!(confirmGroupTextField.getText().equals(groupNameTextField.getText()))){
+                errorWarning.setContentText("Group Name does not match");
+                errorWarning.show();
+            }
+            else if(emailTextField.getText().isEmpty()){
+                errorWarning.setContentText("Forgot to enter friends email");
+                errorWarning.show();
+            }else if(!(emailTextField.getText().matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$"))){
+                errorWarning.setContentText("Email Format Is Incorrect");
+                errorWarning.show();
+            }
+            else {
+                try {
+                   if(group.makeGroup(groupNameTextField.getText(), confirmGroupTextField.getText())){
+                    int groupID = group.getGroupID(groupNameTextField.getText());
+                   for (int i = 0; i < members.size(); i++) {
+                        if (members.get(i) != null) {
+                            group.insertGroupMember(groupID, members.get(i));
+                        }
+                   }
+                    group.insertGroupMember(groupID, ID);
+                    Email.sendMail(emailTextField.getText(), "You have been added to " + groupNameTextField.getText() +
+                            "\nLogin to your Pro-Active account to check other group members fitness progress! 😊");
+                    mainStage.setScene(Group(groupID));}
+                } catch (SQLException | MessagingException throwables) {
+                    throwables.printStackTrace();
                 }
-                group.insertGroupMember(groupID, ID);
-                mainStage.setScene(Group(groupID));
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        });
+            }});
 
 
-        Button addFriendButton = new Button("Add Friend");
-        addFriendButton.setTranslateX(730); // negative = Left, positive = right
-        addFriendButton.setTranslateY(400); //Bottom
-        addFriendButton.setTextFill(Color.WHITE);
-        addFriendButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-        addFriendButton.setOnAction(event -> {
-            try {
-                members.add(group.getMemberUUID(inviteTextField.getText()));
-                Alert friendAdded = new Alert(Alert.AlertType.CONFIRMATION);
-                friendAdded.setTitle("Friend Added");
-                friendAdded.setHeaderText(inviteTextField.getText() + " has been added to the group");
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        });
+//        Button addFriendButton = new Button("Add Friend");
+//        addFriendButton.setTranslateX(730); // negative = Left, positive = right
+//        addFriendButton.setTranslateY(400); //Bottom
+//        addFriendButton.setTextFill(Color.WHITE);
+//        addFriendButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+//        addFriendButton.setOnAction(event -> {
+//            try {
+//                members.add(group.getMemberUUID(inviteTextField.getText()));
+//                Alert friendAdded = new Alert(Alert.AlertType.CONFIRMATION);
+//                friendAdded.setTitle("Friend Added");
+//                friendAdded.setHeaderText(inviteTextField.getText() + " has been added to the group");
+//            } catch (SQLException throwables) {
+//                throwables.printStackTrace();
+//            }
+//        });
+
 
 
 
@@ -1426,7 +1485,7 @@ public class Main extends Application {
 
 
         createGroupRoot.getChildren().addAll(sideButtons,confirmGroupTextField,groupNameTextField
-                ,inviteTextField,createGroupName,createGroupButton, addFriendButton, checkBoxLayout);
+                ,createGroupName,createGroupButton,  checkBoxLayout,emailTextField);
         return new Scene(createGroupRoot,1024,600);
 
     }
@@ -1699,7 +1758,9 @@ public class Main extends Application {
     protected Scene Group(int GroupID){
 
         Pane Group = new Pane();
+
         Group group = new Group();
+
         Label groupNameLbl = new Label();
         groupNameLbl.setText(group.getGroupName(GroupID));
         groupNameLbl.setTextFill(Color.rgb(55,77,95));
@@ -1707,7 +1768,27 @@ public class Main extends Application {
         groupNameLbl.setTranslateX(440);
         groupNameLbl.setTranslateY(160);
 
-        Group.getChildren().addAll(groupNameLbl);
+        Button closeBtn = new Button("Back");
+        closeBtn.setPrefSize(200, 40);
+        closeBtn.setTranslateX(400); // negative = Left, positive = right
+        closeBtn.setTranslateY(540); //Bottom
+        closeBtn.setTextFill(Color.WHITE);
+        closeBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        closeBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    mainStage.setScene(createGroup());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        });
+
+
+
+
+        Group.getChildren().addAll(groupNameLbl, closeBtn);
         return new Scene(Group,1024,600);
 
     }

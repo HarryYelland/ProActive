@@ -30,8 +30,10 @@ public class Group {
     }
 
     Boolean makeGroup(String groupName, String confirmName) throws SQLException {
+        System.out.println("Method running..");
         Group group = new Group();
-        if(groupName != confirmName){
+        if(!groupName.contentEquals(confirmName)){
+            System.out.println("Group Name != confirmName");
             return false;
         }
         if(group.getGroupID(groupName) >= 0) {
@@ -39,18 +41,26 @@ public class Group {
             return false;
         }
         PreparedStatement ps;
-        ResultSet rs;
-        String query1 = "INSERT INTO Groups (GroupName) VALUES (?)";
+       // ResultSet rs;
+        //String query1 = "INSERT INTO groups(groupname) VALUES(?)";
+
+        System.out.println("Method still running..");
         try
         {
+            String query1 = "INSERT INTO groups(groupname) VALUES(?)";
             PreparedStatement insertGroup = DatabaseConnector.getConnection().prepareStatement(query1);
-            ps = DatabaseConnector.getConnection().prepareStatement(query1);
-            ps.setString (1, groupName);
-            rs = ps.executeQuery();
-            rs = insertGroup.executeQuery();
+           // ps = DatabaseConnector.getConnection().prepareStatement(query1);
+           // ps.setString (1, groupName);
+            //rs = ps.executeQuery();
+            //rs = insertGroup.executeQuery();
+
+            insertGroup.setString (1, groupName);
+            insertGroup.executeUpdate();
+
             System.out.println("MADE GROUP");
             return true;
         } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         return false;
     }
@@ -59,13 +69,14 @@ public class Group {
         int groupID = -1;
         PreparedStatement ps;
         ResultSet rs;
-        String query2 = "SELECT GroupID FROM Groups WHERE GroupName LIKE ?";
+        String query2 = "SELECT groupid FROM groups WHERE groupname LIKE ?";
         ps = DatabaseConnector.getConnection().prepareStatement(query2);
         ps.setString (1, groupName);
         rs = ps.executeQuery();
-        if (rs.next())
+        while (rs.next())
         {
             groupID = rs.getInt(1);
+            System.out.println(groupID);
         }
         System.out.println("GOT GROUP ID");
         return groupID;
@@ -89,18 +100,22 @@ public class Group {
 
     Boolean insertGroupMember(int groupID, int uuid) throws SQLException {
         PreparedStatement ps;
-        ResultSet rs;
-        String query1 = "INSERT INTO GroupMembers (GroupID, UUID) VALUES (?, ?)";
+        //ResultSet rs;
+        String query1 = "INSERT INTO groupmembers (groupid, uuid) VALUES (?, ?)";
         try {
             PreparedStatement insertMember = DatabaseConnector.getConnection().prepareStatement(query1);
-            ps = DatabaseConnector.getConnection().prepareStatement(query1);
-            ps.setInt(1, groupID);
-            ps.setInt(2, uuid);
-            rs = ps.executeQuery();
-            rs = insertMember.executeQuery();
+            //ps = DatabaseConnector.getConnection().prepareStatement(query1);
+           // ps.setInt(1, groupID);
+           // ps.setInt(2, uuid);
+           // rs = ps.executeQuery();
+           // rs = insertMember.executeQuery();
+            insertMember.setInt(1, groupID);
+            insertMember.setInt(2, uuid);
+            insertMember.executeUpdate();
             System.out.println("INSERTED GROUP MEMBER");
             return true;
         } catch (SQLException e){
+            e.printStackTrace();
         }
             return false;
     }
