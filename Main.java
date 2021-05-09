@@ -1719,9 +1719,10 @@ public class Main extends Application {
         BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(1.0, 1.0, true, true, false, false));
         accountRoot.setBackground(new Background(backgroundImage));
 
-        if(account.getCalorieGoal(ID) <= 0){
-            account.setFirstDetails(ID);
-        }
+        // commented out for now, inserts two details into db for one user, see line 381
+        //if(account.getCalorieGoal(ID) <= 0){
+        //    account.setFirstDetails(ID);
+        //}
 
         HBox loginPageNameRoot = new HBox();
         BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("headerIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
@@ -2050,13 +2051,21 @@ public class Main extends Application {
 
         rewardButton.setOnAction(actionEvent -> mainStage.setScene(accountPage()));
 
+        Account account = new Account();
+        Achievement achievements[] = account.checkAchievements(ID);
 
-        TableView rewardsTable = new TableView();
+        TableView<Achievement> rewardsTable = new TableView<Achievement>();
+        rewardsTable.getItems().addAll(achievements);
+
         rewardsTable.setEditable(true);
+        TableColumn<Achievement, String> rewardDate = new TableColumn<Achievement, String>("Date");
+        rewardDate.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getDate()));
+        TableColumn<Achievement, String> achievement = new TableColumn<Achievement, String>("Achievements");
+        achievement.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getAchievement()));
+        TableColumn<Achievement, String> rewardPoints = new TableColumn<Achievement, String>("Points");
+        rewardPoints.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getPoints().toString()));
 
-        TableColumn rewardDate = new TableColumn("Date");
-        TableColumn achievement = new TableColumn("Achievements");
-        TableColumn rewardPoints = new TableColumn("Points");
+
 
        // rewardsTable.set
 
