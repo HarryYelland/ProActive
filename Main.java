@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -25,6 +26,7 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.CheckBox;
+import javafx.util.Callback;
 
 import javax.mail.MessagingException;
 import javax.swing.event.ChangeEvent;
@@ -645,7 +647,13 @@ public class Main extends Application {
         gImg.setTranslateX(-10);
         groupsButton.setGraphic(gImg);
 
-        groupsButton.setOnAction(event -> mainStage.setScene(groupPage()));
+        groupsButton.setOnAction(event -> {
+            try {
+                mainStage.setScene(groupPage());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         Button logOutButton = new Button();
         logOutButton.setText("🚪 Logout");
@@ -845,7 +853,13 @@ public class Main extends Application {
         gImg.setTranslateX(-10);
         groupsButton.setGraphic(gImg);
 
-        groupsButton.setOnAction(event -> mainStage.setScene(groupPage()));
+        groupsButton.setOnAction(event -> {
+            try {
+                mainStage.setScene(groupPage());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         Button logOutButton = new Button();
         logOutButton.setText("🚪 Logout");
@@ -1026,7 +1040,13 @@ public class Main extends Application {
         gImg.setFitWidth(30);
         gImg.setTranslateX(-10);
         groupsButton.setGraphic(gImg);
-        groupsButton.setOnAction(event -> mainStage.setScene(groupPage()));
+        groupsButton.setOnAction(event -> {
+            try {
+                mainStage.setScene(groupPage());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         Button logOutButton = new Button();
         logOutButton.setText("🚪 Logout");
@@ -1050,7 +1070,7 @@ public class Main extends Application {
 
     }
 
-    protected Scene groupPage(){
+    protected Scene groupPage() throws SQLException {
         Pane groupRoot = new Pane();
 
         BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
@@ -1063,6 +1083,17 @@ public class Main extends Application {
         groupPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,40));
         groupPageName.setTranslateX(500);
         groupPageName.setTranslateY(40);
+
+//        ArrayList<String> userGroups =  Group.showGroups(ID);
+//
+//        Pagination groupPagination = new Pagination(userGroups.size());
+//        groupPagination.setTranslateX(600);
+//        groupPagination.setTranslateY(240);
+//
+
+
+
+
 
 
         //Circle Group Button
@@ -1182,7 +1213,13 @@ public class Main extends Application {
         gImg.setTranslateX(-10);
         groupsButton.setGraphic(gImg);
 
-        groupsButton.setOnAction(event -> mainStage.setScene(groupPage()));
+        groupsButton.setOnAction(event -> {
+            try {
+                mainStage.setScene(groupPage());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         Button logOutButton = new Button();
         logOutButton.setText("🚪 Logout");
@@ -1314,6 +1351,9 @@ public class Main extends Application {
         createGroupButton.setTranslateY(500); //Bottom
         createGroupButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         createGroupButton.setOnAction(event->{
+
+           // Registration register = new Registration();
+
             Alert errorWarning = new Alert(Alert.AlertType.ERROR);
             errorWarning.setTitle("Error");
             errorWarning.setHeaderText("Oops something went wrong");
@@ -1346,17 +1386,31 @@ public class Main extends Application {
             }
             else {
                 try {
-                   if(group.makeGroup(groupNameTextField.getText(), confirmGroupTextField.getText())){
-                    int groupID = group.getGroupID(groupNameTextField.getText());
-                   for (int i = 0; i < members.size(); i++) {
-                        if (members.get(i) != null) {
-                            group.insertGroupMember(groupID, members.get(i));
+                    Group newGroup = new Group();
+
+                    if(group.getGroupID(groupNameTextField.getText())>= 0){
+                        errorWarning.setContentText("Group name is already taken!" +  "\nTry again!");
+                        errorWarning.show();
+                    }
+                    if (newGroup.checkUserExist(emailTextField.getText())) {
+
+                        if(group.makeGroup(groupNameTextField.getText(), confirmGroupTextField.getText(),emailTextField.getText())) {
+                            int groupID = group.getGroupID(groupNameTextField.getText());
+                            for (int i = 0; i < members.size(); i++) {
+                                if (members.get(i) != null) {
+                                    group.insertGroupMember(groupID, members.get(i));
+                                }
+                            }
+                            group.insertGroupMember(groupID, ID);
+                            Email.sendMail(emailTextField.getText(), "You have been added to " + groupNameTextField.getText() +
+                                    "\nLogin to your Pro-Active account to check other group members fitness progress! 😊");
+                            mainStage.setScene(Group(groupID));
                         }
-                   }
-                    group.insertGroupMember(groupID, ID);
-                    Email.sendMail(emailTextField.getText(), "You have been added to " + groupNameTextField.getText() +
-                            "\nLogin to your Pro-Active account to check other group members fitness progress! 😊");
-                    mainStage.setScene(Group(groupID));}
+                    }else{
+                        errorWarning.setContentText("Email does not exist");
+                        errorWarning.show();
+                    }
+
                 } catch (SQLException | MessagingException throwables) {
                     throwables.printStackTrace();
                 }
@@ -1467,7 +1521,13 @@ public class Main extends Application {
         gImg.setTranslateX(-10);
         groupsButton.setGraphic(gImg);
 
-        groupsButton.setOnAction(event -> mainStage.setScene(groupPage()));
+        groupsButton.setOnAction(event -> {
+            try {
+                mainStage.setScene(groupPage());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         Button logOutButton = new Button();
         logOutButton.setText("🚪 Logout");
@@ -1733,7 +1793,13 @@ public class Main extends Application {
         gImg.setTranslateX(-10);
         groupsButton.setGraphic(gImg);
 
-        groupsButton.setOnAction(event -> mainStage.setScene(groupPage()));
+        groupsButton.setOnAction(event -> {
+            try {
+                mainStage.setScene(groupPage());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         Button logOutButton = new Button();
         logOutButton.setText("🚪 Logout");
