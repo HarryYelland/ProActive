@@ -1084,49 +1084,33 @@ public class Main extends Application {
         groupPageName.setTranslateX(500);
         groupPageName.setTranslateY(40);
 
-//        ArrayList<String> userGroups =  Group.showGroups(ID);
-//
-//        Pagination groupPagination = new Pagination(userGroups.size());
-//        groupPagination.setTranslateX(600);
-//        groupPagination.setTranslateY(240);
-//
+        ArrayList<String> userGroups =  Group.showGroups(ID);
+        HBox roundGroups = new HBox();
 
+        roundGroups.setSpacing(15);
+            for(int i = 1; i < userGroups.size() + 1; i++) {
+                    Group group = new Group();
+                    Button joinedGroup1Button = new Button();
+                    joinedGroup1Button.setText("Group " + i);
+                    joinedGroup1Button.setTextFill(Color.WHITE);
+                    joinedGroup1Button.setPrefSize(100, 100);
+                    joinedGroup1Button.setTranslateX(340); // negative = Left, positive = right
+                    joinedGroup1Button.setTranslateY(120); //Bottom
+                    joinedGroup1Button.setStyle("-fx-background-radius: 100px; " + "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+                    int finalI = i;
+                    joinedGroup1Button.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            try {
+                                mainStage.setScene(Group(group.getGroupID(userGroups.get(finalI))));
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+                        }
+                    });
 
-
-
-
-
-        //Circle Group Button
-        Button joinedGroup1Button = new Button();
-        joinedGroup1Button.setText("Group 1");
-        joinedGroup1Button.setTextFill(Color.WHITE);
-        joinedGroup1Button.setPrefSize(100, 100);
-        joinedGroup1Button.setTranslateX(340); // negative = Left, positive = right
-        joinedGroup1Button.setTranslateY(120); //Bottom
-        joinedGroup1Button.setStyle("-fx-background-radius: 100px; " + "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-
-
-        //Circle Group2 Button
-        Button joinedGroup2Button = new Button();
-        joinedGroup2Button.setText("Group 2");
-        joinedGroup2Button.setTextFill(Color.WHITE);
-        joinedGroup2Button.setPrefSize(100, 100);
-        joinedGroup2Button.setTranslateX(560); // negative = Left, positive = right
-        joinedGroup2Button.setTranslateY(120); //Bottom
-        joinedGroup2Button.setStyle("-fx-background-radius: 100px; " + "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #d3208b;"  + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-
-
-        //Circle Group3 Button
-        Button joinedGroup3Button = new Button();
-        joinedGroup3Button.setText("Group 3");
-        joinedGroup3Button.setTextFill(Color.WHITE);
-        joinedGroup3Button.setPrefSize(100, 100);
-        joinedGroup3Button.setTranslateX(790); // negative = Left, positive = right
-        joinedGroup3Button.setTranslateY(120); //Bottom
-        joinedGroup3Button.setStyle("-fx-background-radius: 100px; " + "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #879AF2;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-
-
-        //groupRoot.setStyle("-fx-background-color: #000000");
+                roundGroups.getChildren().addAll(joinedGroup1Button);
+        }
 
         VBox sideButtons = new VBox(59);
 
@@ -1260,8 +1244,7 @@ public class Main extends Application {
 
         joinGroupButton.setOnAction(event -> mainStage.setScene(joinGroupPage()));
 
-        groupRoot.getChildren().addAll(sideButtons,createGroupButton,joinGroupButton,groupPageName,joinedGroup1Button,
-                joinedGroup2Button,joinedGroup3Button);
+        groupRoot.getChildren().addAll(sideButtons,createGroupButton,joinGroupButton,groupPageName, roundGroups);
 
         return new Scene(groupRoot,1024,600);
     }
@@ -1314,35 +1297,11 @@ public class Main extends Application {
 
         checkBoxLayout.getChildren().addAll(radioButton1, radioButton2, radioButton3);
 
-//        TextField inviteTextField = new TextField();
-//        inviteTextField.setPromptText("Friend username");
-//        inviteTextField.setPrefSize(350,40);
-//        inviteTextField.setTranslateX(360);
-//        inviteTextField.setTranslateY(400);
-
-
         TextField emailTextField = new TextField();
         emailTextField.setPromptText("Friend Email");
         emailTextField.setPrefSize(500,40);
         emailTextField.setTranslateX(360);
         emailTextField.setTranslateY(400);
-
-//
-//        Button sendEmail = new Button("Send");
-//        sendEmail.setTextFill(Color.WHITE);
-//        sendEmail.setTranslateX(900); // negative = Left, positive = right
-//        sendEmail.setTranslateY(400); //Bottom
-//        sendEmail.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-//        sendEmail.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent actionEvent) {
-//                try {
-//                    Email.sendMail(emailTextField.getText(), "You have been added to " + groupNameTextField.getText() + ", \nLogin to your Pro-Active account to check other group members fitness progress! 😊");
-//                } catch (MessagingException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
 
 
         Button createGroupButton = new Button("Create Group");
@@ -1351,9 +1310,6 @@ public class Main extends Application {
         createGroupButton.setTranslateY(500); //Bottom
         createGroupButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         createGroupButton.setOnAction(event->{
-
-           // Registration register = new Registration();
-
             Alert errorWarning = new Alert(Alert.AlertType.ERROR);
             errorWarning.setTitle("Error");
             errorWarning.setHeaderText("Oops something went wrong");
@@ -1393,8 +1349,8 @@ public class Main extends Application {
                         errorWarning.show();
                     }
                     if (newGroup.checkUserExist(emailTextField.getText())) {
+                        if(group.makeGroup(groupNameTextField.getText(), confirmGroupTextField.getText(),emailTextField.getText(),ID)) {
 
-                        if(group.makeGroup(groupNameTextField.getText(), confirmGroupTextField.getText(),emailTextField.getText())) {
                             int groupID = group.getGroupID(groupNameTextField.getText());
                             for (int i = 0; i < members.size(); i++) {
                                 if (members.get(i) != null) {
@@ -1402,39 +1358,30 @@ public class Main extends Application {
                                 }
                             }
                             group.insertGroupMember(groupID, ID);
+
+
                             Email.sendMail(emailTextField.getText(), "You have been added to " + groupNameTextField.getText() +
                                     "\nLogin to your Pro-Active account to check other group members fitness progress! 😊");
                             mainStage.setScene(Group(groupID));
+                        }else{
+                            errorWarning.setTitle("Error");
+                            errorWarning.setHeaderText("Oops something went wrong");
+                            errorWarning.setContentText("You have exceeded the maximum number of groups: 5");
+                            errorWarning.show();
                         }
                     }else{
-                        errorWarning.setContentText("Email does not exist");
-                        errorWarning.show();
+                        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+                        Account account = new Account();
+                        Email.sendMail(emailTextField.getText(), account.getUsername(ID)+ " tried to add you to a Group on ProActive Health Tracker - Download today at: https://github.com/HarryYelland/pro-active");
+                        confirmation.setHeaderText("Email not registered with Pro-Active");
+                        confirmation.setContentText("Sent invitation link to " + emailTextField.getText() + " to join");
+                        confirmation.show();
                     }
 
                 } catch (SQLException | MessagingException throwables) {
                     throwables.printStackTrace();
                 }
             }});
-
-
-//        Button addFriendButton = new Button("Add Friend");
-//        addFriendButton.setTranslateX(730); // negative = Left, positive = right
-//        addFriendButton.setTranslateY(400); //Bottom
-//        addFriendButton.setTextFill(Color.WHITE);
-//        addFriendButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-//        addFriendButton.setOnAction(event -> {
-//            try {
-//                members.add(group.getMemberUUID(inviteTextField.getText()));
-//                Alert friendAdded = new Alert(Alert.AlertType.CONFIRMATION);
-//                friendAdded.setTitle("Friend Added");
-//                friendAdded.setHeaderText(inviteTextField.getText() + " has been added to the group");
-//            } catch (SQLException throwables) {
-//                throwables.printStackTrace();
-//            }
-//        });
-
-
-
 
         VBox sideButtons = new VBox(59);
 
@@ -1558,19 +1505,31 @@ public class Main extends Application {
         joinGroupRoot.setBackground(new Background(backgroundImage));
 
 
-
         Label joinGroupsPageName = new Label("Join Groups");
         joinGroupsPageName.setTextFill(Color.rgb(55,77,95));
         joinGroupsPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,40));
         joinGroupsPageName.setTranslateX(500);
         joinGroupsPageName.setTranslateY(45);
 
-        Text para = new Text();
-        para.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore \n" +
-                " et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip");
-
+        Label para = new Label();
+        para.setText("Private Group Code: ");
+        para.setTextFill(Color.rgb(55,77,95));
+        para.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,30));
         para.setTranslateX(350);
-        para.setTranslateY(145);
+        para.setTranslateY(120);
+
+        TextField joinPrivateGroup = new TextField();
+        joinPrivateGroup.setPrefSize(200,40);
+        joinPrivateGroup.setTranslateX(650);
+        joinPrivateGroup.setTranslateY(121);
+
+        Button joinPrivateGroupButton = new Button("Join ⏩");
+        joinPrivateGroupButton.setStyle("-fx-background-radius: 5em; " +
+                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5, 0.5, 0, 2)");
+
+        joinPrivateGroupButton.setTextFill(Color.WHITE);
+        joinPrivateGroupButton.setTranslateX(860);
+        joinPrivateGroupButton.setTranslateY(118);
 
 
 
@@ -1815,7 +1774,7 @@ public class Main extends Application {
 
 
 
-        joinGroupRoot.getChildren().addAll(sideButtons,group1,group2,group3,group4,group5,group6,joinGroupsPageName,para);
+        joinGroupRoot.getChildren().addAll(sideButtons,group1,group2,group3,group4,group5,group6,joinGroupsPageName,para,joinPrivateGroup,joinPrivateGroupButton);
 
 
         return new Scene(joinGroupRoot,1024,600);
@@ -1825,14 +1784,18 @@ public class Main extends Application {
 
         Pane Group = new Pane();
 
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
+                ,new BackgroundSize(1.0,1.0,true,true,false,false));
+        Group.setBackground(new Background(backgroundImage));
+
         Group group = new Group();
 
         Label groupNameLbl = new Label();
         groupNameLbl.setText(group.getGroupName(GroupID));
         groupNameLbl.setTextFill(Color.rgb(55,77,95));
         groupNameLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        groupNameLbl.setTranslateX(440);
-        groupNameLbl.setTranslateY(160);
+        groupNameLbl.setTranslateX(430);
+        groupNameLbl.setTranslateY(50);
 
         Button closeBtn = new Button("Back");
         closeBtn.setPrefSize(200, 40);
@@ -1844,7 +1807,7 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    mainStage.setScene(createGroup());
+                    mainStage.setScene(groupPage());
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }

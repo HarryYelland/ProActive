@@ -48,7 +48,7 @@ public class Group {
         return UserExist;
     }
 
-    Boolean makeGroup(String groupName, String confirmName, String email) throws SQLException {
+    Boolean makeGroup(String groupName, String confirmName, String email,int ID) throws SQLException {
         System.out.println("Method running..");
         Group group = new Group();
         if(!groupName.contentEquals(confirmName)){
@@ -59,6 +59,22 @@ public class Group {
             System.out.println("Group Name Already Taken");
             return false;
         }
+        String query2 = "SELECT COUNT(*) FROM groupmembers WHERE uuid = ?";
+        PreparedStatement groupCount = DatabaseConnector.getConnection().prepareStatement(query2);
+        groupCount.setInt (1, ID);
+        ResultSet rs;
+        rs = groupCount.executeQuery();
+        while (rs.next())
+        {
+            int results = rs.getInt(1);
+            if(results > 4){
+                return false;
+            }
+            System.out.println("Results" + results);
+        }
+
+
+
         PreparedStatement ps;
        // ResultSet rs;
         //String query1 = "INSERT INTO groups(groupname) VALUES(?)";
@@ -142,20 +158,20 @@ public class Group {
         }
             return false;
     }
-//    public static ArrayList<String> showGroups(int uuid) throws  SQLException{
-//        String query2 = "SELECT groups.groupname FROM groups INNER JOIN groupmembers ON groups.groupid = groupmembers.groupid WHERE groupmembers.uuid =? ";
-//        PreparedStatement userGroups = DatabaseConnector.getConnection().prepareStatement(query2);
-//        userGroups.setInt(1,uuid);
-//        ResultSet resultSet = userGroups.executeQuery();
-//        ArrayList<String> groupList = new ArrayList<>();
-//        while (resultSet.next()){
-//            String getGroupName = resultSet.getString("groupname");
-//            groupList.add(getGroupName);
-//        }
-//        return groupList;
-//
-//
-//    }
+    public static ArrayList<String> showGroups(int uuid) throws  SQLException{
+        String query2 = "SELECT groups.groupname FROM groups INNER JOIN groupmembers ON groups.groupid = groupmembers.groupid WHERE groupmembers.uuid =? ";
+        PreparedStatement userGroups = DatabaseConnector.getConnection().prepareStatement(query2);
+        userGroups.setInt(1,uuid);
+        ResultSet resultSet = userGroups.executeQuery();
+        ArrayList<String> groupList = new ArrayList<>();
+
+        while (resultSet.next()){
+            String getGroupName = resultSet.getString("groupname");
+            groupList.add(getGroupName);
+        }
+        return groupList;
+
+    }
 
     public String getGroupName(int id){
         PreparedStatement ps;
