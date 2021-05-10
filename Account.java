@@ -1,6 +1,7 @@
 //package com.company;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Account {
@@ -374,6 +375,97 @@ public class Account {
         return false;
     }
 
+    public Goal getGoal(int id) {
+        Goal goals = new Goal();
+        PreparedStatement ps;
+        ResultSet rs;
+        String query1 = "SELECT * FROM DETAILS WHERE UUID = ?";
+
+        try {
+            ps = Account.getConnection().prepareStatement(query1);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                goals.setGoalName(rs.getString(6));
+                goals.setCalorieGoal(rs.getInt(3));
+            }
+        } catch (SQLException e) {
+            e.getStackTrace();
+        }
+        return goals;
+    }
+
+    public SingleExercise[] getExercises(int id) {
+        ArrayList<SingleExercise> exercises = new ArrayList<>();
+        PreparedStatement ps;
+        ResultSet rs;
+        String query1 = "SELECT * FROM EXERCISECOMP JOIN EXERCISE ON EXERCISE.EXERCISEID = EXERCISECOMP.EXCOMPID WHERE UUID = ?";
+
+        try
+        {
+            ps = Account.getConnection().prepareStatement(query1);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            while (rs.next())
+            {
+                SingleExercise se = new SingleExercise();
+                se.setCalories(rs.getInt(6));
+                se.setDate(rs.getDate(4).toString());
+                se.setName(rs.getString(7));
+                se.setReps(rs.getInt(8));
+                exercises.add(se);
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+        return exercises.toArray(new SingleExercise[0]);
+    }
+
+    public Achievement[] checkAchievements(int id) {
+        ArrayList<Achievement> achievements = new ArrayList<>();
+        PreparedStatement ps;
+        ResultSet rs;
+        String query1 = "SELECT * FROM CONSUMABLE INNER JOIN CONSUMABLECOMP ON CONSUMABLECOMP.CONSUMABLEID = CONSUMABLE.CONSUMABLEID AND CONSUMABLECOMP.UUID = ?";
+
+        try
+        {
+            ps = Account.getConnection().prepareStatement(query1);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            Goal g = getGoal(id);
+
+            int totalCalories = 0;
+            while (rs.next())
+            {
+                int calories = rs.getInt(2);
+                totalCalories += calories;
+
+                if (g.getCalorieGoal() <= totalCalories) {
+                    Achievement achievement = new Achievement();
+                    achievement.setAchievement("Achieved: " + g.getGoalName());
+                    achievement.setDate(rs.getDate(7).toString());
+                    achievement.setPoints(1);
+                    achievements.add(achievement);
+                }
+            }
+
+            SingleExercise exercises[] = getExercises(id);
+            for (SingleExercise se : exercises) {
+                Achievement achievement = new Achievement();
+                achievement.setAchievement("Burn " + se.getCalories() + " calories with " + se.getReps() + " reps of " + se.getName());
+                achievement.setDate(se.getDate());
+                achievement.setPoints(1);
+                achievements.add(achievement);
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+        return achievements.toArray(new Achievement[0]);
+    }
 
     public static void main(String username, String password){
         Account account = new Account();
