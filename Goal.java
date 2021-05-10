@@ -27,4 +27,5 @@ public class Goal {
     public void setCalorieGoal(Integer calorieGoal) {
         this.calorieGoal = calorieGoal;
     }
+
 }

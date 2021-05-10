@@ -1600,7 +1600,13 @@ public class Main extends Application {
 
         group1.setStyle("-fx-background-color: transparent;");
 
-        group1.setOnAction(event -> mainStage.setScene(Group(1)));
+        group1.setOnAction(event -> {
+            try {
+                mainStage.setScene(Group(1));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
 
         // Styling join group2 button
@@ -1624,7 +1630,13 @@ public class Main extends Application {
 
         //group2.setPrefSize(210,150);
         group2.setStyle("-fx-background-color: transparent;");
-        group2.setOnAction(event -> mainStage.setScene(Group(2)));
+        group2.setOnAction(event -> {
+            try {
+                mainStage.setScene(Group(2));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
 
         //JOIN GROUP BUTTON 3
@@ -1645,7 +1657,13 @@ public class Main extends Application {
         group3.setGraphic(rec3);
 
         group3.setStyle("-fx-background-color: transparent;");
-        group3.setOnAction(event -> mainStage.setScene(Group(3)));
+        group3.setOnAction(event -> {
+            try {
+                mainStage.setScene(Group(3));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
 
         //Join group Button 4
@@ -1664,7 +1682,13 @@ public class Main extends Application {
         //rec4.setEffect(new DropShadow(20,Color.rgb(211,32,139)));
         group4.setGraphic(rec4);
         group4.setStyle("-fx-background-color: transparent;");
-        group4.setOnAction(event -> mainStage.setScene(Group(4)));
+        group4.setOnAction(event -> {
+            try {
+                mainStage.setScene(Group(4));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
 
         //Join Group 5 BUTTON STYLING
@@ -1685,7 +1709,13 @@ public class Main extends Application {
 
         group5.setGraphic(rec5);
         group5.setStyle("-fx-background-color: transparent;");
-        group5.setOnAction(event -> mainStage.setScene(Group(5)));
+        group5.setOnAction(event -> {
+            try {
+                mainStage.setScene(Group(5));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
 
         //JOIN GROUP BUTTON 6 STYLING
@@ -1706,7 +1736,13 @@ public class Main extends Application {
         group6.setGraphic(rec6);
 
         group6.setStyle("-fx-background-color: transparent;");
-        group6.setOnAction(event -> mainStage.setScene(Group(6)));
+        group6.setOnAction(event -> {
+            try {
+                mainStage.setScene(Group(6));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
 
 
@@ -1823,7 +1859,7 @@ public class Main extends Application {
         return new Scene(joinGroupRoot,1024,600);
     }
 
-    protected Scene Group(int GroupID){
+    protected Scene Group(int GroupID) throws SQLException {
 
         Pane Group = new Pane();
         Group group = new Group();
@@ -1832,16 +1868,98 @@ public class Main extends Application {
         groupNameLbl.setTextFill(Color.rgb(55,77,95));
         groupNameLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
         groupNameLbl.setTranslateX(100);
-        groupNameLbl.setTranslateY(80);
+        groupNameLbl.setTranslateY(40);
 
         Label groupCodeLbl = new Label();
         groupCodeLbl.setText("Join Code: " + group.getGroupCode(GroupID));
         groupCodeLbl.setTextFill(Color.rgb(55,77,95));
         groupCodeLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
         groupCodeLbl.setTranslateX(550);
-        groupCodeLbl.setTranslateY(80);
+        groupCodeLbl.setTranslateY(40);
 
-        Group.getChildren().addAll(groupCodeLbl, groupNameLbl);
+        int groupType = group.getGroupType(GroupID);
+        Instant instant = DATE.toInstant(ZoneOffset.UTC);
+        Date date = Date.from(instant);
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        if(groupType == 0){
+            GroupGoal groupGoals[] = group.checkCalorieGoal(group.getAllGroupMembers(GroupID), sqlDate);
+
+            TableView<GroupGoal> rewardsTable = new TableView<GroupGoal>();
+            rewardsTable.getItems().addAll(groupGoals);
+            rewardsTable.setEditable(true);
+
+            TableColumn<GroupGoal, String> goalName = new TableColumn<GroupGoal, String>("Goal");
+            goalName.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getGoalName()));
+            TableColumn<GroupGoal, String> username = new TableColumn<GroupGoal, String>("Username");
+            username.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getUsername()));
+            TableColumn<GroupGoal, String> date1 = new TableColumn<GroupGoal, String>("Date");
+            date1.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getDate().toString()));
+
+            // rewardsTable.set
+
+            goalName.setPrefWidth(200);
+            username.setPrefWidth(200);
+            date1.setPrefWidth(200);
+
+            rewardsTable.setPrefSize(600,400);
+            rewardsTable.setTranslateX(220);
+            rewardsTable.setTranslateY(140);
+
+            rewardsTable.getColumns().addAll(goalName, username, date1);
+            Group.getChildren().addAll(groupCodeLbl, groupNameLbl, rewardsTable);
+        } else if (groupType == 1){
+            GroupGoal groupGoals[] = group.checkExerciseGoal(sqlDate, group.getAllGroupMembers(GroupID));
+
+            TableView<GroupGoal> rewardsTable = new TableView<GroupGoal>();
+            rewardsTable.getItems().addAll(groupGoals);
+            rewardsTable.setEditable(true);
+
+            TableColumn<GroupGoal, String> goalName = new TableColumn<GroupGoal, String>("Goal");
+            goalName.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getGoalName()));
+            TableColumn<GroupGoal, String> username = new TableColumn<GroupGoal, String>("Username");
+            username.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getUsername()));
+            TableColumn<GroupGoal, String> date1 = new TableColumn<GroupGoal, String>("Date");
+            date1.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getDate().toString()));
+
+            // rewardsTable.set
+
+            goalName.setPrefWidth(200);
+            username.setPrefWidth(200);
+            date1.setPrefWidth(200);
+
+            rewardsTable.setPrefSize(600,400);
+            rewardsTable.setTranslateX(220);
+            rewardsTable.setTranslateY(140);
+
+            rewardsTable.getColumns().addAll(goalName, username, date1);
+            Group.getChildren().addAll(groupCodeLbl, groupNameLbl, rewardsTable);
+        } else if (groupType == 2) {
+            CustomGoal customGoals[] = group.checkCustomGoal(group.getAllGroupMembers(GroupID));
+
+            TableView<CustomGoal> rewardsTable = new TableView<CustomGoal>();
+            rewardsTable.getItems().addAll(customGoals);
+            rewardsTable.setEditable(true);
+
+            TableColumn<CustomGoal, String> goalName = new TableColumn<CustomGoal, String>("Goal");
+            goalName.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getGoal()));
+            TableColumn<CustomGoal, String> username = new TableColumn<CustomGoal, String>("Username");
+            username.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getUsername()));
+            TableColumn<CustomGoal, String> date1 = new TableColumn<CustomGoal, String>("Completed");
+            date1.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getCompleted().toString()));
+
+            // rewardsTable.set
+
+            goalName.setPrefWidth(200);
+            username.setPrefWidth(200);
+            date1.setPrefWidth(200);
+
+            rewardsTable.setPrefSize(600,400);
+            rewardsTable.setTranslateX(220);
+            rewardsTable.setTranslateY(140);
+
+            rewardsTable.getColumns().addAll(goalName, username, date1);
+            Group.getChildren().addAll(groupCodeLbl, groupNameLbl, rewardsTable);
+        }
         return new Scene(Group,1024,600);
 
     }
