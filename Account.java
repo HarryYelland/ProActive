@@ -262,9 +262,6 @@ public class Account {
 
         String query1 = "SELECT Password From Account WHERE UUID = ?";
         String query2 = "UPDATE Account SET Password = ? WHERE UUID = ?";
-
-
-
         try {
             ps = Login.getConnection().prepareStatement(query1);
             ps.setInt(1, id);
@@ -466,6 +463,7 @@ public class Account {
         }
         return achievements.toArray(new Achievement[0]);
     }
+
 
     public static void main(String username, String password){
         Account account = new Account();

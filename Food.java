@@ -163,4 +163,107 @@ public class Food {
         }
         return data;
     }
+    public ArrayList<Integer> getAllConsumables(){
+        PreparedStatement ps;
+        ResultSet rs;
+        ArrayList<Integer> allFoods = new ArrayList<>();
+
+        String query1 = "SELECT ConsumableID FROM Consumable";
+
+        try
+        {
+            ps = DatabaseConnector.getConnection().prepareStatement(query1);
+            rs = ps.executeQuery();
+
+            while (rs.next())
+            {
+                System.out.println("Consumable Found");
+                allFoods.add(rs.getInt(1));
+            }
+        }
+        catch(SQLException e) {
+        }
+        return allFoods;
+    }
+
+    public String getConsumableName(int ID){
+        PreparedStatement ps;
+        ResultSet rs;
+        String consumableName  = "";
+
+        String query1 = "SELECT Name FROM Consumable WHERE ConsumableID = ?";
+
+        try
+        {
+            ps = DatabaseConnector.getConnection().prepareStatement(query1);
+            ps.setInt(1, ID);
+            rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                System.out.println("Consumable Found");
+                consumableName = rs.getString(1);
+                return consumableName;
+            } else {
+                System.out.println("No Consumable By That ID");
+            }
+        }
+        catch(SQLException e) {
+        }
+        return consumableName;
+    }
+
+
+
+    public int getConsumableCalories(int ID){
+        PreparedStatement ps;
+        ResultSet rs;
+        int calories = 0;
+
+        String query1 = "SELECT Calories FROM Consumable WHERE ConsumableID = ?";
+
+        try
+        {
+            ps = DatabaseConnector.getConnection().prepareStatement(query1);
+            ps.setInt(1, ID);
+            rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                System.out.println("Consumable Found");
+                calories = rs.getInt(1);
+                return calories;
+            } else {
+                System.out.println("No Consumable By That ID");
+            }
+        }
+        catch(SQLException e) {
+        }
+        return calories;
+    }
+
+    public Consumable[] checkConsumables(int id, Date date) {
+        ArrayList<Consumable> consumables = new ArrayList<>();
+        PreparedStatement ps;
+        ResultSet rs;
+        String query1 = "SELECT Calories, Name FROM CONSUMABLE INNER JOIN CONSUMABLECOMP ON CONSUMABLECOMP.CONSUMABLEID = CONSUMABLE.CONSUMABLEID WHERE CONSUMABLECOMP.UUID = ? AND CAST(date AS DATE) = ?";
+        try
+        {
+            ps = Account.getConnection().prepareStatement(query1);
+            ps.setInt(1, id);
+            ps.setDate(2, date);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Consumable consumable = new Consumable();
+                consumable.setName(rs.getString(2));
+                consumable.setCalories(rs.getInt(1));
+            }
+
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+        return consumables.toArray(new Consumable[0]);
+    }
 }
