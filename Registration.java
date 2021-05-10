@@ -113,7 +113,7 @@ public class Registration {
 
         //else
         //{
-        return registration.register(username, email.toLowerCase(), password);
+        return registration.register(username.toLowerCase(), email.toLowerCase(), password);
         //}
 
     }

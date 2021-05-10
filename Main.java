@@ -1,14 +1,10 @@
 //package com.company;
 
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -26,14 +22,8 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.CheckBox;
-import javafx.util.Callback;
 
 import javax.mail.MessagingException;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import java.awt.*;
-import java.sql.Array;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -54,6 +44,7 @@ public class Main extends Application {
         mainStage = primaryStage;
         Scene mainScene = mainPage();
         primaryStage.setTitle("Pro-Active");
+        primaryStage.getIcons().add(new Image("clipboard.png"));
         primaryStage.setScene(mainScene);
         primaryStage.show();
     }
@@ -325,7 +316,6 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent event) {
                 Registration register = new Registration();
-
                 Alert errorWarning = new Alert(Alert.AlertType.ERROR);
                 errorWarning.setTitle("Error");
                 errorWarning.setHeaderText("Oops Something went wrong");
@@ -364,7 +354,7 @@ public class Main extends Application {
                 }
                 //Reference from: https://www.tutorialspoint.com/validate-email-address-in-java
                 else if(!(emailTextField.getText().matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$"))){
-                    errorWarning.setContentText("Email Format Is Incorrect");
+                    errorWarning.setContentText("Email Formatting Incorrect");
                     errorWarning.show();
                 }
                 else {
@@ -715,47 +705,6 @@ public class Main extends Application {
         dateRightButton.setTranslateY(45); //Bottom
         dateRightButton.setOnAction(event -> {DATE = DATE.plusDays(1); mainStage.setScene(exerciseLog());});
 
-        //Exercise Log Table
-        TableView tableView1 = new TableView();
-        tableView1.setEditable(true);
-
-        TableColumn ExerciseName = new TableColumn("Exercise Name");
-        TableColumn RepsDistance = new TableColumn("Reps/Distance");
-        TableColumn CaloriesBurnt = new TableColumn("Calories Burnt");
-        Instant instant = DATE.toInstant(ZoneOffset.UTC);
-        Date newdate = Date.from(instant);
-        java.sql.Date sqlDate = new java.sql.Date(newdate.getTime());
-
-
-        try {
-            Exercise exercise1 = new Exercise();
-            ArrayList<Integer> exerciseIds = new ArrayList<>();
-            ArrayList<String> exerciseNames = new ArrayList<>();
-            ArrayList<Integer> exerciseReps = new ArrayList<>();
-            ArrayList<Integer> exerciseCalories = new ArrayList<>();
-
-            //ExerciseName.setCellValueFactory(c -> new SimpleStringProperty(new String("123")));
-            //RepsDistance.setCellValueFactory(c -> new SimpleStringProperty(new String("456")));
-            //CaloriesBurnt.setCellValueFactory(c -> new SimpleStringProperty(new String("789")));
-            exerciseIds = exercise1.getIDsFromDate(sqlDate, ID);
-            for(int i=0; i<exerciseIds.size(); i++){
-                exerciseNames.set(i, exercise1.getExerciseName(exerciseIds.get(1)));
-                exerciseReps.set(i, exercise1.getExerciseReps(exerciseIds.get(1)));
-                exerciseCalories.set(i, exercise1.getExerciseCalories(exerciseIds.get(1)));
-            }
-            tableView1.getItems().addAll(exerciseNames, exerciseReps, exerciseCalories);
-        } catch(Exception e){
-            System.out.println(e);
-        }
-
-        ExerciseName.setPrefWidth(200);
-        RepsDistance.setPrefWidth(200);
-        CaloriesBurnt.setPrefWidth(200);
-        tableView1.setPrefSize(600, 400);
-        tableView1.setTranslateX(310);
-        tableView1.setTranslateY(100);
-
-        tableView1.getColumns().addAll(ExerciseName, RepsDistance, CaloriesBurnt);
 
 
         Button addToLog = new Button();
@@ -876,7 +825,7 @@ public class Main extends Application {
 
 
 
-        exerciseRoot.getChildren().addAll(exercise, date, dateLeftButton, dateRightButton, sideButtons, addToLog, tableView1);
+        exerciseRoot.getChildren().addAll(exercise, date, dateLeftButton, dateRightButton, sideButtons, addToLog);
         return new Scene(exerciseRoot, 1024, 600);
 
 
@@ -929,31 +878,32 @@ public class Main extends Application {
         addToLog.setOnAction(event -> mainStage.setScene(foodLoggingPage()));
 
         //Dietary Log Table
-        TableView tableView = new TableView();
-        tableView.setEditable(true);
-
-        TableColumn FoodName = new TableColumn("Food Name");
-        TableColumn CaloriesConsumed = new TableColumn("Calories Consumed");
-        TableColumn CaloriesRemaining = new TableColumn("Calories Remaining");
         Instant instant = DATE.toInstant(ZoneOffset.UTC);
         Date newdate = Date.from(instant);
         java.sql.Date sqlDate = new java.sql.Date(newdate.getTime());
-        try {
-            tableView.setItems(food.getFoodLog(sqlDate));
-        } catch(Exception e){
-            System.out.println(e);
-        }
 
+        Food food1 = new Food();
+        Consumable consumables[] = food1.checkConsumables(ID, sqlDate);
 
-        FoodName.setPrefWidth(200);
-        CaloriesConsumed.setPrefWidth(200);
-        CaloriesRemaining.setPrefWidth(200);
+        TableView<Consumable> consumableTable = new TableView<Consumable>();
+        consumableTable.getItems().addAll(consumables);
+        consumableTable.setEditable(true);
 
-        tableView.setPrefSize(600, 400);
-        tableView.setTranslateX(310);
-        tableView.setTranslateY(100);
+        TableColumn<Consumable, String> consumableName = new TableColumn<Consumable, String>("Name");
+        consumableName.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getName()));
+        TableColumn<Consumable, String> consumableCalories = new TableColumn<Consumable, String>("Calories");
+        consumableCalories.setCellValueFactory(a-> new SimpleStringProperty(String.valueOf(a.getValue().getCalories())));
 
-        tableView.getColumns().addAll(FoodName, CaloriesConsumed, CaloriesRemaining);
+        // rewardsTable.set
+
+        consumableName.setPrefWidth(200);
+        consumableCalories.setPrefWidth(200);
+
+        consumableTable.setPrefSize(400,400);
+        consumableTable.setTranslateX(400);
+        consumableTable.setTranslateY(100);
+
+        consumableTable.getColumns().addAll(consumableName, consumableCalories);
 
 
         VBox sideButtons = new VBox(59);
@@ -1064,7 +1014,7 @@ public class Main extends Application {
 
 
 
-        dietaryLogRoot.getChildren().addAll(diet, date, dateLeftButton, dateRightButton, sideButtons, addToLog, tableView);
+        dietaryLogRoot.getChildren().addAll(diet, date, dateLeftButton, dateRightButton, sideButtons, addToLog, consumableTable);
         return new Scene(dietaryLogRoot, 1024, 600);
 
 
@@ -1088,28 +1038,28 @@ public class Main extends Application {
         HBox roundGroups = new HBox();
 
         roundGroups.setSpacing(15);
-            for(int i = 1; i < userGroups.size() + 1; i++) {
-                    Group group = new Group();
-                    Button joinedGroup1Button = new Button();
-                    joinedGroup1Button.setText("Group " + i);
-                    joinedGroup1Button.setTextFill(Color.WHITE);
-                    joinedGroup1Button.setPrefSize(100, 100);
-                    joinedGroup1Button.setTranslateX(340); // negative = Left, positive = right
-                    joinedGroup1Button.setTranslateY(120); //Bottom
-                    joinedGroup1Button.setStyle("-fx-background-radius: 100px; " + "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-                    int finalI = i;
-                    joinedGroup1Button.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent actionEvent) {
-                            try {
-                                mainStage.setScene(Group(group.getGroupID(userGroups.get(finalI))));
-                            } catch (SQLException throwables) {
-                                throwables.printStackTrace();
-                            }
-                        }
-                    });
+        for(int i = 1; i < userGroups.size() + 1; i++) {
+            Group group = new Group();
+            Button joinedGroup1Button = new Button();
+            joinedGroup1Button.setText("Group " + i);
+            joinedGroup1Button.setTextFill(Color.WHITE);
+            joinedGroup1Button.setPrefSize(100, 100);
+            joinedGroup1Button.setTranslateX(340); // negative = Left, positive = right
+            joinedGroup1Button.setTranslateY(120); //Bottom
+            joinedGroup1Button.setStyle("-fx-background-radius: 100px; " + "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+            int finalI = i;
+            joinedGroup1Button.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    try {
+                        mainStage.setScene(Group(group.getGroupID(userGroups.get(finalI))));
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
+            });
 
-                roundGroups.getChildren().addAll(joinedGroup1Button);
+            roundGroups.getChildren().addAll(joinedGroup1Button);
         }
 
         VBox sideButtons = new VBox(59);
@@ -1250,6 +1200,7 @@ public class Main extends Application {
     }
 
 
+
     protected Scene createGroup() throws SQLException {
         ArrayList<Integer> members = new ArrayList();
         Group group = new Group();
@@ -1278,7 +1229,6 @@ public class Main extends Application {
         confirmGroupTextField.setTranslateX(360);
         confirmGroupTextField.setTranslateY(270);
 
-
         HBox checkBoxLayout = new HBox();
         checkBoxLayout.setPrefSize(500,60);
         checkBoxLayout.setTranslateX(415);
@@ -1299,7 +1249,7 @@ public class Main extends Application {
 
         TextField emailTextField = new TextField();
         emailTextField.setPromptText("Friend Email");
-        emailTextField.setPrefSize(500,40);
+        emailTextField.setPrefSize(350,40);
         emailTextField.setTranslateX(360);
         emailTextField.setTranslateY(400);
 
@@ -1339,49 +1289,87 @@ public class Main extends Application {
             }else if(!(emailTextField.getText().matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$"))){
                 errorWarning.setContentText("Email Format Is Incorrect");
                 errorWarning.show();
-            }
-            else {
+            }else {
                 try {
-                    Group newGroup = new Group();
-
-                    if(group.getGroupID(groupNameTextField.getText())>= 0){
-                        errorWarning.setContentText("Group name is already taken!" +  "\nTry again!");
+                    if(Group.showGroups(ID).size() > 4){
+                        errorWarning.setContentText("Too many groups, please leave a group to create/join a new one");
                         errorWarning.show();
                     }
-                    if (newGroup.checkUserExist(emailTextField.getText())) {
-                        if(group.makeGroup(groupNameTextField.getText(), confirmGroupTextField.getText(),emailTextField.getText(),ID)) {
+                    else {
+                        try {
+                            Group newGroup = new Group();
 
-                            int groupID = group.getGroupID(groupNameTextField.getText());
-                            for (int i = 0; i < members.size(); i++) {
-                                if (members.get(i) != null) {
-                                    group.insertGroupMember(groupID, members.get(i));
-                                }
+                            if(group.getGroupID(groupNameTextField.getText())>= 0){
+                                errorWarning.setContentText("Group name is already taken!" +  "\nTry again!");
+                                errorWarning.show();
                             }
-                            group.insertGroupMember(groupID, ID);
+                            if (newGroup.checkUserExist(emailTextField.getText())) {
+                                RadioButton selectedRadioButton = (RadioButton) radioGroup.getSelectedToggle();
+                                String toggleGroupValue = selectedRadioButton.getText();
+                                if(group.addGroup(groupNameTextField.getText(), toggleGroupValue)) {
+
+                                    int groupID = group.getGroupID(groupNameTextField.getText());
+                                    for (int i = 0; i < members.size(); i++) {
+                                        if (members.get(i) != null) {
+                                            //group.insertGroupMember(groupID, members.get(i));
+                                            Email.sendMail(emailTextField.getText(), "You have been invited to " + groupNameTextField.getText() +
+                                                    "\nLogin to your Pro-Active account and join the group using this code: " + group.getGroupCode(groupID) +
+                                                    ".\n This group enables you to view other group member's fitness progress! 😊");
+                                        } else {
+                                            Account account = new Account();
+                                            Email.sendMail(emailTextField.getText(), "You were invited to a group on ProActive Health Tracker by: " +
+                                                    account.getUsername(ID) + "! Sign up Today by downloading the Tracker from https://github.com/HarryYelland/ProActive," +
+                                                    " and use code: " + group.getGroupCode(groupID) + " to join their group!");
+                                        }
+                                    }
+                                    group.insertGroupMember(groupID, ID);
 
 
-                            Email.sendMail(emailTextField.getText(), "You have been added to " + groupNameTextField.getText() +
-                                    "\nLogin to your Pro-Active account to check other group members fitness progress! 😊");
-                            mainStage.setScene(Group(groupID));
-                        }else{
-                            errorWarning.setTitle("Error");
-                            errorWarning.setHeaderText("Oops something went wrong");
-                            errorWarning.setContentText("You have exceeded the maximum number of groups: 5");
-                            errorWarning.show();
+
+                                    mainStage.setScene(Group(groupID));
+                                }else{
+                                    errorWarning.setTitle("Error");
+                                    errorWarning.setHeaderText("Oops something went wrong");
+                                    errorWarning.setContentText("You have exceeded the maximum number of groups: 5");
+                                    errorWarning.show();
+                                }
+                            }else{
+                                Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+                                Account account = new Account();
+                                Email.sendMail(emailTextField.getText(), account.getUsername(ID)+ " tried to add you to a Group on ProActive Health Tracker - Download today at: https://github.com/HarryYelland/pro-active");
+                                confirmation.setHeaderText("Email not registered with Pro-Active");
+                                confirmation.setContentText("Sent invitation link to " + emailTextField.getText() + " to join");
+                                confirmation.show();
+                            }
+
+                        } catch (SQLException | MessagingException throwables) {
+                            throwables.printStackTrace();
                         }
-                    }else{
-                        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-                        Account account = new Account();
-                        Email.sendMail(emailTextField.getText(), account.getUsername(ID)+ " tried to add you to a Group on ProActive Health Tracker - Download today at: https://github.com/HarryYelland/pro-active");
-                        confirmation.setHeaderText("Email not registered with Pro-Active");
-                        confirmation.setContentText("Sent invitation link to " + emailTextField.getText() + " to join");
-                        confirmation.show();
                     }
-
-                } catch (SQLException | MessagingException throwables) {
+                } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
-            }});
+            }
+        });
+
+
+        Button addFriendButton = new Button("Add Friend");
+        addFriendButton.setTranslateX(730); // negative = Left, positive = right
+        addFriendButton.setTranslateY(400); //Bottom
+        addFriendButton.setTextFill(Color.WHITE);
+        addFriendButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        addFriendButton.setOnAction(event -> {
+            try {
+                members.add(group.getMemberUUID(emailTextField.getText()));
+                Alert friendAdded = new Alert(Alert.AlertType.CONFIRMATION);
+                friendAdded.setTitle("Friend Added");
+                friendAdded.setHeaderText(emailTextField.getText() + " will been added to the group");
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+
+
 
         VBox sideButtons = new VBox(59);
 
@@ -1492,7 +1480,7 @@ public class Main extends Application {
 
 
         createGroupRoot.getChildren().addAll(sideButtons,confirmGroupTextField,groupNameTextField
-                ,createGroupName,createGroupButton,  checkBoxLayout,emailTextField);
+                ,emailTextField,createGroupName,createGroupButton, addFriendButton, checkBoxLayout);
         return new Scene(createGroupRoot,1024,600);
 
     }
@@ -1530,6 +1518,28 @@ public class Main extends Application {
         joinPrivateGroupButton.setTextFill(Color.WHITE);
         joinPrivateGroupButton.setTranslateX(860);
         joinPrivateGroupButton.setTranslateY(118);
+        joinPrivateGroupButton.setOnAction(event->{
+            Group group = new Group();
+            int id = group.getIdFromCode(joinPrivateGroup.getText());
+            try {
+                if(Group.showGroups(ID).size() > 4){
+                    Alert errorWarning = new Alert(Alert.AlertType.ERROR);
+                    errorWarning.setContentText("Too many groups, please leave a group to create/join a new one");
+                    errorWarning.show();
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            if(id >= 0){
+                try {
+                    group.insertGroupMember(id, ID);
+                    mainStage.setScene(Group(id));
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+
+            }
+        });
 
 
 
@@ -1783,41 +1793,22 @@ public class Main extends Application {
     protected Scene Group(int GroupID){
 
         Pane Group = new Pane();
-
-        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
-                ,new BackgroundSize(1.0,1.0,true,true,false,false));
-        Group.setBackground(new Background(backgroundImage));
-
         Group group = new Group();
-
         Label groupNameLbl = new Label();
         groupNameLbl.setText(group.getGroupName(GroupID));
         groupNameLbl.setTextFill(Color.rgb(55,77,95));
         groupNameLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        groupNameLbl.setTranslateX(430);
-        groupNameLbl.setTranslateY(50);
+        groupNameLbl.setTranslateX(140);
+        groupNameLbl.setTranslateY(120);
 
-        Button closeBtn = new Button("Back");
-        closeBtn.setPrefSize(200, 40);
-        closeBtn.setTranslateX(400); // negative = Left, positive = right
-        closeBtn.setTranslateY(540); //Bottom
-        closeBtn.setTextFill(Color.WHITE);
-        closeBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-        closeBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    mainStage.setScene(groupPage());
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
-        });
+        Label groupCodeLbl = new Label();
+        groupCodeLbl.setText("Join Code: " + group.getGroupCode(GroupID));
+        groupCodeLbl.setTextFill(Color.rgb(55,77,95));
+        groupCodeLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
+        groupCodeLbl.setTranslateX(440);
+        groupCodeLbl.setTranslateY(120);
 
-
-
-
-        Group.getChildren().addAll(groupNameLbl, closeBtn);
+        Group.getChildren().addAll(groupCodeLbl);
         return new Scene(Group,1024,600);
 
     }
@@ -1829,10 +1820,9 @@ public class Main extends Application {
         BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(1.0, 1.0, true, true, false, false));
         accountRoot.setBackground(new Background(backgroundImage));
 
-        // commented out for now, inserts two details into db for one user, see line 381
-        //if(account.getCalorieGoal(ID) <= 0){
-        //    account.setFirstDetails(ID);
-        //}
+        if(account.getCalorieGoal(ID) <= 0){
+            account.setFirstDetails(ID);
+        }
 
         HBox loginPageNameRoot = new HBox();
         BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("headerIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
@@ -1949,7 +1939,7 @@ public class Main extends Application {
     protected Scene foodLoggingPage() {
         Pane accountRoot = new Pane();
         Account account = new Account();
-
+        Food food = new Food();
         BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER, new BackgroundSize(1.0,1.0,true,true,false,false));
         accountRoot.setBackground(new Background(backgroundImage));
 
@@ -1972,15 +1962,6 @@ public class Main extends Application {
         loginPageNameRoot.setPrefSize(1025, 200);
         loginPageNameRoot.getChildren().addAll(accountPageName);
 
-        final ComboBox prevFoodComboBox = new ComboBox();
-        prevFoodComboBox.getItems().add("Food 1");
-        prevFoodComboBox.getItems().add("Food 2");
-        prevFoodComboBox.getItems().add("Food 3");
-        prevFoodComboBox.setTranslateX(260);
-        prevFoodComboBox.setTranslateY(230);
-        prevFoodComboBox.setPromptText("Select Already Added Food");
-        prevFoodComboBox.setPrefSize(500, 40);
-
         Label foodLabel = new Label("Name of Food: ");
         foodLabel.setTranslateX(265);
         foodLabel.setTranslateY(360);
@@ -2001,6 +1982,20 @@ public class Main extends Application {
         calorieTb.setTranslateX(460);
         calorieTb.setTranslateY(415);
 
+        final ComboBox prevFoodComboBox = new ComboBox();
+        ArrayList<Integer> foods = food.getAllConsumables();
+        for(int i=0; i<foods.size(); i++){
+            prevFoodComboBox.getItems().add(food.getConsumableName(foods.get(i)));
+            prevFoodComboBox.setOnAction(event -> {
+                foodTb.setText(food.getConsumableName(foods.get(prevFoodComboBox.getSelectionModel().getSelectedIndex())));
+                calorieTb.setText(String.valueOf(food.getConsumableCalories(foods.get(prevFoodComboBox.getSelectionModel().getSelectedIndex()))));
+            });
+        }
+
+        prevFoodComboBox.setTranslateX(260);
+        prevFoodComboBox.setTranslateY(230);
+        prevFoodComboBox.setPromptText("Select Already Added Food");
+        prevFoodComboBox.setPrefSize(500, 40);
 
         Button saveBtn = new Button("Save Details");
         saveBtn.setTranslateX(648);
@@ -2011,11 +2006,15 @@ public class Main extends Application {
             Instant instant = DATE.toInstant(ZoneOffset.UTC);
             Date date = Date.from(instant);
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-            Food food = new Food();
             food.addFood(foodTb.getText(), Integer.parseInt(calorieTb.getText()));
             int id = food.getConsumableID(foodTb.getText());
-            if(id != 1){
+            if(id >= 0){
                 food.addLog(ID, id, sqlDate);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Added Consumable");
+                alert.setHeaderText(null);
+                alert.setContentText("Food/Drink: " + foodTb.getText() + " added to log!");
+                alert.showAndWait();
             } else {
                 System.out.println("ID: " + id + " Not Found");
             }
@@ -2067,13 +2066,6 @@ public class Main extends Application {
             exerciseNames.add(exercise.getExerciseName(exerciseIDs.get(i)));
         }
 
-        final ComboBox exerciseComboBox = new ComboBox();
-        ObservableList<String> exercises = FXCollections.observableList(exerciseNames);
-        exerciseComboBox.setItems(exercises);
-        exerciseComboBox.setTranslateX(260);
-        exerciseComboBox.setTranslateY(230);
-        exerciseComboBox.setPromptText("Select Already Added Exercise");
-        exerciseComboBox.setPrefSize(500, 40);
 
         Label exerciseLabel = new Label("Name of Exercise: ");
         exerciseLabel.setTranslateX(265);
@@ -2105,7 +2097,24 @@ public class Main extends Application {
         repsTb.setTranslateX(460);
         repsTb.setTranslateY(485);
 
-        Button saveBtn = new Button("Save Details");
+        final ComboBox prevExerciseComboBox = new ComboBox();
+        ArrayList<Integer> exercises = exercise.getAllExercises();
+        for(int i=0; i<exercises.size(); i++){
+            prevExerciseComboBox.getItems().add(exercise.getExerciseName(exercises.get(i)));
+            prevExerciseComboBox.setOnAction(event -> {
+                exerciseTb.setText(exercise.getExerciseName(exercises.get(prevExerciseComboBox.getSelectionModel().getSelectedIndex())));
+                repsTb.setText(String.valueOf(exercise.getExerciseReps(exercises.get(prevExerciseComboBox.getSelectionModel().getSelectedIndex()))));
+                calorieTb.setText(String.valueOf(exercise.getExerciseCalories(exercises.get(prevExerciseComboBox.getSelectionModel().getSelectedIndex()))));
+            });
+        }
+
+        prevExerciseComboBox.setTranslateX(260);
+        prevExerciseComboBox.setTranslateY(230);
+        prevExerciseComboBox.setPromptText("Select Already Added Food/Drink");
+        prevExerciseComboBox.setPrefSize(500, 40);
+
+
+        Button saveBtn = new Button("Add To Log");
         saveBtn.setTranslateX(648);
         saveBtn.setTranslateY(535);
         saveBtn.setTextFill(Color.WHITE);
@@ -2118,6 +2127,11 @@ public class Main extends Application {
             int id = exercise.getExerciseID(exerciseTb.getText());
             if (id >= 0) {
                 exercise.addLog(ID, id, sqlDate);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Added Exercise");
+                alert.setHeaderText(null);
+                alert.setContentText("Exercise: " + exerciseTb.getText() + " added to log!");
+                alert.showAndWait();
             } else {
                 System.out.println("ID: " + id + " Not Found");
             }
@@ -2131,14 +2145,13 @@ public class Main extends Application {
         closeBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         closeBtn.setOnAction(event -> mainStage.setScene(exerciseLog()));
 
-        accountRoot.getChildren().addAll(loginPageNameRoot, exercisePageName, calorieLabel, calorieTb, exerciseLabel, exerciseTb, repsLabel, repsTb, saveBtn, closeBtn, exerciseComboBox);
+        accountRoot.getChildren().addAll(loginPageNameRoot, exercisePageName, calorieLabel, calorieTb, exerciseLabel, exerciseTb, repsLabel, repsTb, saveBtn, closeBtn, prevExerciseComboBox);
 
         return new Scene(accountRoot, 1024, 600);
     }
 
 
     protected Scene achievementPage (){
-
         Pane achievementRoot = new Pane();
         Label achievementLabel = new Label("🏆 Your Achievements 🏆");
         achievementLabel.setTextFill(Color.rgb(55,77,95));
@@ -2161,13 +2174,14 @@ public class Main extends Application {
 
         rewardButton.setOnAction(actionEvent -> mainStage.setScene(accountPage()));
 
+
         Account account = new Account();
         Achievement achievements[] = account.checkAchievements(ID);
 
         TableView<Achievement> rewardsTable = new TableView<Achievement>();
         rewardsTable.getItems().addAll(achievements);
-
         rewardsTable.setEditable(true);
+
         TableColumn<Achievement, String> rewardDate = new TableColumn<Achievement, String>("Date");
         rewardDate.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getDate()));
         TableColumn<Achievement, String> achievement = new TableColumn<Achievement, String>("Achievements");
@@ -2175,9 +2189,7 @@ public class Main extends Application {
         TableColumn<Achievement, String> rewardPoints = new TableColumn<Achievement, String>("Points");
         rewardPoints.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getPoints().toString()));
 
-
-
-       // rewardsTable.set
+        // rewardsTable.set
 
         rewardDate.setPrefWidth(200);
         achievement.setPrefWidth(200);
@@ -2191,11 +2203,7 @@ public class Main extends Application {
 
         achievementRoot.getChildren().addAll(rewardButton,rewardsTable,achievementLabel);
 
-
-
         return new Scene(achievementRoot, 1024, 600);
-
-
     }
 
 
