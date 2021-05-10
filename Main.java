@@ -705,6 +705,35 @@ public class Main extends Application {
         dateRightButton.setTranslateY(45); //Bottom
         dateRightButton.setOnAction(event -> {DATE = DATE.plusDays(1); mainStage.setScene(exerciseLog());});
 
+        //Dietary Log Table
+        Instant instant = DATE.toInstant(ZoneOffset.UTC);
+        Date newdate = Date.from(instant);
+        java.sql.Date sqlDate = new java.sql.Date(newdate.getTime());
+
+        Exercise exercise1 = new Exercise();
+        SingleExercise exercises[] = exercise1.checkExercises(ID, sqlDate);
+
+        System.out.println(exercises.toString());
+
+        TableView<SingleExercise> exerciseTable = new TableView<SingleExercise>();
+        exerciseTable.getItems().addAll(exercises);
+        exerciseTable.setEditable(true);
+
+        TableColumn<SingleExercise, String> exerciseName = new TableColumn<SingleExercise, String>("Name");
+        exerciseName.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getName()));
+        TableColumn<SingleExercise, String> exerciseReps = new TableColumn<SingleExercise, String>("Reps");
+        exerciseReps.setCellValueFactory(a-> new SimpleStringProperty(String.valueOf(a.getValue().getReps())));
+        TableColumn<SingleExercise, String> exerciseCalories = new TableColumn<SingleExercise, String>("Calories");
+        exerciseCalories.setCellValueFactory(a-> new SimpleStringProperty(String.valueOf(a.getValue().getCalories())));
+        exerciseName.setPrefWidth(200);
+        exerciseReps.setPrefWidth(200);
+        exerciseCalories.setPrefWidth(200);
+
+        exerciseTable.setPrefSize(600,400);
+        exerciseTable.setTranslateX(330);
+        exerciseTable.setTranslateY(100);
+
+        exerciseTable.getColumns().addAll(exerciseName, exerciseReps, exerciseCalories);
 
 
         Button addToLog = new Button();
@@ -825,7 +854,7 @@ public class Main extends Application {
 
 
 
-        exerciseRoot.getChildren().addAll(exercise, date, dateLeftButton, dateRightButton, sideButtons, addToLog);
+        exerciseRoot.getChildren().addAll(exercise, date, dateLeftButton, dateRightButton, sideButtons, addToLog, exerciseTable);
         return new Scene(exerciseRoot, 1024, 600);
 
 
@@ -882,8 +911,9 @@ public class Main extends Application {
         Date newdate = Date.from(instant);
         java.sql.Date sqlDate = new java.sql.Date(newdate.getTime());
 
-        Food food1 = new Food();
-        Consumable consumables[] = food1.checkConsumables(ID, sqlDate);
+        Consumable consumables[] = food.checkConsumables(ID, sqlDate);
+
+        System.out.println(consumables.toString());
 
         TableView<Consumable> consumableTable = new TableView<Consumable>();
         consumableTable.getItems().addAll(consumables);
@@ -1038,10 +1068,10 @@ public class Main extends Application {
         HBox roundGroups = new HBox();
 
         roundGroups.setSpacing(15);
-        for(int i = 1; i < userGroups.size() + 1; i++) {
+        for(int i = 0; i < userGroups.size(); i++) {
             Group group = new Group();
             Button joinedGroup1Button = new Button();
-            joinedGroup1Button.setText("Group " + i);
+            joinedGroup1Button.setText(userGroups.get(i));
             joinedGroup1Button.setTextFill(Color.WHITE);
             joinedGroup1Button.setPrefSize(100, 100);
             joinedGroup1Button.setTranslateX(340); // negative = Left, positive = right
@@ -1360,6 +1390,9 @@ public class Main extends Application {
         addFriendButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         addFriendButton.setOnAction(event -> {
             try {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Inviting User: " + emailTextField.getText());
+                alert.show();
                 members.add(group.getMemberUUID(emailTextField.getText()));
                 Alert friendAdded = new Alert(Alert.AlertType.CONFIRMATION);
                 friendAdded.setTitle("Friend Added");
@@ -1798,17 +1831,17 @@ public class Main extends Application {
         groupNameLbl.setText(group.getGroupName(GroupID));
         groupNameLbl.setTextFill(Color.rgb(55,77,95));
         groupNameLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        groupNameLbl.setTranslateX(140);
-        groupNameLbl.setTranslateY(120);
+        groupNameLbl.setTranslateX(100);
+        groupNameLbl.setTranslateY(80);
 
         Label groupCodeLbl = new Label();
         groupCodeLbl.setText("Join Code: " + group.getGroupCode(GroupID));
         groupCodeLbl.setTextFill(Color.rgb(55,77,95));
         groupCodeLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        groupCodeLbl.setTranslateX(440);
-        groupCodeLbl.setTranslateY(120);
+        groupCodeLbl.setTranslateX(550);
+        groupCodeLbl.setTranslateY(80);
 
-        Group.getChildren().addAll(groupCodeLbl);
+        Group.getChildren().addAll(groupCodeLbl, groupNameLbl);
         return new Scene(Group,1024,600);
 
     }

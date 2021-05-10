@@ -1,8 +1,5 @@
 //package com.company;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -249,5 +246,33 @@ import java.util.Scanner;
             }
             return allExercises;
         }
+
+        public SingleExercise[] checkExercises(int id, Date date) {
+            ArrayList<SingleExercise> exercises = new ArrayList<>();
+            PreparedStatement ps;
+            ResultSet rs;
+            String query1 = "SELECT Name, Reps, Calories FROM Exercise INNER JOIN ExerciseComp ON ExerciseComp.ExerciseID = Exercise.ExerciseID WHERE ExerciseComp.UUID = ? AND CAST(date AS DATE) = ?";
+            try
+            {
+                ps = Account.getConnection().prepareStatement(query1);
+                ps.setInt(1, id);
+                ps.setDate(2, date);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    SingleExercise singleExercise = new SingleExercise();
+                    singleExercise.setName(rs.getString(1));
+                    singleExercise.setReps(rs.getInt(2));
+                    singleExercise.setCalories(rs.getInt(3));
+                    exercises.add(singleExercise);
+                }
+
+            }
+            catch(SQLException e)
+            {
+                System.out.println(e.getStackTrace());
+            }
+            return exercises.toArray(new SingleExercise[exercises.size()]);
+        }
+
 
     }
