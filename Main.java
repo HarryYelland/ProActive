@@ -31,6 +31,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 
 public class Main extends Application {
@@ -255,35 +256,47 @@ public class Main extends Application {
 
         registerPageNameRoot.getChildren().addAll(registerPageName);
 
+        TextField nameTextField = new TextField();
+        nameTextField.setPromptText("Name");
+        nameTextField.setPrefSize(255,40);
+        nameTextField.setTranslateX(250);
+        nameTextField.setTranslateY(240);
+
+        TextField surnameTextField = new TextField();
+        surnameTextField.setPromptText("Surname");
+        surnameTextField.setPrefSize(255,40);
+        surnameTextField.setTranslateX(545);
+        surnameTextField.setTranslateY(240);
+
 
         //Username Text field
         TextField usernameTextField = new TextField();
         usernameTextField.setPromptText("Username");
-        usernameTextField.setPrefSize(540,40);
+        usernameTextField.setPrefSize(550,40);
         usernameTextField.setTranslateX(250);
-        usernameTextField.setTranslateY(240);
+        usernameTextField.setTranslateY(290);
 
 
         //Email Text field
         TextField emailTextField = new TextField();
         emailTextField.setPromptText("Email");
-        emailTextField.setPrefSize(540,40);
+        emailTextField.setPrefSize(550,40);
         emailTextField.setTranslateX(250);
-        emailTextField.setTranslateY(300);
+        emailTextField.setTranslateY(340);
 
         //Password Text field
         PasswordField passwordTextField = new PasswordField();
         passwordTextField.setPromptText("Password");
-        passwordTextField.setPrefSize(540,40);
+        passwordTextField.setPrefSize(550,40);
         passwordTextField.setTranslateX(250);
-        passwordTextField.setTranslateY(360);
+        passwordTextField.setTranslateY(390);
 
         //Confirm Password Text Field
         PasswordField confirmPasswordTextField = new PasswordField();
         confirmPasswordTextField.setPromptText("Confirm Password");
-        confirmPasswordTextField.setPrefSize(540,40);
+        confirmPasswordTextField.setPrefSize(550,40);
         confirmPasswordTextField.setTranslateX(250);
-        confirmPasswordTextField.setTranslateY(420);
+        confirmPasswordTextField.setTranslateY(440);
 
 
         //Register Button
@@ -321,18 +334,28 @@ public class Main extends Application {
                 errorWarning.setHeaderText("Oops Something went wrong");
 
                 if(usernameTextField.getText().isEmpty() && emailTextField.getText().isEmpty() &&
-                        passwordTextField.getText().isEmpty() && confirmPasswordTextField.getText().isEmpty()){
+                        passwordTextField.getText().isEmpty() && nameTextField.getText().isEmpty() && surnameTextField.getText().isEmpty()
+                        && confirmPasswordTextField.getText().isEmpty()){
 
                     errorWarning.setContentText("""
                             Forgot to enter your:
+                            Name
+                            Surname
                             Username
                             Email
                             Password
                             Confirm Password""");
                     errorWarning.show();
+                }else if(nameTextField.getText().isEmpty()){
+                    errorWarning.setContentText("Forgot to enter your Name");
+                    errorWarning.show();
+
+                }else if(surnameTextField.getText().isEmpty()){
+                    errorWarning.setContentText("Forgot to enter your Surname");
+                    errorWarning.show();
                 }
                 else if(usernameTextField.getText().isEmpty()){
-                    errorWarning.setContentText("Forgot to enter your username");
+                    errorWarning.setContentText("Forgot to enter your Username");
                     errorWarning.show();
                 }
                 else if(emailTextField.getText().isEmpty()){
@@ -342,6 +365,10 @@ public class Main extends Application {
                 }
                 else if(passwordTextField.getText().isEmpty()){
                     errorWarning.setContentText("Forgot to enter your Password");
+                    errorWarning.show();
+                }else if(!(passwordTextField.getText().matches("(.*)[0-9](.*) || (.*)[^A-Za-z0-9](.*) ") || passwordTextField.getText().length()>= 8 || passwordTextField.getText().length() <=40)){
+                    errorWarning.setHeaderText("Password formatting incorrect");
+                    errorWarning.setContentText("Your must include at least:" + "\n1 numeric & 1 non-alphanumeric\n" + "Length must be between 8 and 40 characters long.");
                     errorWarning.show();
                 }
                 else if(confirmPasswordTextField.getText().isEmpty()){
@@ -384,7 +411,7 @@ public class Main extends Application {
         });
 
 
-        registerRoot.getChildren().addAll(usernameTextField,rButton,emailTextField,passwordTextField,confirmPasswordTextField,registerPageNameRoot, backButton);
+        registerRoot.getChildren().addAll(usernameTextField,rButton,emailTextField,passwordTextField,confirmPasswordTextField,registerPageNameRoot, backButton,surnameTextField,nameTextField);
 
         return new Scene(registerRoot, 1024, 600);
     }
@@ -1239,7 +1266,6 @@ public class Main extends Application {
                 ,new BackgroundSize(1.0,1.0,true,true,false,false));
         createGroupRoot.setBackground(new Background(backgroundImage));
 
-
         Label createGroupName = new Label("Create Groups");
         createGroupName.setTextFill(Color.rgb(55,77,95));
         createGroupName.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,40));
@@ -1862,20 +1888,71 @@ public class Main extends Application {
     protected Scene Group(int GroupID) throws SQLException {
 
         Pane Group = new Pane();
+
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
+                ,new BackgroundSize(1.0,1.0,true,true,false,false));
+        Group.setBackground(new Background(backgroundImage));
+
         Group group = new Group();
         Label groupNameLbl = new Label();
         groupNameLbl.setText(group.getGroupName(GroupID));
         groupNameLbl.setTextFill(Color.rgb(55,77,95));
         groupNameLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        groupNameLbl.setTranslateX(100);
-        groupNameLbl.setTranslateY(40);
+        groupNameLbl.setTranslateX(430);
+        groupNameLbl.setTranslateY(10);
 
         Label groupCodeLbl = new Label();
         groupCodeLbl.setText("Join Code: " + group.getGroupCode(GroupID));
         groupCodeLbl.setTextFill(Color.rgb(55,77,95));
         groupCodeLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        groupCodeLbl.setTranslateX(550);
-        groupCodeLbl.setTranslateY(40);
+        groupCodeLbl.setTranslateX(380);
+        groupCodeLbl.setTranslateY(50);
+
+        Button backButton = new Button();
+        backButton.setText("Back");
+        backButton.setTextFill(Color.WHITE);
+        backButton.setPrefSize(200, 40);
+        backButton.setStyle("-fx-background-radius: 5em; " +
+                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+
+        backButton.setTranslateX(310); // negative = Left, positive = right
+        backButton.setTranslateY(550); //Bottom
+        backButton.setOnAction(event -> {
+            try {
+                mainStage.setScene(groupPage());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+
+        Button deleteUser = new Button();
+        deleteUser.setText("Leave Group");
+        deleteUser.setTextFill(Color.WHITE);
+        deleteUser.setPrefSize(200, 40);
+        deleteUser.setTranslateX(515); // negative = Left, positive = right
+        deleteUser.setTranslateY(550); //Bottom
+        deleteUser.setStyle("-fx-background-radius: 5em; " +
+                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
+                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+
+       // Group group = new Group();
+        deleteUser.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    if(group.leaveGroup(ID, GroupID)){
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Left Group");
+                        alert.setContentText("You have successfully left" + groupNameLbl);
+                    }
+                    mainStage.setScene(groupPage());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        });
+
 
         int groupType = group.getGroupType(GroupID);
         Instant instant = DATE.toInstant(ZoneOffset.UTC);
@@ -1888,11 +1965,11 @@ public class Main extends Application {
             rewardsTable.getItems().addAll(groupGoals);
             rewardsTable.setEditable(true);
 
-            TableColumn<GroupGoal, String> goalName = new TableColumn<GroupGoal, String>("Goal");
+            TableColumn<GroupGoal, String> goalName = new TableColumn<GroupGoal, String>("🏆 Goal");
             goalName.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getGoalName()));
-            TableColumn<GroupGoal, String> username = new TableColumn<GroupGoal, String>("Username");
+            TableColumn<GroupGoal, String> username = new TableColumn<GroupGoal, String>("👤 Username");
             username.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getUsername()));
-            TableColumn<GroupGoal, String> date1 = new TableColumn<GroupGoal, String>("Date");
+            TableColumn<GroupGoal, String> date1 = new TableColumn<GroupGoal, String>("📅 Date");
             date1.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getDate().toString()));
 
             // rewardsTable.set
@@ -1903,10 +1980,11 @@ public class Main extends Application {
 
             rewardsTable.setPrefSize(600,400);
             rewardsTable.setTranslateX(220);
-            rewardsTable.setTranslateY(140);
+            rewardsTable.setTranslateY(120);
 
             rewardsTable.getColumns().addAll(goalName, username, date1);
-            Group.getChildren().addAll(groupCodeLbl, groupNameLbl, rewardsTable);
+            Group.getChildren().addAll(groupCodeLbl, groupNameLbl, rewardsTable,backButton,deleteUser);
+
         } else if (groupType == 1){
             GroupGoal groupGoals[] = group.checkExerciseGoal(sqlDate, group.getAllGroupMembers(GroupID));
 
@@ -1914,11 +1992,11 @@ public class Main extends Application {
             rewardsTable.getItems().addAll(groupGoals);
             rewardsTable.setEditable(true);
 
-            TableColumn<GroupGoal, String> goalName = new TableColumn<GroupGoal, String>("Goal");
+            TableColumn<GroupGoal, String> goalName = new TableColumn<GroupGoal, String>("🏆 Goal");
             goalName.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getGoalName()));
-            TableColumn<GroupGoal, String> username = new TableColumn<GroupGoal, String>("Username");
+            TableColumn<GroupGoal, String> username = new TableColumn<GroupGoal, String>("👤 Username");
             username.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getUsername()));
-            TableColumn<GroupGoal, String> date1 = new TableColumn<GroupGoal, String>("Date");
+            TableColumn<GroupGoal, String> date1 = new TableColumn<GroupGoal, String>("📅 Date");
             date1.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getDate().toString()));
 
             // rewardsTable.set
@@ -1929,10 +2007,11 @@ public class Main extends Application {
 
             rewardsTable.setPrefSize(600,400);
             rewardsTable.setTranslateX(220);
-            rewardsTable.setTranslateY(140);
+            rewardsTable.setTranslateY(120);
 
             rewardsTable.getColumns().addAll(goalName, username, date1);
-            Group.getChildren().addAll(groupCodeLbl, groupNameLbl, rewardsTable);
+            Group.getChildren().addAll(groupCodeLbl, groupNameLbl, rewardsTable,backButton,deleteUser);
+
         } else if (groupType == 2) {
             CustomGoal customGoals[] = group.checkCustomGoal(group.getAllGroupMembers(GroupID));
 
@@ -1940,11 +2019,11 @@ public class Main extends Application {
             rewardsTable.getItems().addAll(customGoals);
             rewardsTable.setEditable(true);
 
-            TableColumn<CustomGoal, String> goalName = new TableColumn<CustomGoal, String>("Goal");
+            TableColumn<CustomGoal, String> goalName = new TableColumn<CustomGoal, String>("🏆 Goal");
             goalName.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getGoal()));
-            TableColumn<CustomGoal, String> username = new TableColumn<CustomGoal, String>("Username");
+            TableColumn<CustomGoal, String> username = new TableColumn<CustomGoal, String>("👤 Username");
             username.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getUsername()));
-            TableColumn<CustomGoal, String> date1 = new TableColumn<CustomGoal, String>("Completed");
+            TableColumn<CustomGoal, String> date1 = new TableColumn<CustomGoal, String>("📅 Completed");
             date1.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getCompleted().toString()));
 
             // rewardsTable.set
@@ -1955,10 +2034,10 @@ public class Main extends Application {
 
             rewardsTable.setPrefSize(600,400);
             rewardsTable.setTranslateX(220);
-            rewardsTable.setTranslateY(140);
+            rewardsTable.setTranslateY(120);
 
             rewardsTable.getColumns().addAll(goalName, username, date1);
-            Group.getChildren().addAll(groupCodeLbl, groupNameLbl, rewardsTable);
+            Group.getChildren().addAll(groupCodeLbl, groupNameLbl,rewardsTable,backButton,deleteUser);
         }
         return new Scene(Group,1024,600);
 
@@ -1982,8 +2061,6 @@ public class Main extends Application {
 
 
         loginPageNameRoot.setPrefSize(1025,200);
-
-        // accountRoot.setStyle("-fx-background-color: #000000");
 
         Label accountPageName = new Label();
         accountPageName.setText(account.getUsername(ID) + "'s Details");
@@ -2199,8 +2276,6 @@ public class Main extends Application {
 
         loginPageNameRoot.setPrefSize(1025, 200);
 
-        // accountRoot.setStyle("-fx-background-color: #000000");
-
         Label exercisePageName = new Label();
         exercisePageName.setText("Add Exercise To Log");
         exercisePageName.setTextFill(Color.WHITE);
@@ -2261,7 +2336,7 @@ public class Main extends Application {
 
         prevExerciseComboBox.setTranslateX(260);
         prevExerciseComboBox.setTranslateY(230);
-        prevExerciseComboBox.setPromptText("Select Already Added Food/Drink");
+        prevExerciseComboBox.setPromptText("Select Already Added Exercise");
         prevExerciseComboBox.setPrefSize(500, 40);
 
 
@@ -2356,7 +2431,6 @@ public class Main extends Application {
 
         return new Scene(achievementRoot, 1024, 600);
     }
-
 
     public static void main(String[] args) {
         launch(args);
