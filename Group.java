@@ -373,4 +373,17 @@ public class Group {
         System.out.println("GOT IDS IN GROUP");
         return ids;
     }
+
+    boolean leaveGroup(int uuid, int groupid) throws SQLException {
+        Boolean left = false;
+        ResultSet rs;
+        String query1 = "DELETE FROM GroupMembers WHERE uuid = ? AND groupId = ?";
+        PreparedStatement leaveGroup = DatabaseConnector.getConnection().prepareStatement(query1);
+        leaveGroup.setInt(1, uuid);
+        leaveGroup.setInt(2, groupid);
+
+        int delete = leaveGroup.executeUpdate();
+        System.out.println("User " + delete + "removed");
+        return true;
+    }
 }
