@@ -263,35 +263,47 @@ public class Main extends Application {
         registerPageNameRoot.getChildren().addAll(registerPageName);
 
 
+        TextField nameTextField = new TextField();
+        nameTextField.setPromptText("Name");
+        nameTextField.setPrefSize(255,40);
+        nameTextField.setTranslateX(250);
+        nameTextField.setTranslateY(240);
+
+        TextField surnameTextField = new TextField();
+        surnameTextField.setPromptText("Surname");
+        surnameTextField.setPrefSize(255,40);
+        surnameTextField.setTranslateX(545);
+        surnameTextField.setTranslateY(240);
+
+
         //Username Text field
         TextField usernameTextField = new TextField();
         usernameTextField.setPromptText("Username");
-        usernameTextField.setPrefSize(540,40);
+        usernameTextField.setPrefSize(550,40);
         usernameTextField.setTranslateX(250);
-        usernameTextField.setTranslateY(240);
+        usernameTextField.setTranslateY(290);
 
 
         //Email Text field
         TextField emailTextField = new TextField();
         emailTextField.setPromptText("Email");
-        emailTextField.setPrefSize(540,40);
+        emailTextField.setPrefSize(550,40);
         emailTextField.setTranslateX(250);
-        emailTextField.setTranslateY(300);
+        emailTextField.setTranslateY(340);
 
         //Password Text field
         PasswordField passwordTextField = new PasswordField();
         passwordTextField.setPromptText("Password");
-        passwordTextField.setPrefSize(540,40);
+        passwordTextField.setPrefSize(550,40);
         passwordTextField.setTranslateX(250);
-        passwordTextField.setTranslateY(360);
+        passwordTextField.setTranslateY(390);
 
         //Confirm Password Text Field
         PasswordField confirmPasswordTextField = new PasswordField();
         confirmPasswordTextField.setPromptText("Confirm Password");
-        confirmPasswordTextField.setPrefSize(540,40);
+        confirmPasswordTextField.setPrefSize(550,40);
         confirmPasswordTextField.setTranslateX(250);
-        confirmPasswordTextField.setTranslateY(420);
-
+        confirmPasswordTextField.setTranslateY(440);
 
         //Register Button
         Button rButton = new Button();
@@ -328,18 +340,28 @@ public class Main extends Application {
                 errorWarning.setHeaderText("Oops Something went wrong");
 
                 if(usernameTextField.getText().isEmpty() && emailTextField.getText().isEmpty() &&
-                        passwordTextField.getText().isEmpty() && confirmPasswordTextField.getText().isEmpty()){
+                        passwordTextField.getText().isEmpty() && nameTextField.getText().isEmpty() && surnameTextField.getText().isEmpty()
+                        && confirmPasswordTextField.getText().isEmpty()){
 
                     errorWarning.setContentText("""
                             Forgot to enter your:
+                            Name
+                            Surname
                             Username
                             Email
                             Password
                             Confirm Password""");
                     errorWarning.show();
+                }else if(nameTextField.getText().isEmpty()){
+                    errorWarning.setContentText("Forgot to enter your Name");
+                    errorWarning.show();
+
+                }else if(surnameTextField.getText().isEmpty()){
+                    errorWarning.setContentText("Forgot to enter your Surname");
+                    errorWarning.show();
                 }
                 else if(usernameTextField.getText().isEmpty()){
-                    errorWarning.setContentText("Forgot to enter your username");
+                    errorWarning.setContentText("Forgot to enter your Username");
                     errorWarning.show();
                 }
                 else if(emailTextField.getText().isEmpty()){
@@ -350,6 +372,11 @@ public class Main extends Application {
                 else if(passwordTextField.getText().isEmpty()){
                     errorWarning.setContentText("Forgot to enter your Password");
                     errorWarning.show();
+                }
+                else if(!(passwordTextField.getText().matches("(.*)[0-9](.*) || (.*)[^A-Za-z0-9](.*) ") || passwordTextField.getText().length()>= 8 || passwordTextField.getText().length() <=40)){
+                errorWarning.setHeaderText("Password formatting incorrect");
+                errorWarning.setContentText("Your must include at least:" + "\n1 numeric & 1 non-alphanumeric\n" + "Length must be between 8 and 40 characters long.");
+                errorWarning.show();
                 }
                 else if(confirmPasswordTextField.getText().isEmpty()){
                     errorWarning.setContentText("Forgot to Confirm your Password");
@@ -366,11 +393,11 @@ public class Main extends Application {
                 }
                 else {
                     try {
-                        if(register.main(usernameTextField.getText(), emailTextField.getText(), passwordTextField.getText()) == -1){
+                        if(register.main(usernameTextField.getText(), emailTextField.getText(), passwordTextField.getText(), nameTextField.getText(), surnameTextField.getText()) == -1){
                             errorWarning.setContentText("Username Already in Use");
                             errorWarning.show();
                         }
-                        else if(register.main(usernameTextField.getText(), emailTextField.getText(), passwordTextField.getText()) == -2){
+                        else if(register.main(usernameTextField.getText(), emailTextField.getText(), passwordTextField.getText(), nameTextField.getText(), surnameTextField.getText()) == -2){
                             errorWarning.setContentText("Email Already in Use");
                             errorWarning.show();
                         } else {
@@ -391,7 +418,7 @@ public class Main extends Application {
         });
 
 
-        registerRoot.getChildren().addAll(usernameTextField,rButton,emailTextField,passwordTextField,confirmPasswordTextField,registerPageNameRoot, backButton);
+        registerRoot.getChildren().addAll(usernameTextField,rButton,emailTextField, nameTextField, surnameTextField, passwordTextField,confirmPasswordTextField,registerPageNameRoot, backButton);
 
         return new Scene(registerRoot, 1024, 600);
     }

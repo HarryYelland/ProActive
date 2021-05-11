@@ -28,20 +28,19 @@ public class Registration {
     //                 https://stackoverflow.com/questions/16099382/java-mysql-check-if-value-exists-in-database
     //                 https://alvinalexander.com/java/java-mysql-insert-example-preparedstatement/
 
-    public int register(String username, String email, String password) throws SQLException {
+    public int register(String username, String email, String password, String firstname, String surname) throws SQLException {
         ResultSet rs;
         boolean exists = false;
 
 
         String query1 = "SELECT * FROM Account WHERE Username =?";
         String query2 = "SELECT * FROM Account WHERE Email =?";
-        String query3 = "INSERT INTO Account(Username, Email, Password, SecurityCode) VALUES(?, ?, ?, ?)";
+        String query3 = "INSERT INTO Account(Username, FirstName, Surname, Email, Password, SecurityCode) VALUES(?, ?, ?, ?, ?, ?)";
 
         try
         {
             PreparedStatement checkUsername = Registration.getConnection().prepareStatement(query1);
             checkUsername.setString(1, username);
-
             rs = checkUsername.executeQuery();
 
             if (rs.next()) {
@@ -78,9 +77,11 @@ public class Registration {
             try(PreparedStatement insert = Registration.getConnection().prepareStatement(query3))
             {
                 insert.setString(1, username);
-                insert.setString(2, email);
-                insert.setString(3, password);
-                insert.setString(4, createSecurityCode());
+                insert.setString(2, firstname);
+                insert.setString(3, surname);
+                insert.setString(4, email);
+                insert.setString(5, password);
+                insert.setString(6, createSecurityCode());
                 insert.execute();
                 System.out.println("New user added into database");
                 exists = true;
@@ -132,7 +133,7 @@ public class Registration {
         return groupCode;
     }
 
-    public static int main(String username, String email, String password) throws SQLException {
+    public static int main(String username, String email, String password, String firstname, String surname) throws SQLException {
         Registration registration = new Registration();
 
         //Scanner s = new Scanner(System.in);
@@ -152,7 +153,7 @@ public class Registration {
 
         //else
         //{
-        return registration.register(username, email, password);
+        return registration.register(username, email, password, firstname, surname);
         //}
 
     }
