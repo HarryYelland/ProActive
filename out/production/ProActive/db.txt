@@ -25,7 +25,8 @@ CREATE TABLE Exercise
 (
 ExerciseID SMALLSERIAL NOT NULL,
 Calories INTEGER NOT NULL,
-Name VARCHAR(20) NOT NULL, 
+Name VARCHAR(20) NOT NULL,
+Reps INTEGER NOT NULL,
 PRIMARY KEY (ExerciseID),
 CHECK(Calories > 0),
 UNIQUE(ExerciseID)
@@ -77,16 +78,20 @@ CalorieGoal INTEGER NOT NULL,
 Weight INTEGER NOT NULL,
 Height INTEGER NOT NULL,
 CustomGoal VARCHAR(40) NOT NULL,
+CustomMet BOOLEAN NOT NULL,
 PRIMARY KEY (DetailsID),
 FOREIGN KEY (UUID) REFERENCES Account(UUID),
 UNIQUE(DetailsID)
 );
 
 --Creates Groups Table
+--Types: 0 calorie, 1 exercise, 2 custom
 CREATE TABLE Groups
 (
 GroupID SMALLSERIAL NOT NULL,
 GroupName VARCHAR(20) NOT NULL,
+GroupType INTEGER NOT NULL,
+JoinCode VARCHAR(5) NOT NULL,
 PRIMARY KEY (GroupID),
 UNIQUE(GroupID),
 UNIQUE(GroupName)
