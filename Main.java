@@ -1068,16 +1068,16 @@ public class Main extends Application {
         HBox roundGroups = new HBox();
 
         roundGroups.setSpacing(15);
-        for(int i = 0; i < userGroups.size(); i++) {
+        for(int i = 1; i < userGroups.size() + 1; i++) {
             Group group = new Group();
             Button joinedGroup1Button = new Button();
-            joinedGroup1Button.setText(userGroups.get(i));
+            joinedGroup1Button.setText(userGroups.get(i - 1));
             joinedGroup1Button.setTextFill(Color.WHITE);
             joinedGroup1Button.setPrefSize(100, 100);
             joinedGroup1Button.setTranslateX(340); // negative = Left, positive = right
             joinedGroup1Button.setTranslateY(120); //Bottom
             joinedGroup1Button.setStyle("-fx-background-radius: 100px; " + "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-            int finalI = i;
+            int finalI = i - 1;
             joinedGroup1Button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
