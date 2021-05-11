@@ -1047,7 +1047,7 @@ public class Main extends Application {
             joinedGroup1Button.setTranslateX(340); // negative = Left, positive = right
             joinedGroup1Button.setTranslateY(120); //Bottom
             joinedGroup1Button.setStyle("-fx-background-radius: 100px; " + "-fx-font: normal 20px 'Arial Nova Cond Light';" + "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-            int finalI = i;
+            int finalI = i - 1;
             joinedGroup1Button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
