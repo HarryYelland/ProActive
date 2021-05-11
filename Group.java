@@ -1,10 +1,7 @@
 //package com.company;
 
 import javax.xml.crypto.Data;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLOutput;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class Group {
@@ -258,6 +255,122 @@ public class Group {
             groupList.add(getGroupName);
         }
         return groupList;
+    }
 
+    public GroupGoal[] checkCalorieGoal(ArrayList<Integer> ids, Date date) {
+        ArrayList<GroupGoal> goals = new ArrayList<>();
+        PreparedStatement ps;
+        ResultSet rs;
+        String query1 = "SELECT * FROM CONSUMABLE INNER JOIN CONSUMABLECOMP ON CONSUMABLECOMP.CONSUMABLEID = CONSUMABLE.CONSUMABLEID AND CONSUMABLECOMP.UUID = ? WHERE Date = ?";
+        for(int i=0; i < ids.size(); i++){
+            try
+            {
+                ps = Account.getConnection().prepareStatement(query1);
+                ps.setInt(1, ids.get(i));
+                ps.setDate(2, date);
+                rs = ps.executeQuery();
+                int totalCalories = 0;
+                Account account = new Account();
+                while (rs.next())
+                {
+                    int calories = rs.getInt(2);
+                    totalCalories += calories;
+
+                    if (account.getCalorieGoal(ids.get(i)) >= totalCalories) {
+                        GroupGoal goal = new GroupGoal();
+                        goal.setGoalName("Calorie Goal Reached: " + totalCalories + " / " + account.getCalorieGoal(ids.get(i)));
+                        goal.setUsername(account.getUsername(ids.get(i)));
+                        goal.setDate(date);
+                        goals.add(goal);
+                    }
+                }
+            }
+            catch(SQLException e)
+            {
+                System.out.println(e.getStackTrace());
+            }
+        }
+        return goals.toArray(new GroupGoal[goals.size()]);
+    }
+
+
+    public GroupGoal[] checkExerciseGoal(Date date, ArrayList<Integer> ids){
+        ArrayList<GroupGoal> goals = new ArrayList<>();
+        Exercise exercise = new Exercise();
+        Account account = new Account();
+
+        for(int i=0; i<ids.size(); i++){
+            SingleExercise exercises[] = exercise.checkExercises(ids.get(i), date);
+            for (SingleExercise se : exercises) {
+                GroupGoal groupGoal = new GroupGoal();
+                groupGoal.setUsername(account.getUsername(ids.get(i)));
+                groupGoal.setGoalName("Performed: " + se.getName() + " for " + se.getReps() + " reps");
+                groupGoal.setDate(date);
+                goals.add(groupGoal);
+            }
+        }
+        return goals.toArray(new GroupGoal[goals.size()]);
+    }
+
+    public CustomGoal[] checkCustomGoal(ArrayList<Integer> ids){
+        ArrayList<CustomGoal> goals = new ArrayList<>();
+        CustomGoal custom = new CustomGoal();
+        PreparedStatement ps;
+        ResultSet rs;
+        String query1 = "SELECT CustomGoal, CustomMet FROM Details WHERE uuid = ?";
+        try
+        {
+            for(int i = 0; i<ids.size(); i++){
+                ps = Account.getConnection().prepareStatement(query1);
+                ps.setInt(1, ids.get(i));
+                rs = ps.executeQuery();
+                int totalCalories = 0;
+                Account account = new Account();
+                while (rs.next())
+                {
+                    custom.setGoal(rs.getString(1));
+                    custom.setCompleted(rs.getBoolean(2));
+                    custom.setUsername(account.getUsername(ids.get(i)));
+                    goals.add(custom);
+                }
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+        return goals.toArray(new CustomGoal[goals.size()]);
+    }
+
+    int getGroupType(int groupID) throws SQLException {
+        PreparedStatement ps;
+        ResultSet rs;
+        int type = -1;
+        String query = "SELECT GroupType FROM Groups WHERE GroupID = ?";
+        ps = DatabaseConnector.getConnection().prepareStatement(query);
+        ps.setInt (1, groupID);
+        rs = ps.executeQuery();
+        if (rs.next())
+        {
+            type = rs.getInt(1);
+        }
+        System.out.println("GOT GROUP TYPE");
+        return type;
+    }
+
+    ArrayList<Integer> getAllGroupMembers(int groupID) throws SQLException {
+        PreparedStatement ps;
+        ResultSet rs;
+        ArrayList<Integer> ids = new ArrayList<>();
+        String query = "SELECT uuid FROM groupmembers WHERE groupid = ?";
+        ps = DatabaseConnector.getConnection().prepareStatement(query);
+        ps.setInt (1, groupID);
+        rs = ps.executeQuery();
+        while (rs.next())
+        {
+            ids.add(rs.getInt(1));
+        }
+        System.out.println("GOT IDS IN GROUP");
+        return ids;
     }
 }

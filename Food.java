@@ -246,7 +246,7 @@ public class Food {
         ArrayList<Consumable> consumables = new ArrayList<>();
         PreparedStatement ps;
         ResultSet rs;
-        String query1 = "SELECT Calories, Name FROM CONSUMABLE INNER JOIN CONSUMABLECOMP ON CONSUMABLECOMP.CONSUMABLEID = CONSUMABLE.CONSUMABLEID WHERE CONSUMABLECOMP.UUID = ? AND CAST(date AS DATE) = ?";
+        String query1 = "SELECT Name, Calories FROM CONSUMABLE INNER JOIN CONSUMABLECOMP ON CONSUMABLECOMP.CONSUMABLEID = CONSUMABLE.CONSUMABLEID WHERE CONSUMABLECOMP.UUID = ? AND CAST(date AS DATE) = ?";
         try
         {
             ps = Account.getConnection().prepareStatement(query1);
@@ -255,8 +255,9 @@ public class Food {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Consumable consumable = new Consumable();
-                consumable.setName(rs.getString(2));
-                consumable.setCalories(rs.getInt(1));
+                consumable.setName(rs.getString(1));
+                consumable.setCalories(rs.getInt(2));
+                consumables.add(consumable);
             }
 
         }
@@ -264,6 +265,6 @@ public class Food {
         {
             System.out.println(e.getStackTrace());
         }
-        return consumables.toArray(new Consumable[0]);
+        return consumables.toArray(new Consumable[consumables.size()]);
     }
 }

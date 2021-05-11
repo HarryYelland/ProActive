@@ -2,9 +2,13 @@ public class Consumable {
     public String name;
     public int calories;
 
-    Consumable() {
+    public Consumable() {
         this.name = "";
         this.calories = 0;
+    }
+    public Consumable(String name, int calories) {
+        this.name = name;
+        this.calories = calories;
     }
 
     public String getName(){return this.name;}
