@@ -31,7 +31,6 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.UUID;
 
 
 public class Main extends Application {
@@ -147,6 +146,13 @@ public class Main extends Application {
         forgotPass.setFont(Font.font("Arial Nova Cond Light", FontPosture.ITALIC,13));
         forgotPass.setTranslateX(271);
         forgotPass.setTranslateY(410);
+        forgotPass.setOnMouseClicked(event-> {
+            try {
+                mainStage.setScene(forgotPassword());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
 
         //Username Field
@@ -256,47 +262,35 @@ public class Main extends Application {
 
         registerPageNameRoot.getChildren().addAll(registerPageName);
 
-        TextField nameTextField = new TextField();
-        nameTextField.setPromptText("Name");
-        nameTextField.setPrefSize(255,40);
-        nameTextField.setTranslateX(250);
-        nameTextField.setTranslateY(240);
-
-        TextField surnameTextField = new TextField();
-        surnameTextField.setPromptText("Surname");
-        surnameTextField.setPrefSize(255,40);
-        surnameTextField.setTranslateX(545);
-        surnameTextField.setTranslateY(240);
-
 
         //Username Text field
         TextField usernameTextField = new TextField();
         usernameTextField.setPromptText("Username");
-        usernameTextField.setPrefSize(550,40);
+        usernameTextField.setPrefSize(540,40);
         usernameTextField.setTranslateX(250);
-        usernameTextField.setTranslateY(290);
+        usernameTextField.setTranslateY(240);
 
 
         //Email Text field
         TextField emailTextField = new TextField();
         emailTextField.setPromptText("Email");
-        emailTextField.setPrefSize(550,40);
+        emailTextField.setPrefSize(540,40);
         emailTextField.setTranslateX(250);
-        emailTextField.setTranslateY(340);
+        emailTextField.setTranslateY(300);
 
         //Password Text field
         PasswordField passwordTextField = new PasswordField();
         passwordTextField.setPromptText("Password");
-        passwordTextField.setPrefSize(550,40);
+        passwordTextField.setPrefSize(540,40);
         passwordTextField.setTranslateX(250);
-        passwordTextField.setTranslateY(390);
+        passwordTextField.setTranslateY(360);
 
         //Confirm Password Text Field
         PasswordField confirmPasswordTextField = new PasswordField();
         confirmPasswordTextField.setPromptText("Confirm Password");
-        confirmPasswordTextField.setPrefSize(550,40);
+        confirmPasswordTextField.setPrefSize(540,40);
         confirmPasswordTextField.setTranslateX(250);
-        confirmPasswordTextField.setTranslateY(440);
+        confirmPasswordTextField.setTranslateY(420);
 
 
         //Register Button
@@ -334,28 +328,18 @@ public class Main extends Application {
                 errorWarning.setHeaderText("Oops Something went wrong");
 
                 if(usernameTextField.getText().isEmpty() && emailTextField.getText().isEmpty() &&
-                        passwordTextField.getText().isEmpty() && nameTextField.getText().isEmpty() && surnameTextField.getText().isEmpty()
-                        && confirmPasswordTextField.getText().isEmpty()){
+                        passwordTextField.getText().isEmpty() && confirmPasswordTextField.getText().isEmpty()){
 
                     errorWarning.setContentText("""
                             Forgot to enter your:
-                            Name
-                            Surname
                             Username
                             Email
                             Password
                             Confirm Password""");
                     errorWarning.show();
-                }else if(nameTextField.getText().isEmpty()){
-                    errorWarning.setContentText("Forgot to enter your Name");
-                    errorWarning.show();
-
-                }else if(surnameTextField.getText().isEmpty()){
-                    errorWarning.setContentText("Forgot to enter your Surname");
-                    errorWarning.show();
                 }
                 else if(usernameTextField.getText().isEmpty()){
-                    errorWarning.setContentText("Forgot to enter your Username");
+                    errorWarning.setContentText("Forgot to enter your username");
                     errorWarning.show();
                 }
                 else if(emailTextField.getText().isEmpty()){
@@ -365,10 +349,6 @@ public class Main extends Application {
                 }
                 else if(passwordTextField.getText().isEmpty()){
                     errorWarning.setContentText("Forgot to enter your Password");
-                    errorWarning.show();
-                }else if(!(passwordTextField.getText().matches("(.*)[0-9](.*) || (.*)[^A-Za-z0-9](.*) ") || passwordTextField.getText().length()>= 8 || passwordTextField.getText().length() <=40)){
-                    errorWarning.setHeaderText("Password formatting incorrect");
-                    errorWarning.setContentText("Your must include at least:" + "\n1 numeric & 1 non-alphanumeric\n" + "Length must be between 8 and 40 characters long.");
                     errorWarning.show();
                 }
                 else if(confirmPasswordTextField.getText().isEmpty()){
@@ -411,7 +391,7 @@ public class Main extends Application {
         });
 
 
-        registerRoot.getChildren().addAll(usernameTextField,rButton,emailTextField,passwordTextField,confirmPasswordTextField,registerPageNameRoot, backButton,surnameTextField,nameTextField);
+        registerRoot.getChildren().addAll(usernameTextField,rButton,emailTextField,passwordTextField,confirmPasswordTextField,registerPageNameRoot, backButton);
 
         return new Scene(registerRoot, 1024, 600);
     }
@@ -1266,6 +1246,7 @@ public class Main extends Application {
                 ,new BackgroundSize(1.0,1.0,true,true,false,false));
         createGroupRoot.setBackground(new Background(backgroundImage));
 
+
         Label createGroupName = new Label("Create Groups");
         createGroupName.setTextFill(Color.rgb(55,77,95));
         createGroupName.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,40));
@@ -1888,71 +1869,20 @@ public class Main extends Application {
     protected Scene Group(int GroupID) throws SQLException {
 
         Pane Group = new Pane();
-
-        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
-                ,new BackgroundSize(1.0,1.0,true,true,false,false));
-        Group.setBackground(new Background(backgroundImage));
-
         Group group = new Group();
         Label groupNameLbl = new Label();
         groupNameLbl.setText(group.getGroupName(GroupID));
         groupNameLbl.setTextFill(Color.rgb(55,77,95));
-        groupNameLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        groupNameLbl.setTranslateX(430);
-        groupNameLbl.setTranslateY(10);
+        groupNameLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,50));
+        groupNameLbl.setTranslateX(400);
+        groupNameLbl.setTranslateY(15);
 
         Label groupCodeLbl = new Label();
         groupCodeLbl.setText("Join Code: " + group.getGroupCode(GroupID));
         groupCodeLbl.setTextFill(Color.rgb(55,77,95));
-        groupCodeLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,35));
-        groupCodeLbl.setTranslateX(380);
-        groupCodeLbl.setTranslateY(50);
-
-        Button backButton = new Button();
-        backButton.setText("Back");
-        backButton.setTextFill(Color.WHITE);
-        backButton.setPrefSize(200, 40);
-        backButton.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-
-        backButton.setTranslateX(310); // negative = Left, positive = right
-        backButton.setTranslateY(550); //Bottom
-        backButton.setOnAction(event -> {
-            try {
-                mainStage.setScene(groupPage());
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        });
-
-        Button deleteUser = new Button();
-        deleteUser.setText("Leave Group");
-        deleteUser.setTextFill(Color.WHITE);
-        deleteUser.setPrefSize(200, 40);
-        deleteUser.setTranslateX(515); // negative = Left, positive = right
-        deleteUser.setTranslateY(550); //Bottom
-        deleteUser.setStyle("-fx-background-radius: 5em; " +
-                "-fx-font: normal 20px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" +
-                "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-
-       // Group group = new Group();
-        deleteUser.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    if(group.leaveGroup(ID, GroupID)){
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Left Group");
-                        alert.setContentText("You have successfully left" + groupNameLbl);
-                    }
-                    mainStage.setScene(groupPage());
-                } catch (SQLException throwables) {
-                    throwables.printStackTrace();
-                }
-            }
-        });
-
+        groupCodeLbl.setFont(Font.font("PMingLiU-ExtB", FontWeight.LIGHT,20));
+        groupCodeLbl.setTranslateX(410);
+        groupCodeLbl.setTranslateY(70);
 
         int groupType = group.getGroupType(GroupID);
         Instant instant = DATE.toInstant(ZoneOffset.UTC);
@@ -1965,11 +1895,11 @@ public class Main extends Application {
             rewardsTable.getItems().addAll(groupGoals);
             rewardsTable.setEditable(true);
 
-            TableColumn<GroupGoal, String> goalName = new TableColumn<GroupGoal, String>("🏆 Goal");
+            TableColumn<GroupGoal, String> goalName = new TableColumn<GroupGoal, String>("Goal");
             goalName.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getGoalName()));
-            TableColumn<GroupGoal, String> username = new TableColumn<GroupGoal, String>("👤 Username");
+            TableColumn<GroupGoal, String> username = new TableColumn<GroupGoal, String>("Username");
             username.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getUsername()));
-            TableColumn<GroupGoal, String> date1 = new TableColumn<GroupGoal, String>("📅 Date");
+            TableColumn<GroupGoal, String> date1 = new TableColumn<GroupGoal, String>("Date");
             date1.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getDate().toString()));
 
             // rewardsTable.set
@@ -1980,11 +1910,38 @@ public class Main extends Application {
 
             rewardsTable.setPrefSize(600,400);
             rewardsTable.setTranslateX(220);
-            rewardsTable.setTranslateY(120);
+            rewardsTable.setTranslateY(140);
 
             rewardsTable.getColumns().addAll(goalName, username, date1);
-            Group.getChildren().addAll(groupCodeLbl, groupNameLbl, rewardsTable,backButton,deleteUser);
+            Button closeBtn = new Button("Return To Menu");
+            closeBtn.setTranslateX(340); // negative = Left, positive = right
+            closeBtn.setTranslateY(550); //Bottom
+            closeBtn.setTextFill(Color.WHITE);
+            closeBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+            closeBtn.setOnAction(event -> {
+                try {
+                    mainStage.setScene(groupPage());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            });
 
+            Button leaveBtn = new Button("Leave Group");
+            leaveBtn.setTranslateX(550); // negative = Left, positive = right
+            leaveBtn.setTranslateY(550); //Bottom
+            leaveBtn.setTextFill(Color.WHITE);
+            leaveBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+            leaveBtn.setOnAction(event -> {
+                try {
+                    group.leaveGroup(ID, GroupID);
+                    mainStage.setScene(groupPage());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            });
+
+
+            Group.getChildren().addAll(groupCodeLbl, groupNameLbl, rewardsTable, closeBtn, leaveBtn);
         } else if (groupType == 1){
             GroupGoal groupGoals[] = group.checkExerciseGoal(sqlDate, group.getAllGroupMembers(GroupID));
 
@@ -1992,11 +1949,11 @@ public class Main extends Application {
             rewardsTable.getItems().addAll(groupGoals);
             rewardsTable.setEditable(true);
 
-            TableColumn<GroupGoal, String> goalName = new TableColumn<GroupGoal, String>("🏆 Goal");
+            TableColumn<GroupGoal, String> goalName = new TableColumn<GroupGoal, String>("Goal");
             goalName.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getGoalName()));
-            TableColumn<GroupGoal, String> username = new TableColumn<GroupGoal, String>("👤 Username");
+            TableColumn<GroupGoal, String> username = new TableColumn<GroupGoal, String>("Username");
             username.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getUsername()));
-            TableColumn<GroupGoal, String> date1 = new TableColumn<GroupGoal, String>("📅 Date");
+            TableColumn<GroupGoal, String> date1 = new TableColumn<GroupGoal, String>("Date");
             date1.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getDate().toString()));
 
             // rewardsTable.set
@@ -2007,11 +1964,38 @@ public class Main extends Application {
 
             rewardsTable.setPrefSize(600,400);
             rewardsTable.setTranslateX(220);
-            rewardsTable.setTranslateY(120);
+            rewardsTable.setTranslateY(140);
 
             rewardsTable.getColumns().addAll(goalName, username, date1);
-            Group.getChildren().addAll(groupCodeLbl, groupNameLbl, rewardsTable,backButton,deleteUser);
+            Button closeBtn = new Button("Return To Menu");
+            closeBtn.setTranslateX(340); // negative = Left, positive = right
+            closeBtn.setTranslateY(550); //Bottom
+            closeBtn.setTextFill(Color.WHITE);
+            closeBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+            closeBtn.setOnAction(event -> {
+                try {
+                    mainStage.setScene(groupPage());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            });
 
+            Button leaveBtn = new Button("Leave Group");
+            leaveBtn.setTranslateX(450); // negative = Left, positive = right
+            leaveBtn.setTranslateY(550); //Bottom
+            leaveBtn.setTextFill(Color.WHITE);
+            leaveBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+            leaveBtn.setOnAction(event -> {
+                try {
+                    group.leaveGroup(ID, GroupID);
+                    mainStage.setScene(groupPage());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            });
+
+
+            Group.getChildren().addAll(groupCodeLbl, groupNameLbl, rewardsTable, closeBtn, leaveBtn);
         } else if (groupType == 2) {
             CustomGoal customGoals[] = group.checkCustomGoal(group.getAllGroupMembers(GroupID));
 
@@ -2019,11 +2003,11 @@ public class Main extends Application {
             rewardsTable.getItems().addAll(customGoals);
             rewardsTable.setEditable(true);
 
-            TableColumn<CustomGoal, String> goalName = new TableColumn<CustomGoal, String>("🏆 Goal");
+            TableColumn<CustomGoal, String> goalName = new TableColumn<CustomGoal, String>("Goal");
             goalName.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getGoal()));
-            TableColumn<CustomGoal, String> username = new TableColumn<CustomGoal, String>("👤 Username");
+            TableColumn<CustomGoal, String> username = new TableColumn<CustomGoal, String>("Username");
             username.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getUsername()));
-            TableColumn<CustomGoal, String> date1 = new TableColumn<CustomGoal, String>("📅 Completed");
+            TableColumn<CustomGoal, String> date1 = new TableColumn<CustomGoal, String>("Completed");
             date1.setCellValueFactory(a-> new SimpleStringProperty(a.getValue().getCompleted().toString()));
 
             // rewardsTable.set
@@ -2034,10 +2018,39 @@ public class Main extends Application {
 
             rewardsTable.setPrefSize(600,400);
             rewardsTable.setTranslateX(220);
-            rewardsTable.setTranslateY(120);
+            rewardsTable.setTranslateY(140);
 
             rewardsTable.getColumns().addAll(goalName, username, date1);
-            Group.getChildren().addAll(groupCodeLbl, groupNameLbl,rewardsTable,backButton,deleteUser);
+
+            Button closeBtn = new Button("Return To Menu");
+            closeBtn.setTranslateX(340); // negative = Left, positive = right
+            closeBtn.setTranslateY(550); //Bottom
+            closeBtn.setTextFill(Color.WHITE);
+            closeBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+            closeBtn.setOnAction(event -> {
+                try {
+                    mainStage.setScene(groupPage());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            });
+
+            Button leaveBtn = new Button("Leave Group");
+            leaveBtn.setTranslateX(470); // negative = Left, positive = right
+            leaveBtn.setTranslateY(550); //Bottom
+            leaveBtn.setTextFill(Color.WHITE);
+            leaveBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+            leaveBtn.setOnAction(event -> {
+                try {
+                    group.leaveGroup(ID, GroupID);
+                    mainStage.setScene(groupPage());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            });
+
+
+            Group.getChildren().addAll(groupCodeLbl, groupNameLbl, rewardsTable, closeBtn, leaveBtn);
         }
         return new Scene(Group,1024,600);
 
@@ -2061,6 +2074,8 @@ public class Main extends Application {
 
 
         loginPageNameRoot.setPrefSize(1025,200);
+
+        // accountRoot.setStyle("-fx-background-color: #000000");
 
         Label accountPageName = new Label();
         accountPageName.setText(account.getUsername(ID) + "'s Details");
@@ -2276,6 +2291,8 @@ public class Main extends Application {
 
         loginPageNameRoot.setPrefSize(1025, 200);
 
+        // accountRoot.setStyle("-fx-background-color: #000000");
+
         Label exercisePageName = new Label();
         exercisePageName.setText("Add Exercise To Log");
         exercisePageName.setTextFill(Color.WHITE);
@@ -2336,7 +2353,7 @@ public class Main extends Application {
 
         prevExerciseComboBox.setTranslateX(260);
         prevExerciseComboBox.setTranslateY(230);
-        prevExerciseComboBox.setPromptText("Select Already Added Exercise");
+        prevExerciseComboBox.setPromptText("Select Already Added Food/Drink");
         prevExerciseComboBox.setPrefSize(500, 40);
 
 
@@ -2431,6 +2448,119 @@ public class Main extends Application {
 
         return new Scene(achievementRoot, 1024, 600);
     }
+
+    protected Scene forgotPassword() throws SQLException {
+        Pane accountRoot = new Pane();
+        Account account = new Account();
+
+        BackgroundImage backgroundImage = new BackgroundImage(new Image(getClass().getResourceAsStream("backgroundIMG.png")), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(1.0, 1.0, true, true, false, false));
+        accountRoot.setBackground(new Background(backgroundImage));
+
+        HBox loginPageNameRoot = new HBox();
+        BackgroundImage bgImage = new BackgroundImage(new Image(getClass().getResourceAsStream("headerIMG.png")),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.CENTER
+                ,new BackgroundSize(1.0,1.0,true,true,false,false));
+        loginPageNameRoot.setBackground(new Background(bgImage));
+
+
+        loginPageNameRoot.setPrefSize(1025,200);
+
+        // accountRoot.setStyle("-fx-background-color: #000000");
+
+        Label accountPageName = new Label();
+        accountPageName.setText("Forgot Password?");
+        accountPageName.setTextFill(Color.rgb(255,255,255));
+        accountPageName.setFont(Font.font("PMingLiU-ExtB", FontWeight.EXTRA_BOLD, 60));
+        accountPageName.setTranslateX(300);
+        accountPageName.setTranslateY(55);
+
+        Label emailLabel = new Label("Enter Email: ");
+        emailLabel.setTranslateX(260);
+        emailLabel.setTranslateY(220);
+        emailLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        TextField emailTb = new TextField();
+        emailTb.setText(String.valueOf(account.getCustomGoal(ID)));
+        emailTb.setPrefSize(300,40);
+        emailTb.setTranslateX(470);
+        emailTb.setTranslateY(220);
+
+        Button sendBtn = new Button("Send Code To Email");
+        sendBtn.setTranslateX(470);
+        sendBtn.setTranslateY(280);
+        sendBtn.setTextFill(Color.WHITE);
+        sendBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        sendBtn.setOnAction(event -> {
+            try {
+                Registration register = new Registration();
+                Email.sendMail(emailTb.getText(), "Security Code: " + register.getSecurityCode(account.getIDFromEmail(emailTb.getText())));
+                Alert errorWarning = new Alert(Alert.AlertType.CONFIRMATION);
+                errorWarning.setTitle("Code");
+                errorWarning.setHeaderText("Security Code sent to Email");
+            } catch (MessagingException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+
+
+        Label codeLabel = new Label("Enter Code: ");
+        codeLabel.setTranslateX(260);
+        codeLabel.setTranslateY(370);
+        codeLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        TextField CodeTb = new TextField();
+        CodeTb.setPrefSize(300,40);
+        CodeTb.setTranslateX(470);
+        CodeTb.setTranslateY(370);
+
+        Label newPasswordLabel = new Label("New Password: ");
+        newPasswordLabel.setTranslateX(260);
+        newPasswordLabel.setTranslateY(420);
+        newPasswordLabel.setStyle("-fx-font: normal 17px 'Didact Gothic'");
+
+        TextField newPasswordTb = new TextField();
+        newPasswordTb.setPrefSize(300,40);
+        newPasswordTb.setTranslateX(470);
+        newPasswordTb.setTranslateY(420);
+
+        Button saveBtn = new Button("Save Details");
+        saveBtn.setTranslateX(470);
+        saveBtn.setTranslateY(470);
+        saveBtn.setTextFill(Color.WHITE);
+        saveBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        saveBtn.setOnAction(event -> {
+            try {
+                Registration registration = new Registration();
+                if(CodeTb.getText().equals(registration.getSecurityCode(account.getIDFromEmail(emailTb.getText())))){
+                    account.resetPassword(account.getIDFromEmail(emailTb.getText()), newPasswordTb.getText());
+                    Login login = new Login();
+                    while(ID < 0){
+                        ID = login.getUser(account.getUsername(account.getIDFromEmail(emailTb.getText())), newPasswordTb.getText());
+                    }
+                    mainStage.setScene(accountPage());
+                } else {
+                    Alert errorWarning = new Alert(Alert.AlertType.ERROR);
+                    errorWarning.setTitle("Error");
+                    errorWarning.setHeaderText("Oops some details wrong");
+                }
+
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+
+        Button closeBtn = new Button("Return");
+        closeBtn.setTranslateX(470); // negative = Left, positive = right
+        closeBtn.setTranslateY(540); //Bottom
+        closeBtn.setTextFill(Color.WHITE);
+        closeBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
+        closeBtn.setOnAction(event -> mainStage.setScene(mainPage()));
+
+        accountRoot.getChildren().addAll(loginPageNameRoot, accountPageName, emailTb, emailLabel, sendBtn, codeLabel, CodeTb, newPasswordLabel, newPasswordTb, saveBtn, closeBtn);
+
+
+        return new Scene(accountRoot, 1024, 600);
+    }
+
 
     public static void main(String[] args) {
         launch(args);

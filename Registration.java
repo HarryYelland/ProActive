@@ -35,7 +35,7 @@ public class Registration {
 
         String query1 = "SELECT * FROM Account WHERE Username =?";
         String query2 = "SELECT * FROM Account WHERE Email =?";
-        String query3 = "INSERT INTO Account(Username, Email, Password) VALUES(?, ?, ?)";
+        String query3 = "INSERT INTO Account(Username, Email, Password, SecurityCode) VALUES(?, ?, ?, ?)";
 
         try
         {
@@ -80,6 +80,7 @@ public class Registration {
                 insert.setString(1, username);
                 insert.setString(2, email);
                 insert.setString(3, password);
+                insert.setString(4, createSecurityCode());
                 insert.execute();
                 System.out.println("New user added into database");
                 exists = true;
@@ -91,6 +92,44 @@ public class Registration {
             }
         }
         return 0;
+    }
+
+    String createSecurityCode(){
+        String code = "";
+        for(int i=0; i<10; i++){
+            String random = String.valueOf ((int) (Math.random() * 9 + 0));
+            code += random;
+        }
+        return code;
+    }
+
+    public String getSecurityCode(int id){
+        PreparedStatement ps;
+        ResultSet rs;
+        String groupCode = "";
+
+        String query1 = "SELECT SecurityCode FROM Account WHERE UUID = ?";
+
+        try
+        {
+            ps = DatabaseConnector.getConnection().prepareStatement(query1);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                System.out.println("Successful login!");
+                groupCode = rs.getString(1);
+                return groupCode;
+            } else {
+                System.out.println("No User By That ID");
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+        return groupCode;
     }
 
     public static int main(String username, String email, String password) throws SQLException {
@@ -113,7 +152,7 @@ public class Registration {
 
         //else
         //{
-        return registration.register(username, email.toLowerCase(), password);
+        return registration.register(username, email, password);
         //}
 
     }
