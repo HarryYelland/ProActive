@@ -108,3 +108,11 @@ FOREIGN KEY (UUID) REFERENCES Account(UUID),
 FOREIGN KEY (GroupID) REFERENCES Groups(GroupID),
 UNIQUE(MemberID)
 );
+
+--Public Group Set Up
+INSERT INTO Groups (GroupName, GroupType, JoinCode) VALUES ("Meal Prep", 0, 1);
+INSERT INTO Groups (GroupName, GroupType, JoinCode) VALUES ("30 Day Challenge", 1, 2);
+INSERT INTO Groups (GroupName, GroupType, JoinCode) VALUES ("Fun & Fit", 1, 3);
+INSERT INTO Groups (GroupName, GroupType, JoinCode) VALUES ("Fitness Motivation", 2, 4);
+INSERT INTO Groups (GroupName, GroupType, JoinCode) VALUES ("Healthy Eating", 0, 5);
+INSERT INTO Groups (GroupName, GroupType, JoinCode) VALUES ("Fitness First", 1, 6);
