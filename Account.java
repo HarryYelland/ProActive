@@ -464,6 +464,65 @@ public class Account {
         return achievements.toArray(new Achievement[0]);
     }
 
+    public int getIDFromEmail(String email){
+        PreparedStatement ps;
+        ResultSet rs;
+        int id = -1;
+
+        String query1 = "SELECT uuid FROM Account WHERE email LIKE ?";
+
+        try
+        {
+            ps = Account.getConnection().prepareStatement(query1);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+
+            if (rs.next())
+            {
+                System.out.println("Successful login!");
+                id = rs.getInt(1);
+                return id;        //caloriegoal
+            }
+
+            else
+            {
+                System.out.println("No Current Email Set");
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getStackTrace());
+        }
+        return id;
+    }
+
+    public boolean resetPassword(int id, String password) throws SQLException {
+        ResultSet rs;
+        PreparedStatement ps;
+        Boolean correctPass = true;
+
+        String query1 = "UPDATE Account SET Password = ? WHERE UUID = ?";
+        try
+        {
+            if (correctPass == true) {
+                PreparedStatement setPassword = Registration.getConnection().prepareStatement(query1);
+                ps = Account.getConnection().prepareStatement(query1);
+                ps.setString(1, password);
+                ps.setInt(2, id);
+                rs = ps.executeQuery();
+                rs = setPassword.executeQuery();
+                return true;
+            } else {
+                return false;
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in Setting Password");
+        }
+        return false;
+    }
+
 
     public static void main(String username, String password){
         Account account = new Account();
