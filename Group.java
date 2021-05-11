@@ -159,8 +159,8 @@ public class Group {
 
     String createJoinCode(){
         String code = "";
-        for(int i=0; i<5; i++){
-            String random = Character.toString ((char) (Math.random() * 122 + 49));
+        for(int i=0; i<10; i++){
+            String random = String.valueOf ((int) (Math.random() * 9 + 0));
             code += random;
         }
         return code;
@@ -376,14 +376,15 @@ public class Group {
 
     boolean leaveGroup(int uuid, int groupid) throws SQLException {
         Boolean left = false;
-        ResultSet rs;
         String query1 = "DELETE FROM GroupMembers WHERE uuid = ? AND groupId = ?";
         PreparedStatement leaveGroup = DatabaseConnector.getConnection().prepareStatement(query1);
         leaveGroup.setInt(1, uuid);
         leaveGroup.setInt(2, groupid);
-
-        int delete = leaveGroup.executeUpdate();
-        System.out.println("User " + delete + "removed");
-        return true;
+        ResultSet result = leaveGroup.executeQuery();
+        while (result.next()) {
+            System.out.println("Left Group");
+            left = true;
+        }
+        return left;
     }
 }
