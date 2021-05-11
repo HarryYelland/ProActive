@@ -1068,10 +1068,10 @@ public class Main extends Application {
         HBox roundGroups = new HBox();
 
         roundGroups.setSpacing(15);
-        for(int i = 0; i < userGroups.size(); i++) {
+        for(int i = 1; i < userGroups.size() + 1; i++) {
             Group group = new Group();
             Button joinedGroup1Button = new Button();
-            joinedGroup1Button.setText(userGroups.get(i));
+            joinedGroup1Button.setText(userGroups.get(i - 1));
             joinedGroup1Button.setTextFill(Color.WHITE);
             joinedGroup1Button.setPrefSize(100, 100);
             joinedGroup1Button.setTranslateX(340); // negative = Left, positive = right
