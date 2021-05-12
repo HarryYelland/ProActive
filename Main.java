@@ -529,7 +529,30 @@ public class Main extends Application {
         passSendButton.setTranslateX(790); // negative = Left, positive = right
         passSendButton.setTranslateY(350); //Bottom
         passSendButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
-
+        passSendButton.setOnAction(event -> {
+            if(oldPass.getText().isEmpty() || newPass.getText().isEmpty() || confirmPass.getText().isEmpty()){
+                Alert errorWarning = new Alert(Alert.AlertType.ERROR);
+                errorWarning.setTitle("Error");
+                errorWarning.setHeaderText("Missing a Password");
+                errorWarning.show();
+            } else if (!newPass.getText().equals(confirmPass.getText())){
+                Alert errorWarning = new Alert(Alert.AlertType.ERROR);
+                errorWarning.setTitle("Error");
+                errorWarning.setHeaderText("New Password & Confirm Password do not Match");
+                errorWarning.show();
+            } else if (newPass.getText().equals(oldPass.getText())){
+                Alert errorWarning = new Alert(Alert.AlertType.ERROR);
+                errorWarning.setTitle("Error");
+                errorWarning.setHeaderText("New password must be different to old password");
+                errorWarning.show();
+            } else {
+                try {
+                    account.setPassword(ID, oldPass.getText(), newPass.getText(), confirmPass.getText());
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+        });
 
         Label changeEmailLabel = new Label("Change Email:");
         changeEmailLabel.setTranslateX(320);
@@ -568,10 +591,21 @@ public class Main extends Application {
         emailSendButton.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
 
         emailSendButton.setOnAction(event -> {
-            try {
-                account.setEmail(ID, newEmail.getText());
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            if(newEmail.getText().isEmpty()) {
+                Alert errorWarning = new Alert(Alert.AlertType.ERROR);
+                errorWarning.setTitle("Error");
+                errorWarning.setHeaderText("Enter New Email");
+                errorWarning.show();
+            }else if(!(newEmail.getText().matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$"))){
+                Alert errorWarning = new Alert(Alert.AlertType.ERROR);
+                errorWarning.setContentText("Email Formatting Incorrect");
+                errorWarning.show();
+            } else{
+                try {
+                    account.setEmail(ID, newEmail.getText());
+                } catch (SQLException throwables) {
+                   throwables.printStackTrace();
+                }
             }
         });
 
@@ -1366,6 +1400,7 @@ public class Main extends Application {
                             if(group.getGroupID(groupNameTextField.getText())>= 0){
                                 errorWarning.setContentText("Group name is already taken!" +  "\nTry again!");
                                 errorWarning.show();
+                                mainStage.setScene(groupPage());
                             }
                             if (newGroup.checkUserExist(emailTextField.getText())) {
                                 RadioButton selectedRadioButton = (RadioButton) radioGroup.getSelectedToggle();
@@ -1430,7 +1465,7 @@ public class Main extends Application {
                 members.add(group.getMemberUUID(emailTextField.getText()));
                 Alert friendAdded = new Alert(Alert.AlertType.CONFIRMATION);
                 friendAdded.setTitle("Friend Added");
-                friendAdded.setHeaderText(emailTextField.getText() + " will been added to the group");
+                friendAdded.setHeaderText(emailTextField.getText() + " will be added to the group");
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -1961,6 +1996,9 @@ public class Main extends Application {
             leaveBtn.setOnAction(event -> {
                 try {
                     group.leaveGroup(ID, GroupID);
+                    if(group.getAllGroupMembers(GroupID).size() == 0){
+                        group.deleteGroup(GroupID);
+                    }
                     mainStage.setScene(groupPage());
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
@@ -2069,6 +2107,9 @@ public class Main extends Application {
             leaveBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
             leaveBtn.setOnAction(event -> {
                 try {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Left Group");
+                    alert.setContentText("You have successfully left" + groupNameLbl);
                     group.leaveGroup(ID, GroupID);
                     mainStage.setScene(groupPage());
                 } catch (SQLException throwables) {
@@ -2273,20 +2314,29 @@ public class Main extends Application {
         saveBtn.setTextFill(Color.WHITE);
         saveBtn.setStyle("-fx-background-radius: 5em; " + "-fx-font: normal 17px 'Arial Nova Cond Light';" +  "-fx-background-color: #FDA000;" + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 5,0.5,0,2)");
         saveBtn.setOnAction(event -> {
-            Instant instant = DATE.toInstant(ZoneOffset.UTC);
-            Date date = Date.from(instant);
-            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-            food.addFood(foodTb.getText(), Integer.parseInt(calorieTb.getText()));
-            int id = food.getConsumableID(foodTb.getText());
-            if(id >= 0){
-                food.addLog(ID, id, sqlDate);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Added Consumable");
+            if(foodTb.getText().isEmpty() || calorieTb.getText().isEmpty()){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Details Missing");
                 alert.setHeaderText(null);
-                alert.setContentText("Food/Drink: " + foodTb.getText() + " added to log!");
+                alert.setContentText("Please Fill In All Details");
                 alert.showAndWait();
+                mainStage.setScene(foodLoggingPage());
             } else {
-                System.out.println("ID: " + id + " Not Found");
+                Instant instant = DATE.toInstant(ZoneOffset.UTC);
+                Date date = Date.from(instant);
+                java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+                food.addFood(foodTb.getText(), Integer.parseInt(calorieTb.getText()));
+                int id = food.getConsumableID(foodTb.getText());
+                if (id >= 0) {
+                    food.addLog(ID, id, sqlDate);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Added Consumable");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Food/Drink: " + foodTb.getText() + " added to log!");
+                    alert.showAndWait();
+                } else {
+                    System.out.println("ID: " + id + " Not Found");
+                }
             }
 
         });
@@ -2380,7 +2430,7 @@ public class Main extends Application {
 
         prevExerciseComboBox.setTranslateX(260);
         prevExerciseComboBox.setTranslateY(230);
-        prevExerciseComboBox.setPromptText("Select Already Added Food/Drink");
+        prevExerciseComboBox.setPromptText("Select Already Added Exercise");
         prevExerciseComboBox.setPrefSize(500, 40);
 
 

@@ -380,11 +380,18 @@ public class Group {
         PreparedStatement leaveGroup = DatabaseConnector.getConnection().prepareStatement(query1);
         leaveGroup.setInt(1, uuid);
         leaveGroup.setInt(2, groupid);
-        ResultSet result = leaveGroup.executeQuery();
-        while (result.next()) {
-            System.out.println("Left Group");
-            left = true;
-        }
+        leaveGroup.execute();
+        left = true;
+        return left;
+    }
+
+    boolean deleteGroup(int groupid) throws SQLException {
+        Boolean left = false;
+        String query1 = "DELETE FROM Groups WHERE groupId = ?";
+        PreparedStatement leaveGroup = DatabaseConnector.getConnection().prepareStatement(query1);
+        leaveGroup.setInt(1, groupid);
+        leaveGroup.execute();
+        left = true;
         return left;
     }
 }
